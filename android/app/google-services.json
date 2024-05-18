@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "58442434849",
+    "project_id": "pollotragonapp",
+    "storage_bucket": "pollotragonapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58442434849:android:c92d497c9cd95cf8991660",
+        "android_client_info": {
+          "package_name": "com.pollotragonapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "58442434849-5ejnse52ethv4v25u7nm0la5dri7h8k1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoRq0KcGfByUwb1AIh6z2Jqvw6WuCKMdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "58442434849-5ejnse52ethv4v25u7nm0la5dri7h8k1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
