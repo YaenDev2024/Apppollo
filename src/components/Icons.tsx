@@ -1,5 +1,5 @@
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -8,7 +8,7 @@ type IconsProps = PropsWithChildren<{
   sizes: number;
 }>;
 
-const Icons = ({name, sizes}: IconsProps) => {
+const Icons = ({ name, sizes }: IconsProps) => {
   switch (name) {
     case 'bars':
       return <Icon name="bars" size={sizes} color={'red'} />;
@@ -32,6 +32,9 @@ const Icons = ({name, sizes}: IconsProps) => {
       break;
     case 'times':
       return <Icon name="times" size={sizes} color={'gray'} />;
+      break;
+    case 'close':
+      return <Icon name="times" size={sizes} color={'red'} />;
       break;
     case 'check':
       return <Icon name="check" size={sizes} color={'white'} />;

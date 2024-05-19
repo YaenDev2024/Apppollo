@@ -1,20 +1,21 @@
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import {Login} from './src/screens/Login';
-import {HomeScreen} from './src/screens/HomeScreen';
+import { Login } from './src/screens/Login';
+import { HomeScreen } from './src/screens/HomeScreen';
 import {
   ImageBackground,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
-  useColorScheme,Button,
+  useColorScheme, Button,
   Alert
 } from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {RootNavigation} from './src/navigation';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RootNavigation } from './src/navigation';
+import { MenuProvider } from './src/hooks/MenuContext';
 // Mueve la declaración de Stack fuera de la función App
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +39,9 @@ export default function App() {
   // }
 
   return (
-      <RootNavigation/>
+    <MenuProvider>
+      <RootNavigation />
+    </MenuProvider>
 
   );
 }
