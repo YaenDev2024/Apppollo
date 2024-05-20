@@ -12,8 +12,7 @@ import Icons from '../components/Icons';
 import {MenuOptions} from '../components/MenuOptions';
 import inventory from '../../Assets/inventory-removebg-preview.png';
 import buy from '../../Assets/cmcarritos.png';
-import { NavBar } from '../components/NavBar';
-
+import {NavBar} from '../components/NavBar';
 
 export const HomeScreen = ({navigation}) => {
   return (
@@ -29,14 +28,19 @@ export const HomeScreen = ({navigation}) => {
             barStyle="light-contentz"
           />
           <View style={styles.container}>
-            <NavBar name={"Menu"} />
+            <NavBar name={'Menu'} />
             <MenuOptions
               name={'Inventario'}
               url={inventory}
               navigation={navigation}
               To={'Inventory'}
             />
-            <MenuOptions name={'Compras'} url={buy} />
+            <MenuOptions
+              name={'Compras'}
+              url={buy}
+              navigation={navigation}
+              To={'Buy'}
+            />
           </View>
         </ScrollView>
       </ImageBackground>
