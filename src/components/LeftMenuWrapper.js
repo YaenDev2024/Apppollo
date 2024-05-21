@@ -11,8 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const LeftMenuWrapper = () => {
   const {menuVisible, hideMenu} = useContext(MenuContext);
-  const navigation = useNavigation(); // Hook to access navigation
-
+ 
   return (
     <Modal
       animationType="fade"
