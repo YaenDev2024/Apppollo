@@ -12,6 +12,7 @@ import {NavBar} from '../components/NavBar';
 import {PackList} from './buy/PackList';
 import {db} from '../../config';
 import {collection, onSnapshot, query} from 'firebase/firestore';
+import GenerateTickets from '../components/GenerateTickets';
 
 export const BuyScreen = () => {
   //get all combos
@@ -96,6 +97,7 @@ export const BuyScreen = () => {
               </View>
             )}
           </View>
+          <GenerateTickets/>
         </ScrollView>
       </ImageBackground>
     </View>
