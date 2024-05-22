@@ -90,6 +90,7 @@ export const BuyScreen = () => {
                         ranch={product.ranch}
                         soda={product.soda}
                         zanahoria={product.zanahoria}
+                        price={product.price}
                       />
                     ))}
                   </View>
@@ -97,7 +98,7 @@ export const BuyScreen = () => {
               </View>
             )}
           </View>
-          <GenerateTickets/>
+          {/* <GenerateTickets/> */}
         </ScrollView>
       </ImageBackground>
     </View>

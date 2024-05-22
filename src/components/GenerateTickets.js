@@ -15,6 +15,8 @@ const GenerateTickets = () => {
     {qty: 2, item: 'Ensalada', price: '$10'},
     {qty: 1, item: 'Bebida', price: '$5'},
   ];
+
+  
   const currentYear = new Date().getFullYear();
 
   return (

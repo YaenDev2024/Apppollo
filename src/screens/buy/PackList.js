@@ -11,6 +11,17 @@ import {
   View,
 } from 'react-native';
 import Icons from '../../components/Icons';
+import {db} from '../../../config';
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+  addDoc,
+  doc,
+  setDoc,
+} from 'firebase/firestore';
 
 export const PackList = ({
   url,
@@ -21,12 +32,38 @@ export const PackList = ({
   soda,
   zanahoria,
   apio,
+  price,
 }) => {
+  const [orders, setOrders] = useState('');
   // create new orden
   const handleNewOrder = () => {
+    const fetchData = async () => {
+      try {
+        const q = query(collection(db, 'orders'));
+        const unsuscribe = onSnapshot(q, querySnapshot => {
+          //let highestOrderId = '0000';
+          const updatedProducts = [];
+          querySnapshot.forEach(doc => {
+            updatedProducts.push(doc.id);
+          });
+          const maxId = updatedProducts.reduce((max, id) => {
+            const numericId = parseInt(id, 10);
+            return numericId > max ? numericId : max;
+          }, 0);
+          let sum = maxId + 1;
+          const maxIdString = sum.toString().padStart(4, '0');
+          setOrders(maxIdString);
+        });
+        return unsuscribe;
+      } catch (error) {
+        console.error('Error al obtener los datos:', error);
+      }
+    };
+    fetchData();
     setEditActive(true);
   };
 
+  const [order, setOrder] = useState('');
   const [qty, setQty] = useState(1);
   const [editActive, setEditActive] = useState(false);
 
@@ -45,7 +82,17 @@ export const PackList = ({
     setEditActive(false);
   };
 
-  
+  const handleCreateOrder = () => {
+   
+    setDoc(doc(db, 'orders', orders), {
+      item: nameCombo,
+      price: price,
+      qty: qty,
+    });
+    setEditActive(false);
+
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.cardPack} onPress={handleNewOrder}>
@@ -60,7 +107,7 @@ export const PackList = ({
         onRequestClose={handleClose}>
         <View style={styles.modalBackground}>
           <View style={styles.card}>
-            <Text style={styles.titleCard}>Orden #00001</Text>
+            <Text style={styles.titleCard}>Orden #{orders}</Text>
             <TouchableWithoutFeedback onPress={handleClose}>
               <View style={styles.closeButton}>
                 <Icons name={'times'} sizes={25} />
@@ -84,7 +131,9 @@ export const PackList = ({
             </View>
 
             <View style={styles.containerbtns}>
-              <TouchableOpacity style={styles.btncrear}>
+              <TouchableOpacity
+                style={styles.btncrear}
+                onPress={handleCreateOrder}>
                 <Text>Crear</Text>
               </TouchableOpacity>
             </View>
