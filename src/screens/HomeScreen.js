@@ -13,7 +13,7 @@ import {MenuOptions} from '../components/MenuOptions';
 import inventory from '../../Assets/inventory-removebg-preview.png';
 import buy from '../../Assets/cmcarritos.png';
 import {NavBar} from '../components/NavBar';
-
+import order from '../../Assets/order.png';
 export const HomeScreen = ({navigation}) => {
   return (
     <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
@@ -40,6 +40,12 @@ export const HomeScreen = ({navigation}) => {
               url={buy}
               navigation={navigation}
               To={'Buy'}
+            />
+             <MenuOptions
+              name={'Ordenes'}
+              url={order}
+              navigation={navigation}
+              To={'Orders'}
             />
           </View>
         </ScrollView>

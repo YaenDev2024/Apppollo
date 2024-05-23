@@ -35,6 +35,9 @@ export const PackList = ({
   price,
 }) => {
   const [orders, setOrders] = useState('');
+  const [combosOrder, setCombosOrder] = useState([]);
+  const [isCompleted, setCompleted] = useState(false);
+  const [haveCombo, setHaveCombo] = useState(false)
   // create new orden
   const handleNewOrder = () => {
     const fetchData = async () => {
@@ -83,14 +86,20 @@ export const PackList = ({
   };
 
   const handleCreateOrder = () => {
-   
-    setDoc(doc(db, 'orders', orders), {
-      item: nameCombo,
-      price: price,
-      qty: qty,
-    });
-    setEditActive(false);
-
+    if (!isCompleted) {
+    const addNewCombo = {item: nameCombo, price: price, qty: qty, closed: '0'}
+        setCombosOrder(prevCombos => [...prevCombos, addNewCombo])
+        setHaveCombo(true)
+        console.log(combosOrder)
+    } else {
+      setDoc(doc(db, 'orders', orders), {
+        item: nameCombo,
+        price: price,
+        qty: qty,
+        closed: '0',
+      });
+      setEditActive(false);
+    }
   };
 
   return (
@@ -115,7 +124,7 @@ export const PackList = ({
             </TouchableWithoutFeedback>
 
             <View style={styles.containerAdd}>
-              <Text style={styles.crearOrder}>Crear nueva orden: </Text>
+              <Text style={styles.crearOrder}>Agregar combo: </Text>
               <TouchableOpacity onPress={handleRest}>
                 <Text>
                   <Icons name={'minus'} sizes={20} />
@@ -136,6 +145,11 @@ export const PackList = ({
                 onPress={handleCreateOrder}>
                 <Text>Crear</Text>
               </TouchableOpacity>
+              {haveCombo ?  <TouchableOpacity
+                style={styles.btncrear}
+                onPress={handleCreateOrder}>
+                <Text>Terminar</Text>
+              </TouchableOpacity>: ''}
             </View>
           </View>
         </View>

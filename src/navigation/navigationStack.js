@@ -5,6 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {HomeScreen} from '../screens/HomeScreen';
 import {MainPageInventory} from '../screens/inventory/MainPageInventory';
 import { BuyScreen } from '../screens/BuyScreen';
+import { OrderScreen } from '../screens/OrderScreen';
 const Stack = createStackNavigator();
 
 export const NavigationStack = () => {
@@ -17,6 +18,7 @@ export const NavigationStack = () => {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Inventory" component={MainPageInventory} />
         <Stack.Screen name="Buy" component={BuyScreen} />
+        <Stack.Screen name="Orders" component={OrderScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

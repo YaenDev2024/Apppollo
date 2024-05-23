@@ -47,7 +47,7 @@ export const MainPageInventory = () => {
 
   const chunkedProducts = filteredProducts.reduce(
     (resultArray, item, index) => {
-      const chunkIndex = Math.floor(index / 3);
+      const chunkIndex = Math.floor(index / 2);
       if (!resultArray[chunkIndex]) {
         resultArray[chunkIndex] = [];
       }

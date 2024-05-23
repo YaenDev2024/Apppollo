@@ -13,17 +13,15 @@ import {
 } from 'react-native';
 import Icons from './Icons';
 import ProgressBar from 'react-native-progress/Bar';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../config';
+import {doc, updateDoc} from 'firebase/firestore';
+import {db} from '../../config';
 
 export const ProductsList = ({name, url, lastqty, lastsize, size, qty, id}) => {
-  
   const [active, setActive] = useState(false);
   const [editActive, setEditActive] = useState(false);
   const [editedName, setEditedName] = useState('');
-  const [editedCantidad, setEditedCantidad] = useState('')
+  const [editedCantidad, setEditedCantidad] = useState('');
   const [editedPeso, setEditedPeso] = useState('');
- 
 
   const calculateProgress = () => {
     return qty / lastqty;
@@ -42,33 +40,30 @@ export const ProductsList = ({name, url, lastqty, lastsize, size, qty, id}) => {
     setEditActive(true);
   };
 
-  const handleNameEdited = text =>{
-    setEditedName(text)
-  }
-  const handleQtyEdited = text =>{
-    setEditedCantidad(text)
-  }
-  const hanldeSizeEdited = text =>{
-    setEditedPeso(text)
-  }
-
+  const handleNameEdited = text => {
+    setEditedName(text);
+  };
+  const handleQtyEdited = text => {
+    setEditedCantidad(text);
+  };
+  const hanldeSizeEdited = text => {
+    setEditedPeso(text);
+  };
 
   const updateFields = async () => {
-   
-        const updateProduct = doc(db,"food", id);
+    const updateProduct = doc(db, 'food', id);
 
-        await updateDoc(updateProduct, {
-            lastqtyadded: editedCantidad,
-            lastsizeadded: editedPeso,
-            name: editedName,
-            size: editedPeso,
-            qty: editedCantidad
-        })
-
+    await updateDoc(updateProduct, {
+      lastqtyadded: editedCantidad,
+      lastsizeadded: editedPeso,
+      name: editedName,
+      size: editedPeso,
+      qty: editedCantidad,
+    });
   };
   return (
     <>
-    {/* Card del producto  */}
+      {/* Card del producto  */}
       <TouchableOpacity
         style={styles.cardProduct}
         onPress={() => setActive(true)}>
@@ -130,7 +125,7 @@ export const ProductsList = ({name, url, lastqty, lastsize, size, qty, id}) => {
           </View>
         </View>
       </Modal>
-{/* Modal para editar cada producto individual */}
+      {/* Modal para editar cada producto individual */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -150,8 +145,7 @@ export const ProductsList = ({name, url, lastqty, lastsize, size, qty, id}) => {
               style={styles.input}
               textAlign="center"
               onChangeText={handleNameEdited}
-              placeholderTextColor='gray'
-
+              placeholderTextColor="gray"
             />
             <Text style={styles.title}>Cantidad:</Text>
             <TextInput
@@ -159,8 +153,7 @@ export const ProductsList = ({name, url, lastqty, lastsize, size, qty, id}) => {
               style={styles.input}
               textAlign="center"
               onChangeText={handleQtyEdited}
-              placeholderTextColor='gray'
-
+              placeholderTextColor="gray"
             />
             <Text style={styles.title}>Peso:</Text>
             <TextInput
@@ -168,10 +161,12 @@ export const ProductsList = ({name, url, lastqty, lastsize, size, qty, id}) => {
               style={styles.input}
               textAlign="center"
               onChangeText={hanldeSizeEdited}
-              placeholderTextColor='gray'
-
+              placeholderTextColor="gray"
             />
-            <TouchableOpacity style={styles.btnAdd} title="Editar" onPress={updateFields}>
+            <TouchableOpacity
+              style={styles.btnAdd}
+              title="Editar"
+              onPress={updateFields}>
               <Text style={styles.titlebtn}>Guardar cambios</Text>
             </TouchableOpacity>
           </View>
@@ -186,33 +181,43 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     borderWidth: 1,
     borderColor: '#D5D5D5',
-    width: 100,
-    height: 150,
-    margin: 5,
-    borderRadius: 5,
+    width: 150,
+    height: 120,
+    margin: 10,
+    borderRadius: 15,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    marginTop: 8,
-    textAlign: 'center',
-    color: 'black',
-    fontStyle: 'italic',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   titleProduct: {
-    textAlign: 'center',
-    width: '100%',
-    borderTopColor: '#F1F1F1',
-    borderTopWidth: 1,
     color: 'black',
-    fontStyle: 'italic',
+    margin: 10,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   img: {
     width: '100%',
-    resizeMode: 'contain',
     height: '80%',
-    borderRadius: 10,
+    resizeMode: 'cover',
+    borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#D5D5D5',
   },
   imgModal: {
     width: '80%',

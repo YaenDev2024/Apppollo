@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import pollo from '../../Assets/fnbg.png';
 
-const GenerateTickets = () => {
+const GenerateTickets = ({products}) => {
   const [eventName, setEventName] = useState('El Pollo Tragon');
   const [order, setOrder] = useState('#0001');
   const [date, setDate] = useState('VIERNES, SEPTEMBER 19, 2024');
@@ -10,11 +10,11 @@ const GenerateTickets = () => {
   const [price, setPrice] = useState('$20');
   const [total, setTotal] = useState(0);
   // Define el array de productos
-  const products = [
-    {qty: 1, item: 'Pollo Asado', price: '$20'},
-    {qty: 2, item: 'Ensalada', price: '$10'},
-    {qty: 1, item: 'Bebida', price: '$5'},
-  ];
+//   const products = [
+//     {qty: 1, item: 'Pollo Asado', price: '$20'},
+//     {qty: 2, item: 'Ensalada', price: '$10'},
+//     {qty: 1, item: 'Bebida', price: '$5'},
+//   ];
 
   
   const currentYear = new Date().getFullYear();
