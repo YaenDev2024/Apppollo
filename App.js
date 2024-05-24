@@ -16,7 +16,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootNavigation } from './src/navigation';
 import { MenuProvider } from './src/hooks/MenuContext';
-
+import { BannerAd, BannerAdSize, TestIds } from '@react-native-admob/admob';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -28,6 +28,8 @@ export default function App() {
   return (
     <MenuProvider>
       <RootNavigation />
+      <BannerAd unitId={TestIds.BANNER} size={BannerAdSize.FULL_BANNER}/>
+      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
     </MenuProvider>
 
   );

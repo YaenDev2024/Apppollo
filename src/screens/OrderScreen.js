@@ -5,7 +5,7 @@ import { NavBar } from '../components/NavBar';
 import order from '../../Assets/ordendecompra.png';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../../config';
-import OrderList from './orders/OrderList';
+import OrderList from './Orders/OrderList';
 
 export const OrderScreen = () => {
   // get all orders

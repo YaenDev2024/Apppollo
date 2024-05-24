@@ -14,6 +14,8 @@ import inventory from '../../Assets/inventory-removebg-preview.png';
 import buy from '../../Assets/cmcarritos.png';
 import {NavBar} from '../components/NavBar';
 import order from '../../Assets/order.png';
+import { BannerAd, RewardedAd, InterstitialAd, BannerAdSize, TestIds } from '@react-native-admob/admob';
+
 export const HomeScreen = ({navigation}) => {
   return (
     <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
@@ -48,6 +50,7 @@ export const HomeScreen = ({navigation}) => {
               To={'Orders'}
             />
           </View>
+        {/* <BannerAd unitId={TestIds.BANNER} size={BannerAdSize.FULL_BANNER}/> */}
         </ScrollView>
       </ImageBackground>
     </View>

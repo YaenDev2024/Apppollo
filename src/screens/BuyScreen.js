@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   ImageBackground,
@@ -9,20 +9,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { NavBar } from '../components/NavBar';
-import { PackList } from './buy/PackList';
-import { db } from '../../config';
-import { collection, onSnapshot, query } from 'firebase/firestore';
-import GenerateTickets from '../components/GenerateTickets';
+import {NavBar} from '../components/NavBar';
+import {PackList} from './buy/PackList';
+import {db} from '../../config';
+import {collection, doc, onSnapshot, query, setDoc} from 'firebase/firestore';
+import {ModalOrdersToSelect} from '../components/BuyScreenComponents/ModalOrdersToSelect';
 
 export const BuyScreen = () => {
-  //get all combos
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [order, setOrder] = useState(false);
   const [lastOrder, setLastorders] = useState('');
-  const [orderActive, setOrderActive] = useState('none')
+  const [orderActive, setOrderActive] = useState('none');
+  const [ModalSelectOrder, setShowModalSelectOrder] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,7 +31,7 @@ export const BuyScreen = () => {
         const unsuscribe = onSnapshot(q, querySnapshot => {
           const updatedProducts = [];
           querySnapshot.forEach(doc => {
-            updatedProducts.push({ id: doc.id, ...doc.data() });
+            updatedProducts.push({id: doc.id, ...doc.data()});
           });
           setProducts(updatedProducts);
           setLoading(false);
@@ -47,7 +48,6 @@ export const BuyScreen = () => {
       try {
         const q = query(collection(db, 'orders'));
         const unsuscribe = onSnapshot(q, querySnapshot => {
-          //let highestOrderId = '0000';
           const updatedProducts = [];
           querySnapshot.forEach(doc => {
             updatedProducts.push(doc.id);
@@ -67,9 +67,7 @@ export const BuyScreen = () => {
     };
 
     fetchDataOrder();
-
   }, []);
-
 
   const filteredProducts = products.filter(product =>
     product.nameCombo.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -77,13 +75,12 @@ export const BuyScreen = () => {
 
   const createOrder = () => {
     setDoc(doc(db, 'orders', lastOrder), {
-      item: nameCombo,
-      price: price,
-      qty: qty,
+      item: '',
+      price: '',
+      qty: '',
       closed: '0',
     });
-  }
-
+  };
 
   const chunkedProducts = filteredProducts.reduce(
     (resultArray, item, index) => {
@@ -98,16 +95,26 @@ export const BuyScreen = () => {
   );
 
   const handleCreateOrder = () => {
-    setOrder(true)
-    setOrderActive("#" + lastOrder);
-  }
+    setOrder(true);
+    setOrderActive('#' + lastOrder);
+    createOrder();
+  };
+
+  const handleSelectOrder = () => {
+    setShowModalSelectOrder(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModalSelectOrder(false);
+  };
+
   return (
-    <View style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
+    <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
       <ImageBackground
         source={require('../../Assets/fondo.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
-        imageStyle={{ opacity: 0.08 }}>
+        imageStyle={{opacity: 0.08}}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <StatusBar
             backgroundColor={'transparent'}
@@ -118,12 +125,16 @@ export const BuyScreen = () => {
             <View style={styles.containerOrder}>
               <Text style={styles.title}>Paquetes disponibles para venta</Text>
               <Text style={styles.title}>Orden Activa: {orderActive}</Text>
+              <TouchableOpacity
+                style={styles.selectorder}
+                onPress={handleSelectOrder}>
+                <Text style={styles.titleorderselect}>Select Order</Text>
+              </TouchableOpacity>
             </View>
             {loading ? (
-              <ActivityIndicator size="large" color="black" /> // Muestra el indicador de carga mientras los datos se están cargando
+              <ActivityIndicator size="large" color="black" /> 
             ) : (
               <View style={styles.containerProducts}>
-
                 {chunkedProducts.map((row, rowIndex) => (
                   <View key={rowIndex} style={styles.row}>
                     {row.map(product => (
@@ -146,12 +157,8 @@ export const BuyScreen = () => {
               </View>
             )}
           </View>
-          {/* <GenerateTickets/> */}
-
-
-
-          <TouchableOpacity
-            style={styles.btncrear} onPress={handleCreateOrder}>
+          <ModalOrdersToSelect isActive={ModalSelectOrder} onClose={handleCloseModal} />
+          <TouchableOpacity style={styles.btncrear} onPress={handleCreateOrder}>
             <Text style={styles.titlebtn}>Crear orden</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -182,13 +189,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
     height: 50,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   titlebtn: {
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 18,
   },
   navbar: {
     backgroundColor: 'white',
@@ -211,6 +218,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
-
+  },
+  titleorderselect: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  selectorder: {
+    backgroundColor: '#B67F51',
+    padding: 10,
+    borderRadius: 5,
   },
 });

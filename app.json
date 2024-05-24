@@ -1,4 +1,8 @@
 {
   "name": "pollotragonapp",
-  "displayName": "El Pollo Tragon"
+  "displayName": "El Pollo Tragon",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-3477493054350988~8710212921",
+    "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
+  }
 }
