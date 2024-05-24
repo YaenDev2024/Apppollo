@@ -16,7 +16,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootNavigation } from './src/navigation';
 import { MenuProvider } from './src/hooks/MenuContext';
-// Mueve la declaración de Stack fuera de la función App
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -24,19 +24,6 @@ export default function App() {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
-  // function create ()
-  // {
-  //   setDoc(doc(db, "food", "LA"), {
-  //     name: "Los Angeles",
-  //     state: "CA",
-  //     country: "USA"
-  //   }).then(()=>{
-  //     console.log("siuu")
-  //   }).catch((err)=>{
-  //     console.log(err)
-  //   });
-  // }
 
   return (
     <MenuProvider>
@@ -48,12 +35,11 @@ export default function App() {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1, // Asegura que la imagen ocupe todo el espacio disponible
-    width: '100%', // Ancho igual al 100% del contenedor
-    height: '100%', // Alto igual al 100% del contenedor
+    flex: 1, 
+    width: '100%', 
+    height: '100%', 
   },
   container: {
-    flex: 1, // Asegura que los componentes dentro del contenedor se expandan correctamente
-    // Otros estilos según sea necesario para tu diseño
+    flex: 1, 
   },
 });

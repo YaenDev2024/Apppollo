@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ImageBackground, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { NavBar } from '../components/NavBar';
-import { OrderList } from './Orders/OrderList';
+
 import order from '../../Assets/ordendecompra.png';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../../config';
+import OrderList from './orders/OrderList';
 
 export const OrderScreen = () => {
   // get all orders
@@ -71,6 +72,7 @@ export const OrderScreen = () => {
                 ))}
               </View>
             )}
+            
           </View>
         </ScrollView>
       </ImageBackground>
@@ -81,7 +83,7 @@ export const OrderScreen = () => {
 const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
-    justifyContent: 'flex-start', // Asegura que el contenido comience desde la parte superior
+    justifyContent: 'flex-start', 
   },
   backgroundImage: {
     flex: 1,
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start', // Asegura que el contenido comience desde la parte superior
+    justifyContent: 'flex-start', 
   },
   navbar: {
     backgroundColor: 'white',

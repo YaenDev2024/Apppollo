@@ -33,6 +33,7 @@ export const PackList = ({
   zanahoria,
   apio,
   price,
+  haveordercreated
 }) => {
   const [orders, setOrders] = useState('');
   const [combosOrder, setCombosOrder] = useState([]);
@@ -104,11 +105,11 @@ export const PackList = ({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.cardPack} onPress={handleNewOrder}>
+      <TouchableOpacity  style={[ haveordercreated ? styles.cardPack : styles.inactive]} onPress={handleNewOrder}  disabled={!haveordercreated}>
         <Image style={styles.img} source={{uri: url}} />
         <Text style={styles.title}>{nameCombo}</Text>
       </TouchableOpacity>
-
+      
       <Modal
         animationType="fade"
         transparent={true}
@@ -205,6 +206,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    // opacity:0.5
   },
   img: {
     width: '103%',
@@ -242,7 +244,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    left: 290,
+    left: 20,
     top: 20,
   },
   titleCard: {
@@ -267,5 +269,28 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingRight: 10,
     paddingLeft: 10,
+  },
+  active: {
+    // estilos cuando está activo
+  },
+  inactive: {
+    opacity: 0.5, // por ejemplo, puedes ajustar la opacidad
+    borderWidth: 1,
+    borderColor: '#D5D5D5',
+    width: 180,
+    height: 200,
+    borderRadius: 5,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
