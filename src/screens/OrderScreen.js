@@ -6,6 +6,7 @@ import order from '../../Assets/ordendecompra.png';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../../config';
 import OrderList from './Orders/OrderList';
+import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
 
 export const OrderScreen = () => {
   // get all orders
@@ -74,6 +75,8 @@ export const OrderScreen = () => {
             )}
             
           </View>
+      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
+
         </ScrollView>
       </ImageBackground>
     </View>

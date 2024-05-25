@@ -14,6 +14,7 @@ import {PackList} from './buy/PackList';
 import {db} from '../../config';
 import {collection, doc, onSnapshot, query, setDoc} from 'firebase/firestore';
 import {ModalOrdersToSelect} from '../components/BuyScreenComponents/ModalOrdersToSelect';
+import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
 
 export const BuyScreen = () => {
   const [loading, setLoading] = useState(true);
@@ -161,6 +162,8 @@ export const BuyScreen = () => {
           <TouchableOpacity style={styles.btncrear} onPress={handleCreateOrder}>
             <Text style={styles.titlebtn}>Crear orden</Text>
           </TouchableOpacity>
+      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
+
         </ScrollView>
       </ImageBackground>
     </View>

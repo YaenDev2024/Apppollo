@@ -33,7 +33,6 @@
     "react-native": "0.74.1",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "^2.16.1",
-    "react-native-google-mobile-ads": "^10.3.2",
     "react-native-image-picker": "^7.1.2",
     "react-native-picker-select": "^9.1.3",
     "react-native-progress": "^5.0.1",

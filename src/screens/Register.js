@@ -15,6 +15,7 @@ import {
 import pollo from '../../Assets/fnbg.png';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../config';
+import { BannerAd } from '@react-native-admob/admob';
 
 export const Register = ({navigation}) => {
   //Esto es para guardar los datos que el usuario ingrese en el form
@@ -88,6 +89,8 @@ export const Register = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
+      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
+
       </ScrollView>
     </ImageBackground>
   );

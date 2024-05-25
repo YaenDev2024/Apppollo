@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, ImageBackground, StatusBar, TouchableOpacity,StyleSheet, Text,TextInput,View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import pollo from '../../Assets/fnbg.png';
+import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
 export const WelcomeScreen = ({navigation}) => {
 
 
@@ -31,6 +32,8 @@ export const WelcomeScreen = ({navigation}) => {
           </Text>
         </TouchableOpacity>
       </View>
+      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
+
     </ScrollView>
   </ImageBackground>
   );

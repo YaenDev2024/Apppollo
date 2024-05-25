@@ -15,6 +15,7 @@ import {
 import pollo from '../../Assets/fnbg.png';
 import {  signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../config';
+import { BannerAd } from '@react-native-admob/admob';
 
 
 export const Login = ({navigation}) => {
@@ -90,6 +91,8 @@ export const Login = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
+      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
+
       </ScrollView>
     </ImageBackground>
   );

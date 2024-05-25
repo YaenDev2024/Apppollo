@@ -28,10 +28,7 @@ export default function App() {
   return (
     <MenuProvider>
       <RootNavigation />
-      <BannerAd unitId={TestIds.BANNER} size={BannerAdSize.FULL_BANNER}/>
-      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
     </MenuProvider>
-
   );
 }
 

@@ -1664,11 +1664,6 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@iabtcf/core@^1.5.3":
-  version "1.5.6"
-  resolved "https://registry.npmjs.org/@iabtcf/core/-/core-1.5.6.tgz"
-  integrity sha512-u2q9thI9vLurYZdGtyJsDYOqoeLc4EgQsYGSc+UVibYII61B/ENJPZS6eFlML1F0hSoTR/goptpo5nGRDkKd2w==
-
 "@isaacs/ttlcache@^1.4.1":
   version "1.4.1"
   resolved "https://registry.npmjs.org/@isaacs/ttlcache/-/ttlcache-1.4.1.tgz"
@@ -6665,14 +6660,6 @@ react-native-gesture-handler@^2.16.1, "react-native-gesture-handler@>= 1.0.0":
     invariant "^2.2.4"
     lodash "^4.17.21"
     prop-types "^15.7.2"
-
-react-native-google-mobile-ads@^10.3.2:
-  version "10.3.2"
-  resolved "https://registry.npmjs.org/react-native-google-mobile-ads/-/react-native-google-mobile-ads-10.3.2.tgz"
-  integrity sha512-fuhZuPWW4vH4LcfEDn7z5WchyfG3o9kP1LaxxBaz2qPZlm8rg4+K3b+6ufEiMrEBPu627oEpvCtMJGXpPkZKyA==
-  dependencies:
-    "@iabtcf/core" "^1.5.3"
-    use-deep-compare-effect "^1.8.1"
 
 react-native-image-picker@^7.1.2:
   version "7.1.2"
