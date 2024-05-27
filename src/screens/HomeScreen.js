@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
   StatusBar,
   Text,
+  Button,
 } from 'react-native';
 import Icons from '../components/Icons';
 import {MenuOptions} from '../components/MenuOptions';
@@ -14,9 +15,30 @@ import inventory from '../../Assets/inventory-removebg-preview.png';
 import buy from '../../Assets/cmcarritos.png';
 import {NavBar} from '../components/NavBar';
 import order from '../../Assets/order.png';
-import { BannerAd, RewardedAd, InterstitialAd, BannerAdSize, TestIds } from '@react-native-admob/admob';
+import {
+  BannerAd,
+  RewardedAd,
+  RewardedInterstitialAd,
+  InterstitialAd,
+  BannerAdSize,
+  TestIds,
+  useRewardedInterstitialAd,
+  useInterstitialAd,
+  useRewardedAd,
+} from '@react-native-admob/admob';
 
 export const HomeScreen = ({navigation}) => {
+
+  const {adLoaded, adDismissed, show} = useRewardedAd(
+    'ca-app-pub-3477493054350988/3027142417'
+  );
+
+  useEffect(() => {
+    if (adDismissed) {
+      navigation.navigate('Inventory');
+    }
+  }, [adDismissed, navigation]);
+
   return (
     <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
       <ImageBackground
@@ -43,15 +65,31 @@ export const HomeScreen = ({navigation}) => {
               navigation={navigation}
               To={'Buy'}
             />
-             <MenuOptions
+            <MenuOptions
               name={'Ordenes'}
               url={order}
               navigation={navigation}
               To={'Orders'}
             />
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Button
+                title="Navigate to next screen"
+                onPress={() => {
+                  if (adLoaded) {
+                    show();
+                  } else {
+                    navigation.navigate('Inventory');
+                  }
+                }}
+              />
+            </View>
           </View>
-          <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
 
+          <BannerAd
+            unitId="ca-app-pub-3477493054350988/1457774401"
+            size={BannerAdSize.FULL_BANNER}
+          />
         </ScrollView>
       </ImageBackground>
     </View>

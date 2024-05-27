@@ -12,9 +12,16 @@ import {
 import {NavBar} from '../components/NavBar';
 import {PackList} from './buy/PackList';
 import {db} from '../../config';
-import {collection, doc, onSnapshot, query, setDoc} from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import {ModalOrdersToSelect} from '../components/BuyScreenComponents/ModalOrdersToSelect';
-import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
+import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
 
 export const BuyScreen = () => {
   const [loading, setLoading] = useState(true);
@@ -24,7 +31,7 @@ export const BuyScreen = () => {
   const [lastOrder, setLastorders] = useState('');
   const [orderActive, setOrderActive] = useState('none');
   const [ModalSelectOrder, setShowModalSelectOrder] = useState(false);
-
+  const [inactiveBtn,setInactiveBtn] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -68,6 +75,12 @@ export const BuyScreen = () => {
     };
 
     fetchDataOrder();
+
+    if(orderActive === 'none')
+      {
+        setInactiveBtn(true);
+      }
+
   }, []);
 
   const filteredProducts = products.filter(product =>
@@ -76,7 +89,7 @@ export const BuyScreen = () => {
 
   const createOrder = () => {
     setDoc(doc(db, 'orders', lastOrder), {
-      item: '',
+      item: [],
       price: '',
       qty: '',
       closed: '0',
@@ -97,7 +110,8 @@ export const BuyScreen = () => {
 
   const handleCreateOrder = () => {
     setOrder(true);
-    setOrderActive('#' + lastOrder);
+    setInactiveBtn(false);
+    setOrderActive(lastOrder);
     createOrder();
   };
 
@@ -105,10 +119,29 @@ export const BuyScreen = () => {
     setShowModalSelectOrder(true);
   };
 
+  const handleEndOrder = async () => {
+    const updateProduct = doc(db, 'orders', orderActive);
+
+    await updateDoc(updateProduct, {
+      closed: '1',
+    });
+
+    setOrderActive('none');
+    setInactiveBtn(true);
+    setOrder(false);
+  };
+
   const handleCloseModal = () => {
     setShowModalSelectOrder(false);
   };
 
+  const getDataModal = text => {
+    console.log(text);
+    setShowModalSelectOrder(false);
+    setOrderActive(text);
+    setOrder(true);
+    setInactiveBtn(false)
+  };
   return (
     <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
       <ImageBackground
@@ -125,22 +158,31 @@ export const BuyScreen = () => {
             <NavBar name={'Compras'} />
             <View style={styles.containerOrder}>
               <Text style={styles.title}>Paquetes disponibles para venta</Text>
-              <Text style={styles.title}>Orden Activa: {orderActive}</Text>
-              <TouchableOpacity
-                style={styles.selectorder}
-                onPress={handleSelectOrder}>
-                <Text style={styles.titleorderselect}>Select Order</Text>
-              </TouchableOpacity>
+              <Text style={styles.title}>Orden Activa: #{orderActive}</Text>
+              <View style={styles.rowbtns}>
+                <TouchableOpacity
+                  style={styles.selectorder}
+                  onPress={handleSelectOrder}>
+                  <Text style={styles.titleorderselect}>Seleccionar Order</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[!inactiveBtn ? styles.endorder : styles.inactive]}
+                  onPress={handleEndOrder}
+                  disabled={inactiveBtn}>
+                  <Text style={styles.titleorderselect}>Terminar Order</Text>
+                </TouchableOpacity>
+              </View>
             </View>
             {loading ? (
-              <ActivityIndicator size="large" color="black" /> 
+              <ActivityIndicator size="large" color="black" />
             ) : (
-              <View style={styles.containerProducts}>
+              <View>
                 {chunkedProducts.map((row, rowIndex) => (
                   <View key={rowIndex} style={styles.row}>
                     {row.map(product => (
                       <PackList
                         key={product.id}
+                        idorder={product.id}
                         url={product.url}
                         nameCombo={product.nameCombo}
                         apio={product.apio}
@@ -151,6 +193,7 @@ export const BuyScreen = () => {
                         zanahoria={product.zanahoria}
                         price={product.price}
                         haveordercreated={order}
+                        orderNo={orderActive}
                       />
                     ))}
                   </View>
@@ -158,12 +201,18 @@ export const BuyScreen = () => {
               </View>
             )}
           </View>
-          <ModalOrdersToSelect isActive={ModalSelectOrder} onClose={handleCloseModal} />
+          <ModalOrdersToSelect
+            isActive={ModalSelectOrder}
+            onClose={handleCloseModal}
+            data={getDataModal}
+          />
           <TouchableOpacity style={styles.btncrear} onPress={handleCreateOrder}>
             <Text style={styles.titlebtn}>Crear orden</Text>
           </TouchableOpacity>
-      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
-
+          <BannerAd
+            unitId="ca-app-pub-3477493054350988/1457774401"
+            size={BannerAdSize.FULL_BANNER}
+          />
         </ScrollView>
       </ImageBackground>
     </View>
@@ -219,8 +268,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
   },
   titleorderselect: {
     color: 'white',
@@ -230,5 +278,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#B67F51',
     padding: 10,
     borderRadius: 5,
+    margin: 1,
+  },
+  endorder: {
+    backgroundColor: '#B66051',
+    padding: 10,
+    borderRadius: 5,
+    margin: 1,
+  },
+  inactive: {
+    backgroundColor: '#B66051',
+    padding: 10,
+    borderRadius: 5,
+    margin: 1,
+    opacity:0.5
+  },
+  rowbtns: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });

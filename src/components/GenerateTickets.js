@@ -1,32 +1,32 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, Image, Alert} from 'react-native';
 import pollo from '../../Assets/fnbg.png';
 
-const GenerateTickets = ({products}) => {
+const GenerateTickets = ({productsss}) => {
   const [eventName, setEventName] = useState('El Pollo Tragon');
   const [order, setOrder] = useState('#0001');
-  const [date, setDate] = useState('VIERNES, SEPTEMBER 19, 2024');
+  const [date, setDate] = useState(new Date);
   const [name, setName] = useState('Tomas Acosta');
   const [price, setPrice] = useState('$20');
   const [total, setTotal] = useState(0);
   // Define el array de productos
-//   const products = [
-//     {qty: 1, item: 'Pollo Asado', price: '$20'},
-//     {qty: 2, item: 'Ensalada', price: '$10'},
-//     {qty: 1, item: 'Bebida', price: '$5'},
-//   ];
+  const products = [
+    {qty: 1, item: 'Pollo Asado', price: '$20'},
+    {qty: 2, item: 'Ensalada', price: '$10'},
+    {qty: 1, item: 'Bebida', price: '$5'},
+  ];
 
-  
+  console.log("Productos en ticket:" + productsss.price)
   const currentYear = new Date().getFullYear();
 
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={pollo} />
       <View style={styles.containerName}>
-        <Text style={styles.title}>Order {order}</Text>
+        <Text style={styles.title}>Order #{productsss.id}  </Text>
         <Text style={styles.title}>Atendido por {name}</Text>
       </View>
-      <Text style={styles.title}>{date}</Text>
+      <Text style={styles.title}>{date.toLocaleString()}</Text>
 
       <View style={styles.containerTitle}>
         <Text style={styles.titleName}>QTY</Text>
@@ -36,25 +36,25 @@ const GenerateTickets = ({products}) => {
 
       {/* Contenedor para todos los productos */}
       <View style={styles.productsContainer}>
-        {products.map((product, index) => (
+        {productsss.item.map((product, index) => (
           <View key={index} style={styles.containerProductos}>
             <Text style={styles.productText}>{product.qty}</Text>
             <Text style={styles.productText}>{product.item}</Text>
-            <Text style={styles.productText}>{product.price}</Text>
+            <Text style={styles.productText}>${product.price}</Text>
           </View>
         ))}
       </View>
 
-      <View style={styles.containerTotal}>
-        <Text style={styles.titleName}>QTY</Text>
-        <Text style={styles.titleTotal}>$ {total}</Text>
+      <View style={styles.containerTitle}>
+        <Text style={styles.titleName}>QTY </Text>
+        <Text style={styles.titleTotal}>{productsss.qty}</Text>
       </View>
-      <View style={styles.containertotal2}>
-        <Text style={styles.titleName}>TOTAL</Text>
-        <Text style={styles.titleTotal}>$ {total}</Text>
+      <View style={styles.containerTitle2}>
+        <Text style={styles.titleName}>TOTAL     </Text>
+        <Text style={styles.titleTotal}>$ {productsss.price}</Text>
       </View>
       <View style={styles.containerPayment}>
-        <Text style={styles.titleName}>Tipo de  pago:</Text>
+        <Text style={styles.titleName}>Tipo de pago:</Text>
         <Text style={styles.titleName}>Efectivo</Text>
       </View>
       <View style={styles.containerPaymentTotal}>
@@ -103,9 +103,8 @@ const styles = StyleSheet.create({
   containertotal2: {
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     width: '100%',
-    paddingBottom: 10,
   },
   image: {
     width: 150,
@@ -134,6 +133,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
+  containerTitle2: {
+    flexDirection: 'row',
+    borderBottomColorColor: 'black',
+    borderBottomWidth: 1,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingVertical:10
+  },
   titleName: {
     fontSize: 12,
     fontWeight: 'bold',
@@ -149,8 +158,6 @@ const styles = StyleSheet.create({
     width: '33%',
     textAlign: 'right',
     marginTop: 10,
-    position: 'absolute',
-    left: 190,
   },
   titleNameItem: {
     fontSize: 12,

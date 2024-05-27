@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ImageBackground, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
-import { NavBar } from '../components/NavBar';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  ImageBackground,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {NavBar} from '../components/NavBar';
 
 import order from '../../Assets/ordendecompra.png';
-import { collection, onSnapshot, query } from 'firebase/firestore';
-import { db } from '../../config';
+import {collection, onSnapshot, query} from 'firebase/firestore';
+import {db} from '../../config';
 import OrderList from './Orders/OrderList';
-import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
+import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
 
 export const OrderScreen = () => {
   // get all orders
@@ -21,7 +29,7 @@ export const OrderScreen = () => {
         const unsuscribe = onSnapshot(q, querySnapshot => {
           const updatedProducts = [];
           querySnapshot.forEach(doc => {
-            updatedProducts.push({ id: doc.id, ...doc.data() });
+            updatedProducts.push({id: doc.id, ...doc.data()});
           });
           console.log('Updated Products:', updatedProducts);
           setProducts(updatedProducts);
@@ -38,46 +46,48 @@ export const OrderScreen = () => {
 
   // Filtrar productos según el término de búsqueda
   const filteredProducts = products.filter(product =>
-    product.item.toLowerCase().includes(searchTerm.toLowerCase())
+    product.id.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // Ordenar productos: primero los que tienen closed == 0, luego closed == 1
   const sortedProducts = filteredProducts.sort((a, b) => a.closed - b.closed);
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <ImageBackground
         source={require('../../Assets/fondo.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
-        imageStyle={{ opacity: 0.08 }}>
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          <StatusBar
-            backgroundColor={'transparent'}
-            barStyle="light-content"
-          />
-          <View style={styles.container}>
+        imageStyle={{opacity: 0.08}}>
+        <View style={styles.container}>
+          <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
+          <View style={styles.containerFlatlist}>
             <NavBar name={'Ordenes'} />
             {loading ? (
               <ActivityIndicator size="large" color="black" />
             ) : (
               <View style={styles.containerProducts}>
-                {sortedProducts.map(product => (
+                <FlatList
+                data={sortedProducts}
+                renderItem={({ item }) => (
                   <OrderList
-                    key={product.id}
-                    id={product.id}
-                    name={product.item}
+                    id={item.id}
+                    name={item.item[0].item + '...'}
                     url={order}
-                    isClosed={product.closed}
-                  />
-                ))}
+                    isClosed={item.closed}
+                    dataToTicket = {item}
+                  /> 
+                )}
+                keyExtractor={item => item.id.toString()}
+              />
               </View>
             )}
-            
           </View>
-      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
-
-        </ScrollView>
+          <BannerAd
+            unitId="ca-app-pub-3477493054350988/1457774401"
+            size={BannerAdSize.FULL_BANNER}
+          />
+        </View>
       </ImageBackground>
     </View>
   );
@@ -86,7 +96,7 @@ export const OrderScreen = () => {
 const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
-    justifyContent: 'flex-start', 
+    justifyContent: 'flex-start',
   },
   backgroundImage: {
     flex: 1,
@@ -96,8 +106,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start', 
+    justifyContent: 'flex-start',
   },
+  containerFlatlist:{
+      flex:1,
+      width:'100%'
+  },    
   navbar: {
     backgroundColor: 'white',
     width: '100%',
@@ -116,6 +130,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   containerProducts: {
+    flex:1,
     width: '100%',
     paddingVertical: 10,
   },

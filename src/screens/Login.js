@@ -15,7 +15,7 @@ import {
 import pollo from '../../Assets/fnbg.png';
 import {  signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../config';
-import { BannerAd } from '@react-native-admob/admob';
+import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
 
 
 export const Login = ({navigation}) => {

@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
   },
   containerProducts: {
     paddingVertical: 10,
+    marginBottom:25
   },
   row: {
     flexDirection: 'row',
