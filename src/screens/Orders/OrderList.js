@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GenerateTickets from '../../components/GenerateTickets';
-import ViewShot from "react-native-view-shot"; // Importa react-native-view-shot
 
 export const OrderList = ({ name, url, isClosed, id, dataToTicket }) => {
   const [showModal, setShowModal] = useState(false);
