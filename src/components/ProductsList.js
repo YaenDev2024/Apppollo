@@ -300,6 +300,9 @@ const styles = StyleSheet.create({
   select: {
     backgroundColor: 'black',
   },
+  title:{
+    color:'black'
+  }
 });
 
 export default ProductsList;

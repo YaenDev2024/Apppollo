@@ -13,8 +13,8 @@ import {NavBar} from '../components/NavBar';
 import order from '../../Assets/ordendecompra.png';
 import {collection, onSnapshot, query} from 'firebase/firestore';
 import {db} from '../../config';
-import OrderList from './Orders/OrderList';
 import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
+import OrderList from './orders/OrderList';
 
 export const OrderScreen = () => {
   // get all orders
@@ -63,6 +63,10 @@ export const OrderScreen = () => {
           <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
           <View style={styles.containerFlatlist}>
             <NavBar name={'Ordenes'} />
+            <BannerAd
+            unitId="ca-app-pub-3477493054350988/1457774401"
+            size={BannerAdSize.ADAPTIVE_BANNER}
+          />
             {loading ? (
               <ActivityIndicator size="large" color="black" />
             ) : (
@@ -83,9 +87,10 @@ export const OrderScreen = () => {
               </View>
             )}
           </View>
+          
           <BannerAd
             unitId="ca-app-pub-3477493054350988/1457774401"
-            size={BannerAdSize.FULL_BANNER}
+            size={BannerAdSize.ADAPTIVE_BANNER}
           />
         </View>
       </ImageBackground>

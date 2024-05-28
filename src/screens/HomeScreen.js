@@ -15,6 +15,7 @@ import inventory from '../../Assets/inventory-removebg-preview.png';
 import buy from '../../Assets/cmcarritos.png';
 import {NavBar} from '../components/NavBar';
 import order from '../../Assets/order.png';
+import coin from '../../Assets/coin-pt.png';
 import {
   BannerAd,
   RewardedAd,
@@ -30,8 +31,10 @@ import {
 export const HomeScreen = ({navigation}) => {
 
   const {adLoaded, adDismissed, show} = useRewardedAd(
-    'ca-app-pub-3477493054350988/3027142417'
+    'ca-app-pub-3477493054350988/8242528814'
   );
+
+  const uri = 'https://firebasestorage.googleapis.com/v0/b/pollotragonapp.appspot.com/o/images%2Fcoin-pt.png?alt=media&token=8aa23bfd-84fc-4aed-a9cd-27129a70e0d8';
 
   useEffect(() => {
     if (adDismissed) {
@@ -71,6 +74,12 @@ export const HomeScreen = ({navigation}) => {
               navigation={navigation}
               To={'Orders'}
             />
+              <MenuOptions
+              name={'Win PTCoins'}
+              url={coin}
+              navigation={navigation}
+              To={'Orders'}
+            />
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <Button
@@ -79,7 +88,7 @@ export const HomeScreen = ({navigation}) => {
                   if (adLoaded) {
                     show();
                   } else {
-                    navigation.navigate('Inventory');
+                    //navigation.navigate('Inventory');
                   }
                 }}
               />

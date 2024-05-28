@@ -69,6 +69,8 @@ export const MainPageInventory = () => {
         <NavBar name={'Inventario'} />
         <View>
           <SearchInput setSearchTerm={setSearchTerm} />
+          <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.ADAPTIVE_BANNER}/>
+
           <ButtonsInventory />
           {loading ? (
             <ActivityIndicator size="large" color="black" /> // Muestra el indicador de carga mientras los datos se están cargando
@@ -93,8 +95,7 @@ export const MainPageInventory = () => {
             </View>
           )}
         </View>
-      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.FULL_BANNER}/>
-
+    
       </ScrollView>
     </ImageBackground>
   );

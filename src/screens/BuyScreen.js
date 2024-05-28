@@ -171,7 +171,12 @@ export const BuyScreen = () => {
                   disabled={inactiveBtn}>
                   <Text style={styles.titleorderselect}>Terminar Order</Text>
                 </TouchableOpacity>
+             
               </View>
+              <BannerAd
+            unitId="ca-app-pub-3477493054350988/1457774401"
+            size={BannerAdSize.ADAPTIVE_BANNER}
+          />
             </View>
             {loading ? (
               <ActivityIndicator size="large" color="black" />
