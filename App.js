@@ -9,14 +9,16 @@ import {
   StyleSheet,
   Text,
   View,
-  useColorScheme, Button,
+  useColorScheme,
+  Button,
   Alert
 } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootNavigation } from './src/navigation';
 import { MenuProvider } from './src/hooks/MenuContext';
-import { BannerAd, BannerAdSize, TestIds } from '@react-native-admob/admob';
+import { BannerAd, BannerAdSize, TestIds, AppOpenAdProvider } from '@react-native-admob/admob';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -26,19 +28,27 @@ export default function App() {
   };
 
   return (
-    <MenuProvider>
-      <RootNavigation />
-    </MenuProvider>
+    <AppOpenAdProvider
+      unitId={'ca-app-pub-3477493054350988/4308605933'} 
+      options={{
+        showOnColdStart: true,
+        showOnAppForeground: true,
+      }}
+    >
+      <MenuProvider>
+        <RootNavigation />
+      </MenuProvider>
+    </AppOpenAdProvider>
   );
 }
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1, 
-    width: '100%', 
-    height: '100%', 
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
   container: {
-    flex: 1, 
+    flex: 1,
   },
 });

@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GenerateTickets from '../../components/GenerateTickets';
 
-export const OrderList = ({ name, url, isClosed, id, dataToTicket }) => {
+export const OrderList = ({ name, url, isClosed, id, dataToTicket, onPress }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleLoadTicket = () => {
     setShowModal(true);
-  }
+    onPress(dataToTicket); // Asegúrate de llamar a onPress aquí con el producto
+  };
 
   return (
     <View style={styles.container}>
@@ -16,18 +17,14 @@ export const OrderList = ({ name, url, isClosed, id, dataToTicket }) => {
         <View style={styles.textContainer}>
           <Text style={styles.textColor}>{name}</Text>
           <Text style={styles.textColor}>#{id}</Text>
-          {isClosed == 0 ? (
+          {isClosed === 0 ? (
             <Text style={styles.textColorActive}>{isClosed}</Text>
           ) : (
-              <Text style={styles.textColorSell}>{isClosed}</Text>
-            )}
+            <Text style={styles.textColorSell}>{isClosed}</Text>
+          )}
         </View>
       </TouchableOpacity>
-      <Modal
-        visible={showModal}
-        animationType="slide"
-        transparent={true}
-      >
+      <Modal visible={showModal} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <GenerateTickets productsss={dataToTicket} />
@@ -80,6 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 25,
     height: 25,
+    textAlign: 'center',
   },
   textColorSell: {
     color: 'green',
@@ -89,6 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 25,
     height: 25,
+    textAlign: 'center',
   },
   img: {
     width: 90,

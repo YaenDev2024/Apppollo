@@ -8,6 +8,8 @@ import {
   StatusBar,
   Text,
   Button,
+  Alert,
+  Image,
 } from 'react-native';
 import Icons from '../components/Icons';
 import {MenuOptions} from '../components/MenuOptions';
@@ -26,21 +28,23 @@ import {
   useRewardedInterstitialAd,
   useInterstitialAd,
   useRewardedAd,
+  useAppOpenAd,
 } from '@react-native-admob/admob';
 
-export const HomeScreen = ({navigation}) => {
-
+export const WinCoins = ({navigation}) => {
   const {adLoaded, adDismissed, show} = useRewardedAd(
-    'ca-app-pub-3477493054350988/8242528814'
+    'ca-app-pub-3477493054350988/8242528814',
   );
-
-  const uri = 'https://firebasestorage.googleapis.com/v0/b/pollotragonapp.appspot.com/o/images%2Fcoin-pt.png?alt=media&token=8aa23bfd-84fc-4aed-a9cd-27129a70e0d8';
+  const [coins, setCoins] = useState(0);
+  const uri =
+    'https://firebasestorage.googleapis.com/v0/b/pollotragonapp.appspot.com/o/images%2Fcoin-pt.png?alt=media&token=8aa23bfd-84fc-4aed-a9cd-27129a70e0d8';
 
   useEffect(() => {
     if (adDismissed) {
-      navigation.navigate('Inventory');
+      let sum = coins + 1;
+      setCoins(sum);
     }
-  }, [adDismissed, navigation]);
+  }, [adDismissed]);
 
   return (
     <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
@@ -55,56 +59,25 @@ export const HomeScreen = ({navigation}) => {
             barStyle="light-contentz"
           />
           <View style={styles.container}>
-            <NavBar name={'Menu'} />
-            
-          <BannerAd
-            unitId="ca-app-pub-3477493054350988/1457774401"
-            size={BannerAdSize.FULL_BANNER}
-          />
-            <MenuOptions
-              name={'Inventario'}
-              url={inventory}
-              navigation={navigation}
-              To={'Inventory'}
+            <NavBar name={'Win'} />
+
+            <BannerAd
+              unitId="ca-app-pub-3477493054350988/1457774401"
+              size={BannerAdSize.FULL_BANNER}
             />
+
             <MenuOptions
-              name={'Compras'}
-              url={buy}
-              navigation={navigation}
-              To={'Buy'}
-            />
-            <MenuOptions
-              name={'Ordenes'}
-              url={order}
-              navigation={navigation}
-              To={'Orders'}
-            />
-              <MenuOptions
-              name={'Win PTCoins'}
+              name={'Ruleta Game'}
               url={coin}
               navigation={navigation}
-              To={'Win'}
-            />
-              <MenuOptions
-              name={'Tickets'}
-              url={coin}
-              navigation={navigation}
-              To={'Ticket'}
-            />
-              <MenuOptions
-              name={'Share'}
-              url={coin}
-              navigation={navigation}
-              To={'Share'}
-            />
-            <MenuOptions
-              name={'PDF'}
-              url={coin}
-              navigation={navigation}
-              To={'pdf'}
+              To={'Roulette'}
             />
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={styles.title}>
+                Coins: {coins}{' '}
+                <Image style={{width: 25, height: 25}} source={{uri: uri}} />
+              </Text>
               <Button
                 title="Navigate to next screen"
                 onPress={() => {
