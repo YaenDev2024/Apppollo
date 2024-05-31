@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#E5E5E5',
     borderWidth: 1,
-    width: '80%',
+    width: '95%',
     height: 100,
     display: 'flex',
     alignItems: 'center',
@@ -26,6 +26,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 10,
     borderRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
   },
   textColor: {
     color: 'black',

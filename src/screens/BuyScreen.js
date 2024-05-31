@@ -23,7 +23,7 @@ import {
 import {ModalOrdersToSelect} from '../components/BuyScreenComponents/ModalOrdersToSelect';
 import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
 
-export const BuyScreen = () => {
+export const BuyScreen = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -115,6 +115,10 @@ export const BuyScreen = () => {
     createOrder();
   };
 
+  const handleCreateCombo = () =>{
+      navigation.navigate('Combos')
+  }
+
   const handleSelectOrder = () => {
     setShowModalSelectOrder(true);
   };
@@ -203,6 +207,7 @@ export const BuyScreen = () => {
                     ))}
                   </View>
                 ))}
+               
               </View>
             )}
           </View>
@@ -211,8 +216,12 @@ export const BuyScreen = () => {
             onClose={handleCloseModal}
             data={getDataModal}
           />
+          
           <TouchableOpacity style={styles.btncrear} onPress={handleCreateOrder}>
             <Text style={styles.titlebtn}>Crear orden</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btncrearC} onPress={handleCreateCombo}>
+            <Text style={styles.titlebtn}>Crear Combo</Text>
           </TouchableOpacity>
           <BannerAd
             unitId="ca-app-pub-3477493054350988/1457774401"
@@ -244,6 +253,12 @@ const styles = StyleSheet.create({
   },
   btncrear: {
     backgroundColor: 'orange',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btncrearC: {
+    backgroundColor: 'green',
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',

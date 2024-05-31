@@ -103,24 +103,26 @@ export const ModalProducts = ({active, setActive, option}) => {
     }, () => {
       storageRef.getDownloadURL().then((downloadURL) => {
         console.log('File available at: ', downloadURL);
-        addDoc(collection(db, 'food'), {
-          name: name,
-          qty: qty,
-          size: size,
-          url: downloadURL,
-          lastqtyadded: qty,
-          lastsizeadded: size
-        })
-          .then(() => {
-            // console.log('siuu');
-          })
-          .catch(err => {
-            console.log(err);
-          });
+          addFoodDocument(name,qty,size,downloadURL);
       });
     });
   };
-
+  
+const addFoodDocument = async (name, qty, size, downloadURL) => {
+  try {
+    const docRef = await addDoc(collection(db, 'food'), {
+      name: name,
+      qty: qty,
+      size: size,
+      url: downloadURL,
+      lastqtyadded: qty,
+      lastsizeadded: size,
+    });
+    console.log('Document written with ID: ', docRef.id);
+  } catch (err) {
+    console.error('Error adding document: ', err);
+  }
+};
   return (
     <View>
         <Modal

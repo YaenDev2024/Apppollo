@@ -4,7 +4,7 @@ import GenerateTickets from '../../components/GenerateTickets';
 
 export const OrderList = ({ name, url, isClosed, id, dataToTicket, onPress }) => {
   const [showModal, setShowModal] = useState(false);
-
+  
   const handleLoadTicket = () => {
     setShowModal(true);
     onPress(dataToTicket); // Asegúrate de llamar a onPress aquí con el producto
@@ -12,18 +12,23 @@ export const OrderList = ({ name, url, isClosed, id, dataToTicket, onPress }) =>
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.card} onPress={handleLoadTicket}>
+      
+      
+     
+      <TouchableOpacity style={isClosed === "0" ? styles.cardDisabled : styles.card} onPress={handleLoadTicket} disabled={isClosed === "0"}>
         <Image style={styles.img} source={url} />
         <View style={styles.textContainer}>
           <Text style={styles.textColor}>{name}</Text>
           <Text style={styles.textColor}>#{id}</Text>
-          {isClosed === 0 ? (
-            <Text style={styles.textColorActive}>{isClosed}</Text>
+          {isClosed === "0" ? (
+            <Text style={styles.textColorActive}></Text>
           ) : (
             <Text style={styles.textColorSell}>{isClosed}</Text>
           )}
         </View>
       </TouchableOpacity>
+
+      
       <Modal visible={showModal} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -57,6 +62,35 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
     padding: 10,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  cardDisabled: {
+    backgroundColor: 'white',
+    borderColor: '#E5E5E5',
+    borderWidth: 1,
+    width: '95%',
+    height: 100,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    margin: 10,
+    borderRadius: 10,
+    padding: 10,
+    opacity:0.5,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
   },
   textContainer: {
     flex: 1,

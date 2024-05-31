@@ -125,7 +125,7 @@ export const OrderScreen = () => {
               />
               </View>
             )}
-            <Button title="Generar y Compartir PDF" onPress={generateAndSharePDF} />
+            {/* <Button title="Generar y Compartir PDF" onPress={generateAndSharePDF} /> */}
           </View>
           
           <BannerAd

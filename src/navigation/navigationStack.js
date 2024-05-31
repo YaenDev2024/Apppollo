@@ -11,6 +11,7 @@ import RuletaGame from '../screens/Games/RuletaGame';
 import { TestPdf } from '../screens/tests/tstpdf';
 import ShareExample from '../screens/tests/ticket';
 import Createpdf from '../screens/tests/createpdf';
+import CombosList from '../screens/buy/CombosList';
 const Stack = createStackNavigator();
 
 export const NavigationStack = () => {
@@ -29,6 +30,7 @@ export const NavigationStack = () => {
         <Stack.Screen name="Ticket" component={TestPdf} />
         <Stack.Screen name="Share" component={ShareExample} />
         <Stack.Screen name="pdf" component={Createpdf} />
+        <Stack.Screen name="Combos" component={CombosList} />
       </Stack.Navigator>
     </NavigationContainer>
   );

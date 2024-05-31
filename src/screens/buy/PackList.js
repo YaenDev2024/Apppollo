@@ -155,6 +155,8 @@ export const PackList = ({
         qty: qty,
         closed: '0',
       });
+
+      
     }
   };
 
@@ -207,17 +209,8 @@ export const PackList = ({
               <TouchableOpacity
                 style={styles.btncrear}
                 onPress={handleCreateOrder}>
-                <Text>Crear</Text>
+                <Text>Agregar</Text>
               </TouchableOpacity>
-              {combosOrder.length > 0 ? (
-                <TouchableOpacity
-                  style={styles.btncrear}
-                  onPress={handleCreateOrder}>
-                  <Text>Terminar</Text>
-                </TouchableOpacity>
-              ) : (
-                ''
-              )}
             </View>
           </View>
         </View>
