@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
   Image,
   Vibration,
 } from 'react-native';
-import {NavBar} from '../../components/NavBar';
+import { NavBar } from '../../components/NavBar';
 import {
   BannerAd,
   BannerAdSize,
@@ -20,40 +20,42 @@ import {
   useInterstitialAd,
   useRewardedInterstitialAd,
 } from '@react-native-admob/admob';
-import {useAuth} from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
 const RuletaGame = () => {
   const [rotation] = useState(new Animated.Value(0));
   const [showWinAnimation, setShowWinAnimation] = useState(false);
   const [coinAnimation] = useState(new Animated.Value(0));
   const [textAnimation] = useState(new Animated.Value(0));
-  const handleVibration = () => {
-    Vibration.vibrate();
-  };
+
   const {
     adLoaded: interstitialLoaded,
     adDismissed: interstitialDismissed,
+    load: loadInterstitial,
     show: showInterstitial,
   } = useInterstitialAd('ca-app-pub-3477493054350988/8755348914');
+  
   const {
     adLoaded: rewardedLoaded,
     adDismissed: rewardedDismissed,
+    load: loadRewarded,
     show: showRewarded,
-  } = useRewardedAd(
-    'ca-app-pub-3477493054350988/8242528814', // Cambiar a tu ID de anuncio recompensado
-  );
-
+  } = useRewardedAd('ca-app-pub-3477493054350988/8242528814');
+  
   const {
     adLoaded: rewardedInterstitialLoaded,
-    adDismissed: rewardedIntertitialDismissed,
+    adDismissed: rewardedInterstitialDismissed,
+    load: loadRewardedInterstitial,
     show: showRewardedInterstitial,
-  } = useRewardedInterstitialAd(
-    'ca-app-pub-3477493054350988/3027142417', // Cambiar a tu ID de anuncio intersticial recompensado
-  );
+  } = useRewardedInterstitialAd('ca-app-pub-3477493054350988/3027142417');
 
-  const {user} = useAuth();
+  const { user } = useAuth();
 
-  const flipCoin = () => {
+  const handleVibration = useCallback(() => {
+    Vibration.vibrate();
+  }, []);
+
+  const flipCoin = useCallback(() => {
     const randomValue = Math.random();
     const rotateDuration = 1000;
 
@@ -94,7 +96,7 @@ const RuletaGame = () => {
         ]).start(() => {
           setShowWinAnimation(false);
 
-          if (interstitialLoaded && !interstitialDismissed) {
+          if (interstitialLoaded) {
             showInterstitial();
             handleVibration();
           } else if (rewardedInterstitialLoaded) {
@@ -104,21 +106,39 @@ const RuletaGame = () => {
             showRewarded();
             handleVibration();
           } else {
-            // Handle the case when neither ad is loaded
+            Alert.alert("No hay anuncios disponibles en este momento. Inténtalo más tarde.");
           }
         });
-        console.log(
-          'data public: ' +
-            rewardedLoaded +
-            ' ' +
-            interstitialLoaded +
-            ' ' +
-            rewardedInterstitialLoaded,
-        );
-        console.log(user.uid);
       }
     });
-  };
+  }, [
+    rotation, 
+    coinAnimation, 
+    textAnimation, 
+    interstitialLoaded, 
+    showInterstitial, 
+    rewardedInterstitialLoaded, 
+    showRewardedInterstitial, 
+    rewardedLoaded, 
+    showRewarded, 
+    handleVibration
+  ]);
+
+  useEffect(() => {
+    if (interstitialDismissed) {
+      loadInterstitial();
+    }
+    if (rewardedDismissed) {
+      loadRewarded();
+    }
+    if (rewardedInterstitialDismissed) {
+      loadRewardedInterstitial();
+    }
+  }, [interstitialDismissed, rewardedDismissed, rewardedInterstitialDismissed, loadInterstitial, loadRewarded, loadRewardedInterstitial]);
+
+  useEffect(() => {
+    console.log('User:', user);
+  }, [user]);
 
   const rotateInterpolate = rotation.interpolate({
     inputRange: [0, 1],
@@ -126,7 +146,7 @@ const RuletaGame = () => {
   });
 
   const animatedStyle = {
-    transform: [{rotate: rotateInterpolate}],
+    transform: [{ rotate: rotateInterpolate }],
   };
 
   const coinOpacityInterpolate = coinAnimation.interpolate({
@@ -147,28 +167,14 @@ const RuletaGame = () => {
     opacity: textOpacityInterpolate,
   };
 
-  useEffect(() => {
-    console.log(
-      'data public: ' +
-        interstitialDismissed +
-        ' ' +
-        rewardedDismissed +
-        ' ' +
-        rewardedIntertitialDismissed,
-    );
-  }, [interstitialDismissed, rewardedDismissed, rewardedDismissed]);
-
-  useEffect(() => {
-    console.log(user);
-  }, []);
-
   return (
-    <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
+    <View style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
       <ImageBackground
         source={require('../../../Assets/fondo.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
-        imageStyle={{opacity: 0.08}}>
+        imageStyle={{ opacity: 0.08 }}
+      >
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
           <View style={styles.container}>
@@ -181,28 +187,23 @@ const RuletaGame = () => {
               Bienvenido, el pollito Tommy te saluda
             </Text>
             <View style={styles.containerCoin}>
-              <TouchableOpacity onPress={flipCoin}>
+              <TouchableOpacity onPress={flipCoin} accessibilityLabel="Lanza la moneda" accessibilityHint="Presiona para lanzar la moneda y ver si cae en Cara o Cruz.">
                 <Animated.Image
                   source={require('../../../Assets/coin-pt.png')}
-                  style={[{width: 200, height: 200}, animatedStyle]}
+                  style={[{ width: 200, height: 200 }, animatedStyle]}
                 />
               </TouchableOpacity>
-              {showWinAnimation &&
-                (!interstitialDismissed ||
-                  !rewardedDismissed ||
-                  !rewardedIntertitialDismissed) && (
-                  <Animated.View
-                    style={[styles.winContainer, textAnimatedStyle]}>
-                    <Text style={styles.plusOne}>+1</Text>
-                    <Animated.Image
-                      source={require('../../../Assets/coin-pt.png')}
-                      style={[styles.coinImage, coinAnimatedStyle]}
-                    />
-                  </Animated.View>
-                )}
+              {showWinAnimation && (
+                <Animated.View style={[styles.winContainer, textAnimatedStyle]}>
+                  <Text style={styles.plusOne}>+1</Text>
+                  <Animated.Image
+                    source={require('../../../Assets/coin-pt.png')}
+                    style={[styles.coinImage, coinAnimatedStyle]}
+                  />
+                </Animated.View>
+              )}
             </View>
           </View>
-
           <BannerAd
             unitId="ca-app-pub-3477493054350988/1457774401"
             size={BannerAdSize.ADAPTIVE_BANNER}
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     top: '70%',
     left: '25%',
-    transform: [{translateX: -50}, {translateY: -50}],
+    transform: [{ translateX: -50 }, { translateY: -50 }],
     backgroundColor: 'rgba(255, 255, 255, 0)',
     borderRadius: 10,
     padding: 20,
