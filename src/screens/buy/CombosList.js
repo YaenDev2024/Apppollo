@@ -114,7 +114,7 @@ const CombosList = () => {
           <View style={styles.container}>
             <BannerAd
               unitId="ca-app-pub-3477493054350988/1457774401"
-              size={BannerAdSize.FULL_BANNER}
+              size={BannerAdSize.ADAPTIVE_BANNER}
             />
             <Text style={styles.title}>Lista de Productos disponibles</Text>
             <SearchInput setSearchTerm={setSearchTerm} />
@@ -150,7 +150,7 @@ const CombosList = () => {
             </View>
             <BannerAd
               unitId="ca-app-pub-3477493054350988/1457774401"
-              size={BannerAdSize.FULL_BANNER}
+              size={BannerAdSize.ADAPTIVE_BANNER}
             />
           </View>
           <Modal visible={showModal} animationType="fade" transparent={true}>

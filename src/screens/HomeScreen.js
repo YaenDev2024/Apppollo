@@ -44,7 +44,7 @@ export const HomeScreen = ({ navigation }) => {
           <View style={styles.container}>
             <BannerAd
               unitId="ca-app-pub-3477493054350988/1457774401"
-              size={BannerAdSize.FULL_BANNER}
+              size={BannerAdSize.ADAPTIVE_BANNER}
             />
             <View style={styles.menuContainer}>
               <MenuOptions name={'Inventario'} url={inventory} navigation={navigation} To={'Inventory'} />
@@ -67,7 +67,7 @@ export const HomeScreen = ({ navigation }) => {
             </View>
             <BannerAd
               unitId="ca-app-pub-3477493054350988/1457774401"
-              size={BannerAdSize.FULL_BANNER}
+              size={BannerAdSize.ADAPTIVE_BANNER}
             />
           </View>
         </ScrollView>

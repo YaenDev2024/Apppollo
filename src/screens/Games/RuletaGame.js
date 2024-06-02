@@ -175,7 +175,7 @@ const RuletaGame = () => {
             <NavBar name={'Ruleta'} />
             <BannerAd
               unitId="ca-app-pub-3477493054350988/1457774401"
-              size={BannerAdSize.FULL_BANNER}
+              size={BannerAdSize.ADAPTIVE_BANNER}
             />
             <Text style={styles.title}>
               Bienvenido, el pollito Tommy te saluda
@@ -205,7 +205,7 @@ const RuletaGame = () => {
 
           <BannerAd
             unitId="ca-app-pub-3477493054350988/1457774401"
-            size={BannerAdSize.FULL_BANNER}
+            size={BannerAdSize.ADAPTIVE_BANNER}
           />
         </ScrollView>
       </ImageBackground>
