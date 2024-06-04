@@ -1,34 +1,104 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   ImageBackground,
   ScrollView,
   StyleSheet,
   StatusBar,
-  Button,
+  ActivityIndicator,
 } from 'react-native';
-import { MenuOptions } from '../components/MenuOptions';
+import {MenuOptions} from '../components/MenuOptions';
 import inventory from '../../Assets/inventory-removebg-preview.png';
 import buy from '../../Assets/cmcarritos.png';
-import { NavBar } from '../components/NavBar';
+import {NavBar} from '../components/NavBar';
 import order from '../../Assets/order.png';
 import coin from '../../Assets/coin-pt.png';
-import {
-  BannerAd,
-  useRewardedAd,
-  BannerAdSize, 
-} from '@react-native-admob/admob';
+import {BannerAd, useRewardedAd, BannerAdSize} from '@react-native-admob/admob';
+import { auth, db } from '../../config'; // Asegúrate de importar db
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
-export const HomeScreen = ({ navigation }) => {
-  const { adLoaded, adDismissed, show } = useRewardedAd(
-    'ca-app-pub-3477493054350988/8242528814'
+export const HomeScreen = ({navigation}) => {
+  const {adLoaded, adDismissed, show} = useRewardedAd(
+    'ca-app-pub-3477493054350988/8242528814',
   );
+  const signedInUser = auth.currentUser;
+  const [time, setTime] = useState(true);
+  const [role, setRole] = useState('');
 
   useEffect(() => {
-    if (adDismissed) {
-      navigation.navigate('Inventory');
+    setTimeout(() => {
+      setTime(false);
+    }, 1000);
+  }, [time]);
+
+  useEffect(() => {
+    if (signedInUser) {
+      const fetchData = async () => {
+        try {
+          const q = query(
+            collection(db, 'users'),
+            where('mail', '==', signedInUser.email),
+          );
+          const unsubscribe = onSnapshot(q, querySnapshot => {
+            querySnapshot.forEach(doc => {
+              if (doc.exists) {
+                setRole(doc.data().role);
+              }
+            });
+          });
+          return () => unsubscribe();
+        } catch (error) {
+          console.error('Error al obtener los datos:', error);
+        }
+      };
+
+      fetchData();
     }
-  }, [adDismissed, navigation]);
+  }, [signedInUser]);
+
+  const renderMenuOptions = () => {
+    if (role === 'admin') {
+      return (
+        <>
+          <MenuOptions
+            name={'Inventario'}
+            url={inventory}
+            navigation={navigation}
+            To={'Inventory'}
+          />
+          <MenuOptions
+            name={'Compras'}
+            url={buy}
+            navigation={navigation}
+            To={'Buy'}
+          />
+          <MenuOptions
+            name={'Ordenes'}
+            url={order}
+            navigation={navigation}
+            To={'Orders'}
+          />
+          <MenuOptions
+            name={'Win PTCoins'}
+            url={coin}
+            navigation={navigation}
+            To={'Win'}
+          />
+        </>
+      );
+    } else if (role === 'user') {
+      return (
+        <MenuOptions
+          name={'Win PTCoins'}
+          url={coin}
+          navigation={navigation}
+          To={'Win'}
+        />
+      );
+    } else {
+      return null; // Si no hay rol o rol no coincide
+    }
+  };
 
   return (
     <View style={styles.root}>
@@ -36,42 +106,31 @@ export const HomeScreen = ({ navigation }) => {
         source={require('../../Assets/fondo.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
-        imageStyle={{ opacity: 0.08 }}
-      >
+        imageStyle={{opacity: 0.08}}>
         <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
         <NavBar name={'Menu'} />
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          <View style={styles.container}>
+        {time ? (
+          <ActivityIndicator size="large" color="black" />
+        ) : (
+          <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <View style={styles.container}>
+              <BannerAd
+                unitId="ca-app-pub-3477493054350988/1457774401"
+                size={BannerAdSize.ADAPTIVE_BANNER}
+              />
+              <View style={styles.menuContainer}>
+                {renderMenuOptions()}
+              </View>
+              <View style={styles.buttonContainer}>
+                {/* Espacio para botones adicionales si es necesario */}
+              </View>
+            </View>
             <BannerAd
               unitId="ca-app-pub-3477493054350988/1457774401"
               size={BannerAdSize.ADAPTIVE_BANNER}
             />
-            <View style={styles.menuContainer}>
-              <MenuOptions name={'Inventario'} url={inventory} navigation={navigation} To={'Inventory'} />
-              <MenuOptions name={'Compras'} url={buy} navigation={navigation} To={'Buy'} />
-              <MenuOptions name={'Ordenes'} url={order} navigation={navigation} To={'Orders'} />
-              <MenuOptions name={'Win PTCoins'} url={coin} navigation={navigation} To={'Win'} />
-              {/* <MenuOptions name={'Tickets'} url={coin} navigation={navigation} To={'Ticket'} />
-              <MenuOptions name={'Share'} url={coin} navigation={navigation} To={'Share'} />
-              <MenuOptions name={'PDF'} url={coin} navigation={navigation} To={'pdf'} /> */}
-            </View>
-            <View style={styles.buttonContainer}>
-              {/* <Button
-                title="Navigate to next screen"
-                onPress={() => {
-                  if (adLoaded) {
-                    show();
-                  }
-                }}
-              /> */}
-            </View>
-           
-          </View>
-          <BannerAd
-              unitId="ca-app-pub-3477493054350988/1457774401"
-              size={BannerAdSize.ADAPTIVE_BANNER}
-            />
-        </ScrollView>
+          </ScrollView>
+        )}
       </ImageBackground>
     </View>
   );
@@ -116,7 +175,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     elevation: 4, // Añade sombra en Android
     shadowColor: '#000', // Añade sombra en iOS
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },

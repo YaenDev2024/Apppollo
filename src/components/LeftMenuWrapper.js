@@ -1,5 +1,5 @@
 // LeftMenuWrapper.js
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Modal,
@@ -7,19 +7,21 @@ import {
   StyleSheet,
   Text,
   Image,
+  Dimensions
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {MenuContext} from '../hooks/MenuContext';
 import Icons from './Icons';
-import {useAuth} from '../hooks/useAuth';
-import {auth} from '../../config';
+import {auth, db} from '../../config';
 import coin from '../../Assets/coin-pt.png';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
 
 const LeftMenuWrapper = () => {
   const {menuVisible, hideMenu} = useContext(MenuContext);
   const navigation = useNavigation();
   const signedInUser = auth.currentUser;
-  //Agregar todos las opciones que se quieran en el leftmenu
+  const windowWidth = Dimensions.get('window').width;
+
   const dataArray = [
     {name: 'Inicio', to: 'Home', icon: 'home'},
     {name: 'Cuenta', to: 'Account', icon: 'user'},
@@ -27,10 +29,34 @@ const LeftMenuWrapper = () => {
     {name: 'Acerca de Nosotros', to: 'AboutUs', icon: 'info-circle'},
   ];
 
+  const [coins, setCoins] = useState(0);
+
   const handleCoin = () => {
     hideMenu();
     navigation.navigate('Win');
   };
+
+  useEffect(() => {
+    if (signedInUser) {
+      const fetchData = async () => {
+        try {
+          const q = query(collection(db, 'users'), where('mail', '==', signedInUser.email));
+          const unsubscribe = onSnapshot(q, querySnapshot => {
+            querySnapshot.forEach(doc => {
+              if (doc.exists) {
+                setCoins(doc.data().coins || 0); // Asegurarse de que coins existe
+              }
+            });
+          });
+          return () => unsubscribe(); // Desuscribirse cuando el componente se desmonte
+        } catch (error) {
+          console.error('Error al obtener los datos:', error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [signedInUser]);
 
   return (
     <Modal
@@ -39,26 +65,26 @@ const LeftMenuWrapper = () => {
       visible={menuVisible}
       onRequestClose={hideMenu}>
       <View style={styles.modalBackground}>
-        <View style={styles.menuContainer}>
+        <View style={[styles.menuContainer, { width: windowWidth * 0.8 }]}>
           {signedInUser ? (
             <View style={styles.containerData}>
               <Image
                 style={styles.imgPerfil}
                 source={{uri: signedInUser.photoURL}}
               />
-              <Text style={styles.name}>{signedInUser.displayName}</Text>
-              <Text style={styles.name}>Coins: 5</Text>
-              <Image style={styles.coin} source={coin}/>
+              <View style={styles.userInfo}>
+                <Text style={styles.name}>{signedInUser.displayName}</Text>
+                <Text style={styles.name}>Coins: {coins} <Image style={styles.coin} source={coin}/></Text>
+              </View>
+             
             </View>
-          ) : (
-            ''
-          )}
+          ) : null}
           <TouchableOpacity onPress={hideMenu} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>
               <Icons name={'close'} sizes={25} />
             </Text>
           </TouchableOpacity>
-          <View style={styles.conainerBtns}>
+          <View style={styles.containerBtns}>
             {dataArray.map((item, index) => (
               <TouchableOpacity
                 key={index}
@@ -82,31 +108,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   menuContainer: {
-    width: '80%',
     height: '100%',
     backgroundColor: 'white',
     position: 'absolute',
     left: 0,
+    paddingTop: 20,
   },
-  coin:{
-    width:30,
-    height:30,
-    marginLeft:-5
+  coin: {
+    width: 30,
+    height: 30
   },
   name: {
     color: 'white',
     fontSize: 16,
-    fontWeight:'700',
-    margin: 10,
+    fontWeight: '700'
   },
-  adbanner: {
-    width: 10,
+  userInfo: {
+    flex: 1,
+    marginLeft: 10,
   },
-  conainerBtns:{
-    
+  containerBtns: {
+    marginTop: 0,
   },
   imgPerfil: {
     width: 60,
@@ -114,15 +139,15 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   containerData: {
-    padding: 10,
+    padding: 20,
     flexDirection: 'row',
-    justifyContent:'flex-start',
     alignItems: 'center',
     borderBottomColor: '#E8E8E8',
     borderBottomWidth: 1,
     width: '100%',
     backgroundColor: '#EC1D1D',
-    height:120
+    height:120,
+    top:-20
   },
   closeButton: {
     marginTop: 10,
@@ -130,13 +155,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     right: -30,
+    top: 10,
   },
   closeButtonText: {
     color: 'black',
     fontWeight: 'bold',
-  },
-  textMenuP: {
-    color: 'black',
   },
   btnMenu: {
     flexDirection: 'row',
@@ -145,9 +168,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textbtn: {
-    marginLeft: 30,
+    marginLeft: 20,
     color: 'gray',
-    fontWeight:'bold'
+    fontWeight: 'bold',
   },
 });
 

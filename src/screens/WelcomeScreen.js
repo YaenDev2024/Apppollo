@@ -29,13 +29,13 @@ export const WelcomeScreen = ({navigation}) => {
         />
         <View style={styles.container}>
           <Image style={{width: 400, height: 400}} source={pollo} />
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('Sign Up')}>
             <Text style={{color: 'white', textAlign: 'center'}}>
               Registrarse
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <Text>o</Text>
           <TouchableOpacity
             style={styles.button}

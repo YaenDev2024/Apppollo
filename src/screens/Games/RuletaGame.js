@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
   Image,
   Vibration,
 } from 'react-native';
-import { NavBar } from '../../components/NavBar';
+import {NavBar} from '../../components/NavBar';
 import {
   BannerAd,
   BannerAdSize,
@@ -20,7 +20,9 @@ import {
   useInterstitialAd,
   useRewardedInterstitialAd,
 } from '@react-native-admob/admob';
-import { useAuth } from '../../hooks/useAuth';
+import {useAuth} from '../../hooks/useAuth';
+import {auth, db} from '../../../config';
+import {collection, onSnapshot, query, where, doc, updateDoc} from 'firebase/firestore';
 
 const RuletaGame = () => {
   const [rotation] = useState(new Animated.Value(0));
@@ -34,14 +36,14 @@ const RuletaGame = () => {
     load: loadInterstitial,
     show: showInterstitial,
   } = useInterstitialAd('ca-app-pub-3477493054350988/8755348914');
-  
+
   const {
     adLoaded: rewardedLoaded,
     adDismissed: rewardedDismissed,
     load: loadRewarded,
     show: showRewarded,
   } = useRewardedAd('ca-app-pub-3477493054350988/8242528814');
-  
+
   const {
     adLoaded: rewardedInterstitialLoaded,
     adDismissed: rewardedInterstitialDismissed,
@@ -49,7 +51,25 @@ const RuletaGame = () => {
     show: showRewardedInterstitial,
   } = useRewardedInterstitialAd('ca-app-pub-3477493054350988/3027142417');
 
-  const { user } = useAuth();
+  const {user} = useAuth();
+  const [coins, setCoins] = useState(0);
+  const [eCPM, seteCPM] = useState(0);
+  const [cruz, setCruz] = useState(false);
+  const signedInUser = auth.currentUser;
+
+  const updateCoin = async () => {
+    if (signedInUser) {
+      const userRef = doc(collection(db, 'users'), signedInUser.email);
+      try {
+        await updateDoc(userRef, {
+          coins: coins + 1,
+        });
+        setCoins(coins + 1);
+      } catch (error) {
+        console.error('Error updating coins:', error);
+      }
+    }
+  };
 
   const handleVibration = useCallback(() => {
     Vibration.vibrate();
@@ -69,7 +89,6 @@ const RuletaGame = () => {
       const result = randomValue < 0.5 ? 'Cara' : 'Cruz';
 
       if (result === 'Cara') {
-        setShowWinAnimation(true);
         Animated.sequence([
           Animated.timing(coinAnimation, {
             toValue: 1,
@@ -93,35 +112,44 @@ const RuletaGame = () => {
             useNativeDriver: true,
             delay: 1000,
           }),
-        ]).start(() => {
-          setShowWinAnimation(false);
-
+        ]).start(async () => {
+          setShowWinAnimation(true);
           if (interstitialLoaded) {
             showInterstitial();
+            await updateCoin();
             handleVibration();
+            setShowWinAnimation(false);
           } else if (rewardedInterstitialLoaded) {
             showRewardedInterstitial();
+            await updateCoin();
             handleVibration();
+            setShowWinAnimation(false);
           } else if (rewardedLoaded) {
             showRewarded();
+            await updateCoin();
             handleVibration();
+            setShowWinAnimation(false);
           } else {
-            Alert.alert("No hay anuncios disponibles en este momento. Inténtalo más tarde.");
+            Alert.alert(
+              'No hay anuncios disponibles en este momento. Inténtalo más tarde.',
+            );
           }
         });
+      } else {
+        setCruz(true);
       }
     });
   }, [
-    rotation, 
-    coinAnimation, 
-    textAnimation, 
-    interstitialLoaded, 
-    showInterstitial, 
-    rewardedInterstitialLoaded, 
-    showRewardedInterstitial, 
-    rewardedLoaded, 
-    showRewarded, 
-    handleVibration
+    rotation,
+    coinAnimation,
+    textAnimation,
+    interstitialLoaded,
+    showInterstitial,
+    rewardedInterstitialLoaded,
+    showRewardedInterstitial,
+    rewardedLoaded,
+    showRewarded,
+    handleVibration,
   ]);
 
   useEffect(() => {
@@ -134,7 +162,14 @@ const RuletaGame = () => {
     if (rewardedInterstitialDismissed) {
       loadRewardedInterstitial();
     }
-  }, [interstitialDismissed, rewardedDismissed, rewardedInterstitialDismissed, loadInterstitial, loadRewarded, loadRewardedInterstitial]);
+  }, [
+    interstitialDismissed,
+    rewardedDismissed,
+    rewardedInterstitialDismissed,
+    loadInterstitial,
+    loadRewarded,
+    loadRewardedInterstitial,
+  ]);
 
   const rotateInterpolate = rotation.interpolate({
     inputRange: [0, 1],
@@ -142,7 +177,7 @@ const RuletaGame = () => {
   });
 
   const animatedStyle = {
-    transform: [{ rotate: rotateInterpolate }],
+    transform: [{rotate: rotateInterpolate}],
   };
 
   const coinOpacityInterpolate = coinAnimation.interpolate({
@@ -163,14 +198,64 @@ const RuletaGame = () => {
     opacity: textOpacityInterpolate,
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setCruz(false);
+    }, 2000);
+  }, [cruz]);
+
+  useEffect(() => {
+    if (signedInUser) {
+      const fetchData = async () => {
+        try {
+          const q = query(
+            collection(db, 'users'),
+            where('mail', '==', signedInUser.email),
+          );
+          const unsubscribe = onSnapshot(q, querySnapshot => {
+            querySnapshot.forEach(doc => {
+              if (doc.exists) {
+                setCoins(doc.data().coins || 0);
+              }
+            });
+          });
+          return () => unsubscribe();
+        } catch (error) {
+          console.error('Error al obtener los datos:', error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [signedInUser]);
+
+  useEffect(() => {
+    const fetcheCPM = async () => {
+      try {
+        const q = query(collection(db, 'eCPM'));
+        const unsubscribe = onSnapshot(q, querySnapshot => {
+          querySnapshot.forEach(doc => {
+            if (doc.exists) {
+              let reward = (doc.data().eCPM / 1000) * coins;
+              seteCPM(reward.toFixed(3));
+            }
+          });
+        });
+        return () => unsubscribe(); // Desuscribirse cuando el componente se desmonte
+      } catch (error) {
+        console.error('Error al obtener los datos:', error);
+      }
+    };
+    fetcheCPM();
+  }, [coins]);
+
   return (
-    <View style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
+    <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
       <ImageBackground
         source={require('../../../Assets/fondo.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
-        imageStyle={{ opacity: 0.08 }}
-      >
+        imageStyle={{opacity: 0.08}}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
           <View style={styles.container}>
@@ -182,13 +267,38 @@ const RuletaGame = () => {
             <Text style={styles.title}>
               Bienvenido, el pollito Tommy te saluda
             </Text>
+            <Text style={styles.titledesc}>
+              La ruleta es un juego de suerte, donde al darle clic tienes la
+              oportunidad de ganar coins, pon aprueba tu suerte y dale clic a la
+              moneda con el pollito Tommy
+            </Text>
+            <View style={styles.containerWins}>
+              <Text style={{color: 'red', fontSize: 17, fontWeight: 'bold'}}>
+                Tus coins: {coins}
+              </Text>
+              <Text style={styles.title}>≈</Text>
+              <Text style={{color: 'orange', fontSize: 17, fontWeight: 'bold'}}>
+                Equivale a: ${eCPM} pesos
+              </Text>
+            </View>
             <View style={styles.containerCoin}>
-              <TouchableOpacity onPress={flipCoin} accessibilityLabel="Lanza la moneda" accessibilityHint="Presiona para lanzar la moneda y ver si cae en Cara o Cruz.">
+              <TouchableOpacity
+                onPress={flipCoin}
+                disabled={cruz}
+                style={cruz && {opacity: 0.5}}>
                 <Animated.Image
                   source={require('../../../Assets/coin-pt.png')}
-                  style={[{ width: 200, height: 200 }, animatedStyle]}
+                  style={[{width: 200, height: 200}, animatedStyle]}
                 />
               </TouchableOpacity>
+              {cruz && (
+                <Text style={styles.title}>
+                  Lo siento no ganaste nada :c, vuelve a intentarlo.
+                </Text>
+              )}
+              <Text style={{color: 'green', fontWeight: 'bold'}}>
+                Vamos intentalo c:
+              </Text>
               {showWinAnimation && (
                 <Animated.View style={[styles.winContainer, textAnimatedStyle]}>
                   <Text style={styles.plusOne}>+1</Text>
@@ -229,6 +339,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  containerWins: {
+    margin: 10,
+    marginBottom: -180,
+    padding: 10,
+    flexDirection: 'row',
+  },
   navbar: {
     backgroundColor: 'white',
     width: '100%',
@@ -246,13 +362,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 15,
   },
+  titledesc: {
+    marginLeft: 20,
+    color: 'gray',
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginRight: 15,
+    padding: 20,
+  },
   winContainer: {
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
     top: '70%',
     left: '25%',
-    transform: [{ translateX: -50 }, { translateY: -50 }],
+    transform: [{translateX: -50}, {translateY: -50}],
     backgroundColor: 'rgba(255, 255, 255, 0)',
     borderRadius: 10,
     padding: 20,

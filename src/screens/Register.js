@@ -13,9 +13,10 @@ import {
   Alert,
 } from 'react-native';
 import pollo from '../../Assets/fnbg.png';
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../../config';
-import { BannerAd } from '@react-native-admob/admob';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {auth, db} from '../../config';
+import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
+import { addDoc, collection } from 'firebase/firestore';
 
 export const Register = ({navigation}) => {
   //Esto es para guardar los datos que el usuario ingrese en el form
@@ -23,35 +24,55 @@ export const Register = ({navigation}) => {
   //START
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
-
+  const [mail, setMail] = useState('');
   const handleUserData = text => {
     setUser(text);
   };
   const handleUserPass = text => {
     setPass(text);
   };
+  const handleCorreoData = text => {
+    setMail(text);
+  };
   //END
   //Funciones para loguearse en base a firebase
 
   const LoginToApp = () => {
-    if(user !== undefined && user !== "" && pass !== undefined && pass !== "")
-    {
-        try {
-             //const auth = getAuth();
-              createUserWithEmailAndPassword(auth,user, pass).then(()=>{
-                Alert.alert('Usuario registrado con éxito');
-                navigation.navigate('Sign In');
-            })
-            .catch((err)=>{
-                Alert.alert(err)
-            });
-        
-          } catch (error) {
-            console.error('Error al iniciar sesión:', error);
-          }
-       
-    }else{
-        Alert.alert("Error","El usuario o contraseña no puede estar vacio, Por favor vuelve a intentarlo")
+    if (
+      user !== undefined &&
+      user !== '' &&
+      pass !== undefined &&
+      pass !== ''
+    ) {
+      try {
+        //const auth = getAuth();
+        createUserWithEmailAndPassword(auth, mail, pass)
+          .then(async () => {
+            Alert.alert('Usuario registrado con éxito');
+
+            try {
+              const docRef = await addDoc(collection(db, 'users'), {
+                userid: user,
+                mail: mail,
+                pass: pass,
+                coins: 0
+              });
+              console.log('Document written with ID: ', docRef.id);
+            } catch (err) {
+              console.error('Error adding document: ', err);
+            }
+          })
+          .catch(err => {
+            Alert.alert(err);
+          });
+      } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+      }
+    } else {
+      Alert.alert(
+        'Error',
+        'El usuario o contraseña no puede estar vacio, Por favor vuelve a intentarlo',
+      );
     }
   };
   return (
@@ -68,6 +89,13 @@ export const Register = ({navigation}) => {
         />
         <View style={styles.container}>
           <Image style={{width: 400, height: 400}} source={pollo} />
+          <Text style={styles.textUsers}>Correo: </Text>
+          <TextInput
+            style={styles.inputType}
+            placeholderTextColor={'gray'}
+            placeholder="Correo"
+            onChangeText={handleCorreoData}
+          />
           <Text style={styles.textUsers}>Usuario: </Text>
           <TextInput
             style={styles.inputType}
@@ -84,13 +112,13 @@ export const Register = ({navigation}) => {
             onChangeText={handleUserPass}
           />
           <TouchableOpacity style={styles.button} onPress={() => LoginToApp()}>
-            <Text style={{color: 'white', textAlign: 'center'}}>
-              Register
-            </Text>
+            <Text style={{color: 'white', textAlign: 'center'}}>Register</Text>
           </TouchableOpacity>
         </View>
-      <BannerAd unitId='ca-app-pub-3477493054350988/1457774401' size={BannerAdSize.ADAPTIVE_BANNER}/>
-
+        <BannerAd
+          unitId="ca-app-pub-3477493054350988/1457774401"
+          size={BannerAdSize.ADAPTIVE_BANNER}
+        />
       </ScrollView>
     </ImageBackground>
   );
