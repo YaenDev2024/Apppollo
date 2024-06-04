@@ -16,7 +16,7 @@ import coin from '../../Assets/coin-pt.png';
 import {
   BannerAd,
   useRewardedAd,
-  BannerAdSize,
+  BannerAdSize, 
 } from '@react-native-admob/admob';
 
 export const HomeScreen = ({ navigation }) => {
@@ -51,9 +51,9 @@ export const HomeScreen = ({ navigation }) => {
               <MenuOptions name={'Compras'} url={buy} navigation={navigation} To={'Buy'} />
               <MenuOptions name={'Ordenes'} url={order} navigation={navigation} To={'Orders'} />
               <MenuOptions name={'Win PTCoins'} url={coin} navigation={navigation} To={'Win'} />
-              <MenuOptions name={'Tickets'} url={coin} navigation={navigation} To={'Ticket'} />
+              {/* <MenuOptions name={'Tickets'} url={coin} navigation={navigation} To={'Ticket'} />
               <MenuOptions name={'Share'} url={coin} navigation={navigation} To={'Share'} />
-              <MenuOptions name={'PDF'} url={coin} navigation={navigation} To={'pdf'} />
+              <MenuOptions name={'PDF'} url={coin} navigation={navigation} To={'pdf'} /> */}
             </View>
             <View style={styles.buttonContainer}>
               {/* <Button
@@ -65,11 +65,12 @@ export const HomeScreen = ({ navigation }) => {
                 }}
               /> */}
             </View>
-            <BannerAd
+           
+          </View>
+          <BannerAd
               unitId="ca-app-pub-3477493054350988/1457774401"
               size={BannerAdSize.ADAPTIVE_BANNER}
             />
-          </View>
         </ScrollView>
       </ImageBackground>
     </View>

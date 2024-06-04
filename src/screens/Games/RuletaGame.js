@@ -136,10 +136,6 @@ const RuletaGame = () => {
     }
   }, [interstitialDismissed, rewardedDismissed, rewardedInterstitialDismissed, loadInterstitial, loadRewarded, loadRewardedInterstitial]);
 
-  useEffect(() => {
-    console.log('User:', user);
-  }, [user]);
-
   const rotateInterpolate = rotation.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],

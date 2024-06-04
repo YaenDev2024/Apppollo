@@ -15,7 +15,7 @@ import order from '../../Assets/ordendecompra.png';
 import {collection, onSnapshot, query} from 'firebase/firestore';
 import {db} from '../../config';
 import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
-import OrderList from './orders/OrderList'; 
+import OrderList from './Orders/OrderList'; 
 import GenerateTickets from '../components/GenerateTickets';
 
 export const OrderScreen = () => {

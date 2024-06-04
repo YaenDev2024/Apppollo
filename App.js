@@ -36,7 +36,9 @@ export default function App() {
       }}
     >
       <MenuProvider>
-        <RootNavigation />
+        <NavigationContainer>
+          <RootNavigation />
+        </NavigationContainer>
       </MenuProvider>
     </AppOpenAdProvider>
   );

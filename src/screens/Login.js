@@ -107,6 +107,7 @@ export const Login = ({ navigation }) => {
           <TouchableOpacity style={styles.button} onPress={LoginToApp}>
             <Text style={{ color: 'white', textAlign: 'center' }}>Iniciar Sesión</Text>
           </TouchableOpacity>
+          <Text style={styles.textUsers}>o</Text>
           <GoogleSigninButton onPress={handleSignIn} disabled={false} />
         </View>
         <BannerAd unitId="ca-app-pub-3477493054350988/1457774401" size={BannerAdSize.ADAPTIVE_BANNER} />
@@ -137,6 +138,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     width: 150,
+  },
+  buttonGoogle: {
+    borderRadius: 50,
+    shadowOpacity:0
   },
   backgroundImage: {
     flex: 1,

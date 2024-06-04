@@ -39,8 +39,17 @@ const Icons = ({name, sizes}: IconsProps) => {
     case 'check':
       return <Icon name="check" size={sizes} color={'white'} />;
       break;
-    case 'minus':
-      return <Icon name="minus" size={sizes} color={'red'} />;
+    case 'home':
+      return <Icon name="home" size={sizes} color={'gray'} />;
+      break;
+    case 'cog':
+      return <Icon name="cog" size={sizes} color={'gray'} />;
+      break;
+    case 'user':
+      return <Icon name="user" size={sizes} color={'gray'} />;
+      break;
+    case 'info-circle':
+      return <Icon name="info-circle" size={sizes} color={'gray'} />;
       break;
     default:
       break;
