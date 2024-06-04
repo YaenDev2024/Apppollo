@@ -14,8 +14,20 @@
       },
       "oauth_client": [
         {
-          "client_id": "58442434849-5ejnse52ethv4v25u7nm0la5dri7h8k1.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "58442434849-1ii2f7qp4juk7jbsdsp6gd63d9nrk1gk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pollotragonapp",
+            "certificate_hash": "bbbaf154d9ffbc7d3abe0cb4d21172dff98906fd"
+          }
+        },
+        {
+          "client_id": "58442434849-qq1mlppjg6igtpg0idnphp8m4hgr88gc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pollotragonapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
         }
       ],
       "api_key": [
