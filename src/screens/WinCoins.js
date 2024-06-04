@@ -74,20 +74,11 @@ export const WinCoins = ({navigation}) => {
             />
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={styles.title}>
+              {/* <Text style={styles.title}>
                 Coins: {coins}{' '}
                 <Image style={{width: 25, height: 25}} source={{uri: uri}} />
-              </Text>
-              <Button
-                title="Navigate to next screen"
-                onPress={() => {
-                  if (adLoaded) {
-                    show();
-                  } else {
-                    //navigation.navigate('Inventory');
-                  }
-                }}
-              />
+              </Text> */}
+           
             </View>
           </View>
 
