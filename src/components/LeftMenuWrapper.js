@@ -1,4 +1,3 @@
-// LeftMenuWrapper.js
 import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
@@ -7,7 +6,9 @@ import {
   StyleSheet,
   Text,
   Image,
-  Dimensions
+  Dimensions,
+  Animated,
+  Easing
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {MenuContext} from '../hooks/MenuContext';
@@ -30,10 +31,11 @@ const LeftMenuWrapper = () => {
   ];
 
   const [coins, setCoins] = useState(0);
+  const [slideAnim] = useState(new Animated.Value(-windowWidth)); // Estado para la animación de deslizamiento
 
-  const handleCoin = () => {
+  const handleCoin = (to) => {
     hideMenu();
-    navigation.navigate('Win');
+    navigation.navigate(to);
   };
 
   useEffect(() => {
@@ -58,14 +60,34 @@ const LeftMenuWrapper = () => {
     }
   }, [signedInUser]);
 
+  useEffect(() => {
+    if (menuVisible) {
+      // Animación para mostrar el menú
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      // Animación para ocultar el menú
+      Animated.timing(slideAnim, {
+        toValue: -windowWidth,
+        duration: 300,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [menuVisible]);
+
   return (
     <Modal
-      animationType="fade"
+      animationType="none"
       transparent={true}
       visible={menuVisible}
       onRequestClose={hideMenu}>
       <View style={styles.modalBackground}>
-        <View style={[styles.menuContainer, { width: windowWidth * 0.8 }]}>
+        <Animated.View style={[styles.menuContainer, { width: windowWidth * 0.8, transform: [{ translateX: slideAnim }] }]}>
           {signedInUser ? (
             <View style={styles.containerData}>
               <Image
@@ -76,7 +98,6 @@ const LeftMenuWrapper = () => {
                 <Text style={styles.name}>{signedInUser.displayName}</Text>
                 <Text style={styles.name}>Coins: {coins} <Image style={styles.coin} source={coin}/></Text>
               </View>
-             
             </View>
           ) : null}
           <TouchableOpacity onPress={hideMenu} style={styles.closeButton}>
@@ -88,7 +109,7 @@ const LeftMenuWrapper = () => {
             {dataArray.map((item, index) => (
               <TouchableOpacity
                 key={index}
-                onPress={handleCoin}
+                onPress={() => handleCoin(item.to)}
                 style={styles.btnMenu}>
                 <Text style={styles.closeButtonText}>
                   <Icons name={item.icon} sizes={25} />
@@ -97,7 +118,7 @@ const LeftMenuWrapper = () => {
               </TouchableOpacity>
             ))}
           </View>
-        </View>
+        </Animated.View>
       </View>
     </Modal>
   );
