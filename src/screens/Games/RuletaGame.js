@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
   Image,
   Vibration,
 } from 'react-native';
-import {NavBar} from '../../components/NavBar';
+import { NavBar } from '../../components/NavBar';
 import {
   BannerAd,
   BannerAdSize,
@@ -20,9 +20,9 @@ import {
   useInterstitialAd,
   useRewardedInterstitialAd,
 } from '@react-native-admob/admob';
-import {useAuth} from '../../hooks/useAuth';
-import {auth, db} from '../../../config';
-import {collection, onSnapshot, query, where, doc, updateDoc, getDocs} from 'firebase/firestore';
+import { useAuth } from '../../hooks/useAuth';
+import { auth, db } from '../../../config';
+import { collection, onSnapshot, query, where, doc, updateDoc, getDocs } from 'firebase/firestore';
 
 const RuletaGame = () => {
   const [rotation] = useState(new Animated.Value(0));
@@ -51,7 +51,7 @@ const RuletaGame = () => {
     show: showRewardedInterstitial,
   } = useRewardedInterstitialAd('ca-app-pub-3477493054350988/3027142417');
 
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [coins, setCoins] = useState(0);
   const [eCPM, seteCPM] = useState(0);
   const [cruz, setCruz] = useState(false);
@@ -63,7 +63,7 @@ const RuletaGame = () => {
         collection(db, 'users'),
         where('mail', '==', signedInUser.email)
       );
-  
+
       try {
         const querySnapshot = await getDocs(userQuery);
         if (!querySnapshot.empty) {
@@ -188,7 +188,7 @@ const RuletaGame = () => {
   });
 
   const animatedStyle = {
-    transform: [{rotate: rotateInterpolate}],
+    transform: [{ rotate: rotateInterpolate }],
   };
 
   const coinOpacityInterpolate = coinAnimation.interpolate({
@@ -261,12 +261,12 @@ const RuletaGame = () => {
   }, [coins]);
 
   return (
-    <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
+    <View style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
       <ImageBackground
         source={require('../../../Assets/fondo.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
-        imageStyle={{opacity: 0.08}}>
+        imageStyle={{ opacity: 0.08 }}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
           <View style={styles.container}>
@@ -284,11 +284,11 @@ const RuletaGame = () => {
               moneda con el pollito Tommy
             </Text>
             <View style={styles.containerWins}>
-              <Text style={{color: 'red', fontSize: 17, fontWeight: 'bold'}}>
+              <Text style={{ color: 'red', fontSize: 17, fontWeight: 'bold' }}>
                 Tus coins: {coins}
               </Text>
               <Text style={styles.title}>≈</Text>
-              <Text style={{color: 'orange', fontSize: 17, fontWeight: 'bold'}}>
+              <Text style={{ color: 'orange', fontSize: 17, fontWeight: 'bold' }}>
                 Equivale a: ${eCPM} pesos
               </Text>
             </View>
@@ -296,10 +296,10 @@ const RuletaGame = () => {
               <TouchableOpacity
                 onPress={flipCoin}
                 disabled={cruz}
-                style={cruz && {opacity: 0.5}}>
+                style={cruz && { opacity: 0.5 }}>
                 <Animated.Image
                   source={require('../../../Assets/coin-pt.png')}
-                  style={[{width: 200, height: 200}, animatedStyle]}
+                  style={[{ width: 200, height: 200 }, animatedStyle]}
                 />
               </TouchableOpacity>
               {cruz && (
@@ -307,7 +307,7 @@ const RuletaGame = () => {
                   Lo siento no ganaste nada :c, vuelve a intentarlo.
                 </Text>
               )}
-              <Text style={{color: 'green', fontWeight: 'bold'}}>
+              <Text style={{ color: 'green', fontWeight: 'bold' }}>
                 Vamos intentalo c:
               </Text>
               {showWinAnimation && (
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     top: '70%',
     left: '25%',
-    transform: [{translateX: -50}, {translateY: -50}],
+    transform: [{ translateX: -50 }, { translateY: -50 }],
     backgroundColor: 'rgba(255, 255, 255, 0)',
     borderRadius: 10,
     padding: 20,

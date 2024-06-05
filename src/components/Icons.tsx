@@ -2,6 +2,8 @@ import React from 'react';
 import type {PropsWithChildren} from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+import M from 'react-native-vector-icons/FontAwesome6';
+import Material from 'react-native-vector-icons/MaterialIcons';
 
 type IconsProps = PropsWithChildren<{
   name: String;
@@ -50,6 +52,24 @@ const Icons = ({name, sizes}: IconsProps) => {
       break;
     case 'info-circle':
       return <Icon name="info-circle" size={sizes} color={'gray'} />;
+      break;
+    case 'wallet':
+      return <M name="wallet" size={sizes} color={'gray'} />;
+      break;
+    case 'cc-paypal':
+      return <Icon name="cc-paypal" size={sizes} color={'blue'} />;
+      break;
+    case 'feedback':
+      return <Material name="feedback" size={sizes} color={'gray'} />;
+      break;
+    case 'file-contract':
+      return <M name="file-contract" size={sizes} color={'gray'} />;
+      break;
+    case 'hide-source':
+      return <Material name="hide-source" size={sizes} color={'gray'} />;
+      break;
+    case 'logoutt':
+      return <Material name="logout" size={sizes} color={'gray'} />;
       break;
     default:
       break;
