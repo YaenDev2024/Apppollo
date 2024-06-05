@@ -22,7 +22,7 @@ import {
 } from '@react-native-admob/admob';
 import {useAuth} from '../../hooks/useAuth';
 import {auth, db} from '../../../config';
-import {collection, onSnapshot, query, where, doc, updateDoc} from 'firebase/firestore';
+import {collection, onSnapshot, query, where, doc, updateDoc, getDocs} from 'firebase/firestore';
 
 const RuletaGame = () => {
   const [rotation] = useState(new Animated.Value(0));
@@ -59,12 +59,23 @@ const RuletaGame = () => {
 
   const updateCoin = async () => {
     if (signedInUser) {
-      const userRef = doc(collection(db, 'users'), signedInUser.email);
+      const userQuery = query(
+        collection(db, 'users'),
+        where('mail', '==', signedInUser.email)
+      );
+  
       try {
-        await updateDoc(userRef, {
-          coins: coins + 1,
-        });
-        setCoins(coins + 1);
+        const querySnapshot = await getDocs(userQuery);
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0]; // Assume email is unique and take the first matching document
+          const userRef = doc(db, 'users', userDoc.id);
+          await updateDoc(userRef, {
+            coins: coins + 1,
+          });
+          setCoins(coins + 1);
+        } else {
+          console.error('No user found with the provided email.');
+        }
       } catch (error) {
         console.error('Error updating coins:', error);
       }
