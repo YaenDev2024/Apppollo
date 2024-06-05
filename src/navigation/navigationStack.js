@@ -12,6 +12,9 @@ import ShareExample from '../screens/tests/ticket';
 import Createpdf from '../screens/tests/createpdf';
 import CombosList from '../screens/buy/CombosList';
 import LeftMenuWrapper from '../components/LeftMenuWrapper';
+import AccountScreen from '../screens/AccountScreen';
+import AboutUsScreen from '../screens/AboutUsScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +34,9 @@ export const NavigationStack = () => {
       <Stack.Screen name="Share" component={ShareExample} />
       <Stack.Screen name="pdf" component={Createpdf} />
       <Stack.Screen name="Combos" component={CombosList} />
+      <Stack.Screen name="Account" component={AccountScreen} />
+      <Stack.Screen name="AboutUs" component={AboutUsScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
     </Stack.Navigator>
   );
 };
