@@ -55,6 +55,7 @@ export const WinCoins = ({navigation}) => {
         }
       });
     });
+    return () => unsubscribeAds(); 
   }, []);
 
   return (

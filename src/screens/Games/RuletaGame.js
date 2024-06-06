@@ -253,7 +253,7 @@ const RuletaGame = () => {
             }
           });
         });
-        return () => unsubscribe(); // Desuscribirse cuando el componente se desmonte
+        return () => unsubscribe(); 
       } catch (error) {
         console.error('Error al obtener los datos:', error);
       }
@@ -274,6 +274,7 @@ const RuletaGame = () => {
         }
       });
     });
+    return () => unsubscribeAds(); 
   }, []);
 
   return (
