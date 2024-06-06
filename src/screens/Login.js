@@ -21,7 +21,7 @@ import {
 } from 'firebase/auth';
 import {
   GoogleSignin,
-  GoogleSigninButton, 
+  GoogleSigninButton,
 } from '@react-native-google-signin/google-signin';
 import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
 import {auth, db} from '../../config';
@@ -86,20 +86,30 @@ export const Login = ({navigation}) => {
         collection(db, 'users'),
         where('mail', '==', signedInUser.email),
       );
-      const querySnapshot = await getDocs(q);
 
+      const qads = query(
+        collection(db, 'ads'),
+        where('mail', '==', signedInUser.email),
+      );
+
+      const querySnapshot = await getDocs(q);
+      const querySnapshotAds = await getDocs(qads);
       if (querySnapshot.empty) {
-        // El correo no existe, agregar nuevo usuario
         await addDoc(collection(db, 'users'), {
           mail: signedInUser.email,
           pass: 'hidden',
           userid: signedInUser.displayName,
           coins: 0,
-          role: 'user'
+          role: 'user',
         });
-        //Alert.alert('Usuario registrado con éxito');
+
+        await addDoc(collection(db, 'ads'), {
+          mail: signedInUser.email,
+          AdOpenApp: true,
+          PlusBanner: true,
+          Paypal: signedInUser.email
+        });
       } else {
-        //Alert.alert('Usuario ya existe en la base de datos');
       }
     } catch (error) {
       console.log('Error en Sign In: ', error);

@@ -2,8 +2,10 @@ import React from 'react';
 import type {PropsWithChildren} from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import M from 'react-native-vector-icons/FontAwesome6';
 import Material from 'react-native-vector-icons/MaterialIcons';
+import MaterialC from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type IconsProps = PropsWithChildren<{
   name: String;
@@ -70,6 +72,15 @@ const Icons = ({name, sizes}: IconsProps) => {
       break;
     case 'logoutt':
       return <Material name="logout" size={sizes} color={'gray'} />;
+      break;
+    case 'cog-outline':
+      return <MaterialC name="cog-outline" size={sizes} color={'white'} />;
+      break;
+    case 'ad':
+      return <Icon5 name="ad" size={sizes} color={'#3E6FC4'} />;
+      break;
+    case 'cash-plus':
+      return <MaterialC name="cash-plus" size={sizes} color={'#3E6FC4'} />;
       break;
     default:
       break;

@@ -28,8 +28,8 @@ const AccountScreen = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
-      <NavBar name={'Cuenta personal'} />
+      <StatusBar backgroundColor={'transparent'} barStyle="default" />
+      {/* <NavBar name={'Cuenta personal'} /> */}
       {time ? (
         <ActivityIndicator size="large" color="black" />
       ) : (
