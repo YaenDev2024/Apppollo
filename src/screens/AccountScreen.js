@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   ImageBackground,
   StatusBar,
   View,
   Switch,
+  TouchableOpacity,
 } from 'react-native';
-import {StyleSheet, Text} from 'react-native';
-import {NavBar} from '../components/NavBar';
-import {ScrollView} from 'react-native';
-import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
-import {auth} from '../../config';
+import { StyleSheet, Text } from 'react-native';
+import { NavBar } from '../components/NavBar';
+import { ScrollView } from 'react-native';
+import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
+import { auth } from '../../config';
 import Icons from '../components/Icons';
 
 const AccountScreen = () => {
   const [time, setTime] = useState(true);
   const signedUser = auth.currentUser;
   const getHighResImageUrl = url => {
-    // Ajusta el tamaño de la imagen de perfil de Google a una mayor resolución
     return url ? url.replace('s96-c', 's400-c') : null;
   };
   useEffect(() => {
@@ -73,25 +73,31 @@ const AccountScreen = () => {
           </View>
           <View style={styles.menuContainer}>
             <View style={styles.menuSecondItem}>
-              <Icons name={'feedback'} sizes={25} />
-              <Text style={styles.menuSecondItemText}>Feedback</Text>
+              <TouchableOpacity style={{ alignItems: 'center', flexDirection: 'row', width:'100%' }}>
+                <Icons name={'feedback'} sizes={25} />
+                <Text style={styles.menuSecondItemText}>Feedback</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.menuSecondItem}>
-              <Icons name={'file-contract'} sizes={25} />
+              <TouchableOpacity style={{ alignItems: 'center', flexDirection: 'row', width:'100%' }}>
+                <Icons name={'file-contract'} sizes={25} />
+                <Text style={styles.menuSecondItemText}>
+                  Terms and Conditions
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-              <Text style={styles.menuSecondItemText}>
-                Terms and Conditions
-              </Text>
+            <View style={styles.menuSecondItem}>
+              <TouchableOpacity style={{ alignItems: 'center', flexDirection: 'row', width:'100%' }}>
+                <Icons name={'hide-source'} sizes={25} />
+                <Text style={styles.menuSecondItemText}>Deactivate</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.menuSecondItem}>
-              <Icons name={'hide-source'} sizes={25} />
-
-              <Text style={styles.menuSecondItemText}>Deactivate</Text>
-            </View>
-            <View style={styles.menuSecondItem}>
-              <Icons name={'logoutt'} sizes={25} />
-
-              <Text style={styles.menuSecondItemText}>Logout</Text>
+              <TouchableOpacity style={{ alignItems: 'center', flexDirection: 'row', width:'100%' }}>
+                <Icons name={'logoutt'} sizes={25} />
+                <Text style={styles.menuSecondItemText}>Logout</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <BannerAd
@@ -115,7 +121,7 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     width: '100%',
-    height: 300, // Ajusta según sea necesario
+    height: 300,
     marginBottom: 20,
   },
   profileImage: {
@@ -147,9 +153,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'white',
     marginBottom: 0,
-    elevation: 2, // Añade sombra en Android
-    shadowColor: '#000', // Añade sombra en iOS
-    shadowOffset: {width: 0, height: 1},
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
@@ -159,9 +165,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: 20,
     marginTop: -20,
-    elevation: 2, // Añade sombra en Android
-    shadowColor: '#000', // Añade sombra en iOS
-    shadowOffset: {width: 0, height: 1},
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.01,
     shadowRadius: 2,
   },
