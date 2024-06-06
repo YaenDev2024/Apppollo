@@ -10,6 +10,7 @@ import {
   Image,
   Switch,
   Button,
+  Alert,
 } from 'react-native';
 import {NavBar} from '../components/NavBar';
 import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
@@ -23,6 +24,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
+import {TextInput} from 'react-native-gesture-handler';
 
 const SettingsScreen = () => {
   const [time, setTime] = useState(true);
@@ -31,23 +33,43 @@ const SettingsScreen = () => {
   const [isEnabledBanner, setIsEnabledBanner] = useState(false);
   const [id, setId] = useState('');
   const [saved, setSaved] = useState(false);
+  const [mailPaypal, setMailPaypal] = useState('');
 
   const toggleSwitchInAddOpen = () =>
     setIsEnabledInApp(previousState => !previousState);
   const toggleSwitchBannerMore = () =>
     setIsEnabledBanner(previousState => !previousState);
 
+  const onChangeMail = text => {
+    setMailPaypal(text);
+  };
+
   const handleSaveChanges = async () => {
-    const updateProduct = doc(db, 'ads', id);
-    setSaved(true);
-    await updateDoc(updateProduct, {
-      AdOpenApp: isEnabledInApp,
-      PlusBanner: isEnabledBanner,
-    }).then(
-      setTimeout(() => {
-        setSaved(false);
-      }, 1000),
-    );
+    const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (regexCorreo.test(mailPaypal)) {
+      
+      if (
+        mailPaypal === null ||
+        mailPaypal === undefined ||
+        mailPaypal === ''
+      ) {
+        Alert.alert('Error', 'El correo de Paypal no puede estar vacio');
+      } else {
+        const updateProduct = doc(db, 'ads', id);
+        setSaved(true);
+        await updateDoc(updateProduct, {
+          AdOpenApp: isEnabledInApp,
+          PlusBanner: isEnabledBanner,
+          Paypal: mailPaypal,
+        }).then(
+          setTimeout(() => {
+            setSaved(false);
+          }, 1000),
+        );
+      }
+    } else {
+      Alert.alert('Correo no válido');
+    }
   };
 
   useEffect(() => {
@@ -64,6 +86,7 @@ const SettingsScreen = () => {
       if (!querySnapshot.empty) {
         querySnapshot.forEach(doc => {
           setId(doc.id);
+          setMailPaypal(signedInUser.email);
           setIsEnabledBanner(doc.data().PlusBanner);
           setIsEnabledInApp(doc.data().AdOpenApp);
         });
@@ -127,11 +150,21 @@ const SettingsScreen = () => {
                     value={isEnabledBanner}
                   />
                 </View>
-                {/* <View style={styles.card}>
-                  <Text style={styles.cardText}>Bank account</Text>
-                  <Switch />
-                </View>
                 <View style={styles.card}>
+                  <Icons name={'cc-paypal'} sizes={25} />
+                  <TextInput
+                    style={{
+                      borderBottomColor: 'gray',
+                      borderBottomWidth: 0.5,
+                      opacity: 0.5,
+                      color: 'gray',
+                    }}
+                    onChangeText={onChangeMail}
+                    inputMode="email"
+                    placeholder={signedInUser.email}
+                    placeholderTextColor={'gray'}></TextInput>
+                </View>
+                {/* <View style={styles.card}>
                   <Text style={styles.cardText}>Gateway credential</Text>
                   <Switch />
                 </View>

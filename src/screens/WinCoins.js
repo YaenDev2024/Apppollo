@@ -30,21 +30,32 @@ import {
   useRewardedAd,
   useAppOpenAd,
 } from '@react-native-admob/admob';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { auth, db } from '../../config';
 
 export const WinCoins = ({navigation}) => {
   const {adLoaded, adDismissed, show} = useRewardedAd(
     'ca-app-pub-3477493054350988/8242528814',
   );
-  const [coins, setCoins] = useState(0);
+  const signedInUser = auth.currentUser;
+  const [itApprovedBanner,setitApprovedBanner] = useState(true)
+ 
   const uri =
     'https://firebasestorage.googleapis.com/v0/b/pollotragonapp.appspot.com/o/images%2Fcoin-pt.png?alt=media&token=8aa23bfd-84fc-4aed-a9cd-27129a70e0d8';
 
   useEffect(() => {
-    if (adDismissed) {
-      let sum = coins + 1;
-      setCoins(sum);
-    }
-  }, [adDismissed]);
+    const qbanner = query(
+      collection(db, 'ads'),
+      where('mail', '==', signedInUser.email),
+    );
+    const unsubscribeAds = onSnapshot(qbanner, querySnapshot => {
+      querySnapshot.forEach(doc => {
+        if (doc.exists) {
+          setitApprovedBanner(doc.data().PlusBanner);
+        }
+      });
+    });
+  }, []);
 
   return (
     <View style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
@@ -61,10 +72,12 @@ export const WinCoins = ({navigation}) => {
           <View style={styles.container}>
             <NavBar name={'Win'} />
 
-            <BannerAd
-              unitId="ca-app-pub-3477493054350988/1457774401"
-              size={BannerAdSize.ADAPTIVE_BANNER}
-            />
+            {itApprovedBanner ? (
+                <BannerAd
+                  unitId="ca-app-pub-3477493054350988/1457774401"
+                  size={BannerAdSize.ADAPTIVE_BANNER}
+                />
+              ) : null}
 
             <MenuOptions
               name={'Ruleta Game'}

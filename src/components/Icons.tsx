@@ -59,7 +59,7 @@ const Icons = ({name, sizes}: IconsProps) => {
       return <M name="wallet" size={sizes} color={'gray'} />;
       break;
     case 'cc-paypal':
-      return <Icon name="cc-paypal" size={sizes} color={'blue'} />;
+      return <Icon name="cc-paypal" size={sizes} color={'#3E6FC4'} />;
       break;
     case 'feedback':
       return <Material name="feedback" size={sizes} color={'gray'} />;

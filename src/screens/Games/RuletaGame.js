@@ -208,7 +208,8 @@ const RuletaGame = () => {
   const textAnimatedStyle = {
     opacity: textOpacityInterpolate,
   };
-
+  const [itApprovedBanner,setitApprovedBanner] = useState(true)
+ 
   useEffect(() => {
     setTimeout(() => {
       setCruz(false);
@@ -260,6 +261,21 @@ const RuletaGame = () => {
     fetcheCPM();
   }, [coins]);
 
+
+  useEffect(() => {
+    const qbanner = query(
+      collection(db, 'ads'),
+      where('mail', '==', signedInUser.email),
+    );
+    const unsubscribeAds = onSnapshot(qbanner, querySnapshot => {
+      querySnapshot.forEach(doc => {
+        if (doc.exists) {
+          setitApprovedBanner(doc.data().PlusBanner);
+        }
+      });
+    });
+  }, []);
+
   return (
     <View style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
       <ImageBackground
@@ -271,10 +287,12 @@ const RuletaGame = () => {
           <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
           <View style={styles.container}>
             <NavBar name={'Ruleta'} />
-            <BannerAd
-              unitId="ca-app-pub-3477493054350988/1457774401"
-              size={BannerAdSize.ADAPTIVE_BANNER}
-            />
+            {itApprovedBanner ? (
+                <BannerAd
+                  unitId="ca-app-pub-3477493054350988/1457774401"
+                  size={BannerAdSize.ADAPTIVE_BANNER}
+                />
+              ) : null}
             <Text style={styles.title}>
               Bienvenido, el pollito Tommy te saluda
             </Text>

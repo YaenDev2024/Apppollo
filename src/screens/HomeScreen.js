@@ -14,8 +14,8 @@ import {NavBar} from '../components/NavBar';
 import order from '../../Assets/order.png';
 import coin from '../../Assets/coin-pt.png';
 import {BannerAd, useRewardedAd, BannerAdSize} from '@react-native-admob/admob';
-import { auth, db } from '../../config'; // Asegúrate de importar db
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import {auth, db} from '../../config'; // Asegúrate de importar db
+import {collection, query, where, onSnapshot} from 'firebase/firestore';
 
 export const HomeScreen = ({navigation}) => {
   const {adLoaded, adDismissed, show} = useRewardedAd(
@@ -24,6 +24,7 @@ export const HomeScreen = ({navigation}) => {
   const signedInUser = auth.currentUser;
   const [time, setTime] = useState(true);
   const [role, setRole] = useState('');
+  const [itApprovedBanner,setitApprovedBanner] = useState(true)
 
   useEffect(() => {
     setTimeout(() => {
@@ -39,6 +40,17 @@ export const HomeScreen = ({navigation}) => {
             collection(db, 'users'),
             where('mail', '==', signedInUser.email),
           );
+          const qbanner = query(
+            collection(db, 'ads'),
+            where('mail', '==', signedInUser.email),
+          );
+          const unsubscribeAds = onSnapshot(qbanner, querySnapshot => {
+            querySnapshot.forEach(doc => {
+              if (doc.exists) {
+                setitApprovedBanner(doc.data().PlusBanner);
+              }
+            });
+          });
           const unsubscribe = onSnapshot(q, querySnapshot => {
             querySnapshot.forEach(doc => {
               if (doc.exists) {
@@ -114,13 +126,13 @@ export const HomeScreen = ({navigation}) => {
         ) : (
           <ScrollView contentContainerStyle={styles.scrollViewContent}>
             <View style={styles.container}>
-              <BannerAd
-                unitId="ca-app-pub-3477493054350988/1457774401"
-                size={BannerAdSize.ADAPTIVE_BANNER}
-              />
-              <View style={styles.menuContainer}>
-                {renderMenuOptions()}
-              </View>
+              {itApprovedBanner ? (
+                <BannerAd
+                  unitId="ca-app-pub-3477493054350988/1457774401"
+                  size={BannerAdSize.ADAPTIVE_BANNER}
+                />
+              ) : null}
+              <View style={styles.menuContainer}>{renderMenuOptions()}</View>
               <View style={styles.buttonContainer}>
                 {/* Espacio para botones adicionales si es necesario */}
               </View>
