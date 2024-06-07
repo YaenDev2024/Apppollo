@@ -59,7 +59,7 @@ const Icons = ({name, sizes}: IconsProps) => {
       return <M name="wallet" size={sizes} color={'gray'} />;
       break;
     case 'cc-paypal':
-      return <Icon name="cc-paypal" size={sizes} color={'#3E6FC4'} />;
+      return <Icon name="cc-paypal" size={sizes} color={'#DE3A3A'} />;
       break;
     case 'feedback':
       return <Material name="feedback" size={sizes} color={'gray'} />;
@@ -77,10 +77,10 @@ const Icons = ({name, sizes}: IconsProps) => {
       return <MaterialC name="cog-outline" size={sizes} color={'white'} />;
       break;
     case 'ad':
-      return <Icon5 name="ad" size={sizes} color={'#3E6FC4'} />;
+      return <Icon5 name="ad" size={sizes} color={'#DE3A3A'} />;
       break;
     case 'cash-plus':
-      return <MaterialC name="cash-plus" size={sizes} color={'#3E6FC4'} />;
+      return <MaterialC name="cash-plus" size={sizes} color={'#DE3A3A'} />;
       break;
     default:
       break;

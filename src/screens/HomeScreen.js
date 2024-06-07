@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   ImageBackground,
@@ -7,24 +7,24 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
-import {MenuOptions} from '../components/MenuOptions';
+import { MenuOptions } from '../components/MenuOptions';
 import inventory from '../../Assets/inventory-removebg-preview.png';
 import buy from '../../Assets/cmcarritos.png';
-import {NavBar} from '../components/NavBar';
+import { NavBar } from '../components/NavBar';
 import order from '../../Assets/order.png';
 import coin from '../../Assets/coin-pt.png';
-import {BannerAd, useRewardedAd, BannerAdSize} from '@react-native-admob/admob';
-import {auth, db} from '../../config'; // Asegúrate de importar db
-import {collection, query, where, onSnapshot} from 'firebase/firestore';
+import { BannerAd, useRewardedAd, BannerAdSize } from '@react-native-admob/admob';
+import { auth, db } from '../../config';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
-export const HomeScreen = ({navigation}) => {
-  const {adLoaded, adDismissed, show} = useRewardedAd(
+export const HomeScreen = ({ navigation }) => {
+  const { adLoaded, adDismissed, show } = useRewardedAd(
     'ca-app-pub-3477493054350988/8242528814',
   );
   const signedInUser = auth.currentUser;
   const [time, setTime] = useState(true);
   const [role, setRole] = useState('');
-  const [itApprovedBanner,setitApprovedBanner] = useState(true)
+  const [itApprovedBanner, setitApprovedBanner] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
@@ -58,7 +58,10 @@ export const HomeScreen = ({navigation}) => {
               }
             });
           });
-          return () => unsubscribe();
+          return () => {
+            unsubscribe();
+            unsubscribeAds();
+          };
         } catch (error) {
           console.error('Error al obtener los datos:', error);
         }
@@ -77,38 +80,43 @@ export const HomeScreen = ({navigation}) => {
             url={inventory}
             navigation={navigation}
             To={'Inventory'}
+             desc={'Programa de recompensas'}
           />
           <MenuOptions
             name={'Compras'}
             url={buy}
             navigation={navigation}
             To={'Buy'}
+            desc={'Programa de recompensas'}
           />
           <MenuOptions
             name={'Ordenes'}
             url={order}
             navigation={navigation}
             To={'Orders'}
+            desc={'Programa de recompensas'}
           />
           <MenuOptions
-            name={'Win PTCoins'}
+            name={'Recompensas'}
             url={coin}
             navigation={navigation}
             To={'Win'}
+            desc={'Programa de recompensas'}
           />
         </>
       );
     } else if (role === 'user') {
       return (
         <MenuOptions
-          name={'Win PTCoins'}
+          name={'Gana PTCoins'}
           url={coin}
           navigation={navigation}
           To={'Win'}
+          desc={'Programa de recompensas'}
         />
       );
     } else {
-      return null; // Si no hay rol o rol no coincide
+      return null;
     }
   };
 
@@ -118,7 +126,8 @@ export const HomeScreen = ({navigation}) => {
         source={require('../../Assets/fondo.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
-        imageStyle={{opacity: 0.08}}>
+        imageStyle={{ opacity: 0.08 }}
+      >
         <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
         <NavBar name={'Menu'} />
         {time ? (
@@ -134,7 +143,6 @@ export const HomeScreen = ({navigation}) => {
               ) : null}
               <View style={styles.menuContainer}>{renderMenuOptions()}</View>
               <View style={styles.buttonContainer}>
-                {/* Espacio para botones adicionales si es necesario */}
               </View>
             </View>
             <BannerAd
@@ -185,9 +193,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 20,
     backgroundColor: 'white',
-    elevation: 4, // Añade sombra en Android
-    shadowColor: '#000', // Añade sombra en iOS
-    shadowOffset: {width: 0, height: 2},
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },

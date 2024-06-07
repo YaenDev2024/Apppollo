@@ -67,7 +67,7 @@ const RuletaGame = () => {
       try {
         const querySnapshot = await getDocs(userQuery);
         if (!querySnapshot.empty) {
-          const userDoc = querySnapshot.docs[0]; // Assume email is unique and take the first matching document
+          const userDoc = querySnapshot.docs[0];
           const userRef = doc(db, 'users', userDoc.id);
           await updateDoc(userRef, {
             coins: coins + 1,
@@ -198,6 +198,8 @@ const RuletaGame = () => {
 
   const coinAnimatedStyle = {
     opacity: coinOpacityInterpolate,
+    width: 50,  // tamaño reducido
+    height: 50,  // tamaño reducido
   };
 
   const textOpacityInterpolate = textAnimation.interpolate({
@@ -208,8 +210,9 @@ const RuletaGame = () => {
   const textAnimatedStyle = {
     opacity: textOpacityInterpolate,
   };
-  const [itApprovedBanner,setitApprovedBanner] = useState(true)
- 
+
+  const [itApprovedBanner, setitApprovedBanner] = useState(true);
+
   useEffect(() => {
     setTimeout(() => {
       setCruz(false);
@@ -253,14 +256,13 @@ const RuletaGame = () => {
             }
           });
         });
-        return () => unsubscribe(); 
+        return () => unsubscribe();
       } catch (error) {
         console.error('Error al obtener los datos:', error);
       }
     };
     fetcheCPM();
   }, [coins]);
-
 
   useEffect(() => {
     const qbanner = query(
@@ -274,67 +276,58 @@ const RuletaGame = () => {
         }
       });
     });
-    return () => unsubscribeAds(); 
+    return () => unsubscribeAds();
   }, []);
 
   return (
-    <View style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
+    <View style={styles.container}>
       <ImageBackground
         source={require('../../../Assets/fondo.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
-        imageStyle={{ opacity: 0.08 }}>
+        imageStyle={{ opacity: 0.1 }}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
-          <View style={styles.container}>
-            <NavBar name={'Ruleta'} />
-            {itApprovedBanner ? (
-                <BannerAd
-                  unitId="ca-app-pub-3477493054350988/1457774401"
-                  size={BannerAdSize.ADAPTIVE_BANNER}
-                />
-              ) : null}
-            <Text style={styles.title}>
-              Bienvenido, el pollito Tommy te saluda
-            </Text>
-            <Text style={styles.titledesc}>
+          <StatusBar backgroundColor={'transparent'} barStyle="dark-content" />
+          <NavBar name={'Ruleta'} />
+          {itApprovedBanner ? (
+            <BannerAd
+              unitId="ca-app-pub-3477493054350988/1457774401"
+              size={BannerAdSize.ADAPTIVE_BANNER}
+            />
+          ) : null}
+          <View style={styles.content}>
+          <Text style={styles.title}>Bienvenido, el pollito Tommy te saluda</Text>
+            <Text style={styles.description}>
               La ruleta es un juego de suerte, donde al darle clic tienes la
-              oportunidad de ganar coins, pon aprueba tu suerte y dale clic a la
-              moneda con el pollito Tommy
+              oportunidad de ganar coins. Pon a prueba tu suerte y dale clic a la
+              moneda con el pollito Tommy.
             </Text>
-            <View style={styles.containerWins}>
-              <Text style={{ color: 'red', fontSize: 17, fontWeight: 'bold' }}>
-                Tus coins: {coins}
-              </Text>
-              <Text style={styles.title}>≈</Text>
-              <Text style={{ color: 'orange', fontSize: 17, fontWeight: 'bold' }}>
-                Equivale a: ${eCPM} pesos
-              </Text>
+            <View style={styles.stats}>
+              <Text style={styles.coinsText}>Tus coins: {coins}</Text>
+              <Text style={styles.equivalentText}>≈ ${eCPM} pesos</Text>
             </View>
-            <View style={styles.containerCoin}>
+            <View style={styles.coinContainer}>
               <TouchableOpacity
                 onPress={flipCoin}
                 disabled={cruz}
-                style={cruz && { opacity: 0.5 }}>
+                style={cruz && styles.disabledButton}>
                 <Animated.Image
                   source={require('../../../Assets/coin-pt.png')}
-                  style={[{ width: 200, height: 200 }, animatedStyle]}
+                  style={[styles.coinImage, animatedStyle]}
                 />
               </TouchableOpacity>
               {cruz && (
-                <Text style={styles.title}>
-                  Lo siento no ganaste nada :c, vuelve a intentarlo.
+                <Text style={styles.losingText}>
+                  Lo siento, no ganaste nada. Vuelve a intentarlo.
                 </Text>
               )}
-              <Text style={{ color: 'green', fontWeight: 'bold' }}>
-                Vamos intentalo c:
-              </Text>
+              <Text style={styles.tryAgainText}>¡Vamos, inténtalo!</Text>
               {showWinAnimation && (
                 <Animated.View style={[styles.winContainer, textAnimatedStyle]}>
                   <Text style={styles.plusOne}>+1</Text>
                   <Animated.Image
                     source={require('../../../Assets/coin-pt.png')}
-                    style={[styles.coinImage, coinAnimatedStyle]}
+                    style={[styles.smallCoinImage, coinAnimatedStyle]}
                   />
                 </Animated.View>
               )}
@@ -351,75 +344,97 @@ const RuletaGame = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollViewContent: {
-    flexGrow: 1,
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
   },
   backgroundImage: {
     flex: 1,
     width: '100%',
     height: '100%',
   },
-  container: {
+  scrollViewContent: {
+    flexGrow: 1,
+  },
+  content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'start',
-  },
-  containerCoin: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  containerWins: {
-    margin: 10,
-    marginBottom: -180,
-    padding: 10,
-    flexDirection: 'row',
-  },
-  navbar: {
-    backgroundColor: 'white',
-    width: '100%',
-    height: '7%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingLeft: 20,
-    paddingRight: 20,
+    padding: 20,
   },
   title: {
-    marginLeft: 20,
-    color: 'black',
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginRight: 15,
+    color: '#333',
+    marginVertical: 10,
+    textAlign: 'center',
   },
-  titledesc: {
-    marginLeft: 20,
-    color: 'gray',
-    fontSize: 12,
+  description: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  stats: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  coinsText: {
+    fontSize: 18,
+    color: 'red',
     fontWeight: 'bold',
-    marginRight: 15,
-    padding: 20,
+    marginHorizontal: 5,
+  },
+  equivalentText: {
+    fontSize: 18,
+    color: 'orange',
+    fontWeight: 'bold',
+    marginHorizontal: 5,
+  },
+  coinContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  coinImage: {
+    width: 200,
+    height: 200,
+  },
+  smallCoinImage: {
+    width: 30,  // tamaño pequeño
+    height: 30,  // tamaño pequeño
+  },
+  losingText: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  tryAgainText: {
+    color: 'green',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginVertical: 10,
   },
   winContainer: {
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    top: '70%',
-    left: '25%',
+    top: '60%',
+    left: '60%',
     transform: [{ translateX: -50 }, { translateY: -50 }],
-    backgroundColor: 'rgba(255, 255, 255, 0)',
+    backgroundColor: 'transparent',
     borderRadius: 10,
-    padding: 20,
-  },
-  coinImage: {
-    width: 50,
-    height: 50,
-    marginBottom: 10,
+    padding: 10,  
+   
   },
   plusOne: {
-    fontSize: 20,
+    fontSize: 16,  
     fontWeight: 'bold',
     color: 'green',
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
 });
 

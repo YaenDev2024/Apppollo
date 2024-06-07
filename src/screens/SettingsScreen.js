@@ -103,7 +103,7 @@ const SettingsScreen = () => {
         style={styles.backgroundImage}
         resizeMode="cover"
         imageStyle={{opacity: 0.08}}>
-        <StatusBar backgroundColor={'#3E6FC4'} barStyle="light-content" />
+        <StatusBar backgroundColor={'#DE3A3A'} barStyle="light-content" />
         {/* <NavBar name={'Ajustes'} /> */}
         {time ? (
           <ActivityIndicator size="large" color="black" />
@@ -132,7 +132,7 @@ const SettingsScreen = () => {
                     Publicidad al abrir la app
                   </Text>
                   <Switch
-                    trackColor={{false: '#767577', true: '#81b0ff'}}
+                    trackColor={{false: '#767577', true: '#DE3A3A'}}
                     thumbColor={isEnabledInApp ? '#f5dd4b' : '#f4f3f4'}
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitchInAddOpen}
@@ -143,7 +143,7 @@ const SettingsScreen = () => {
                   <Icons name={'cash-plus'} sizes={25} />
                   <Text style={styles.cardText}>Permitir +1 Banner extra</Text>
                   <Switch
-                    trackColor={{false: '#767577', true: '#81b0ff'}}
+                    trackColor={{false: '#767577', true: '#DE3A3A'}}
                     thumbColor={isEnabledBanner ? '#f5dd4b' : '#f4f3f4'}
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitchBannerMore}
@@ -173,7 +173,7 @@ const SettingsScreen = () => {
                   <Switch />
                 </View> */}
                 <View style={styles.card}>
-                  <Button title="Guardar" onPress={handleSaveChanges} />
+                  <Button title="Guardar" color={'#DC8011'} onPress={handleSaveChanges} />
                   {saved ? (
                     <Text style={{color: 'green'}}>Guardado con exito!</Text>
                   ) : null}
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    backgroundColor: '#3E6FC4',
+    backgroundColor: '#DE3A3A',
     width: '100%',
     paddingVertical: 30,
     alignItems: 'flex-start',
