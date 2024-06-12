@@ -16,8 +16,8 @@ import {MenuOptions} from '../components/MenuOptions';
 import inventory from '../../Assets/inventory-removebg-preview.png';
 import buy from '../../Assets/cmcarritos.png';
 import {NavBar} from '../components/NavBar';
-import order from '../../Assets/order.png';
-import coin from '../../Assets/coin-pt.png';
+import quiz from '../../Assets/quiz.png';
+import coin from '../../Assets/ruleta.png';
 import {
   BannerAd,
   RewardedAd,
@@ -30,16 +30,16 @@ import {
   useRewardedAd,
   useAppOpenAd,
 } from '@react-native-admob/admob';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { auth, db } from '../../config';
+import {collection, onSnapshot, query, where} from 'firebase/firestore';
+import {auth, db} from '../../config';
 
 export const WinCoins = ({navigation}) => {
   const {adLoaded, adDismissed, show} = useRewardedAd(
     'ca-app-pub-3477493054350988/8242528814',
   );
   const signedInUser = auth.currentUser;
-  const [itApprovedBanner,setitApprovedBanner] = useState(true)
- 
+  const [itApprovedBanner, setitApprovedBanner] = useState(true);
+
   const uri =
     'https://firebasestorage.googleapis.com/v0/b/pollotragonapp.appspot.com/o/images%2Fcoin-pt.png?alt=media&token=8aa23bfd-84fc-4aed-a9cd-27129a70e0d8';
 
@@ -55,7 +55,7 @@ export const WinCoins = ({navigation}) => {
         }
       });
     });
-    return () => unsubscribeAds(); 
+    return () => unsubscribeAds();
   }, []);
 
   return (
@@ -74,17 +74,26 @@ export const WinCoins = ({navigation}) => {
             <NavBar name={'Win'} />
 
             {itApprovedBanner ? (
-                <BannerAd
-                  unitId="ca-app-pub-3477493054350988/1457774401"
-                  size={BannerAdSize.ADAPTIVE_BANNER}
-                />
-              ) : null}
+              <BannerAd
+                unitId="ca-app-pub-3477493054350988/1457774401"
+                size={BannerAdSize.ADAPTIVE_BANNER}
+              />
+            ) : null}
 
             <MenuOptions
-              name={'Ruleta Game'}
+              name={'Juego de Ruleta'}
               url={coin}
               navigation={navigation}
               To={'Roulette'}
+              desc={'Juego de ruleta con el Pollito Tommy'}
+            />
+
+            <MenuOptions
+              name={'Juego de Preguntas'}
+              url={quiz}
+              navigation={navigation}
+              To={'Quiz'}
+              desc={'Responde las preguntas del Pollito Tommy '}
             />
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -92,7 +101,6 @@ export const WinCoins = ({navigation}) => {
                 Coins: {coins}{' '}
                 <Image style={{width: 25, height: 25}} source={{uri: uri}} />
               </Text> */}
-           
             </View>
           </View>
 

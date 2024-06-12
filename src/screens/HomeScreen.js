@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   ImageBackground,
@@ -7,18 +7,18 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
-import { MenuOptions } from '../components/MenuOptions';
+import {MenuOptions} from '../components/MenuOptions';
 import inventory from '../../Assets/inventory-removebg-preview.png';
 import buy from '../../Assets/cmcarritos.png';
-import { NavBar } from '../components/NavBar';
+import {NavBar} from '../components/NavBar';
 import order from '../../Assets/order.png';
 import coin from '../../Assets/coin-pt.png';
-import { BannerAd, useRewardedAd, BannerAdSize } from '@react-native-admob/admob';
-import { auth, db } from '../../config';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import {BannerAd, useRewardedAd, BannerAdSize} from '@react-native-admob/admob';
+import {auth, db} from '../../config';
+import {collection, query, where, onSnapshot} from 'firebase/firestore';
 
-export const HomeScreen = ({ navigation }) => {
-  const { adLoaded, adDismissed, show } = useRewardedAd(
+export const HomeScreen = ({navigation}) => {
+  const {adLoaded, adDismissed, show} = useRewardedAd(
     'ca-app-pub-3477493054350988/8242528814',
   );
   const signedInUser = auth.currentUser;
@@ -80,7 +80,7 @@ export const HomeScreen = ({ navigation }) => {
             url={inventory}
             navigation={navigation}
             To={'Inventory'}
-             desc={'Programa de recompensas'}
+            desc={'Programa de recompensas'}
           />
           <MenuOptions
             name={'Compras'}
@@ -107,13 +107,16 @@ export const HomeScreen = ({ navigation }) => {
       );
     } else if (role === 'user') {
       return (
-        <MenuOptions
-          name={'Gana PTCoins'}
-          url={coin}
-          navigation={navigation}
-          To={'Win'}
-          desc={'Programa de recompensas'}
-        />
+        <>
+          <MenuOptions
+            name={'Gana PTCoins'}
+            url={coin}
+            navigation={navigation}
+            To={'Win'}
+            desc={'Programa de recompensas'}
+          />
+          
+        </>
       );
     } else {
       return null;
@@ -126,8 +129,7 @@ export const HomeScreen = ({ navigation }) => {
         source={require('../../Assets/fondo.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
-        imageStyle={{ opacity: 0.08 }}
-      >
+        imageStyle={{opacity: 0.08}}>
         <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
         <NavBar name={'Menu'} />
         {time ? (
@@ -142,8 +144,7 @@ export const HomeScreen = ({ navigation }) => {
                 />
               ) : null}
               <View style={styles.menuContainer}>{renderMenuOptions()}</View>
-              <View style={styles.buttonContainer}>
-              </View>
+              <View style={styles.buttonContainer}></View>
             </View>
             <BannerAd
               unitId="ca-app-pub-3477493054350988/1457774401"
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },

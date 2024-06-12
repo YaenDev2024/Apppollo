@@ -15,6 +15,7 @@ import LeftMenuWrapper from '../components/LeftMenuWrapper';
 import AccountScreen from '../screens/AccountScreen';
 import AboutUsScreen from '../screens/AboutUsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import QuizGame from '../screens/Games/QuizGame';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export const NavigationStack = () => {
       <Stack.Screen name="Orders" component={OrderScreen} />
       <Stack.Screen name="Win" component={WinCoins} />
       <Stack.Screen name="Roulette" component={RuletaGame} />
+      <Stack.Screen name="Quiz" component={QuizGame} />
       <Stack.Screen name="Ticket" component={TestPdf} />
       <Stack.Screen name="Share" component={ShareExample} />
       <Stack.Screen name="pdf" component={Createpdf} />

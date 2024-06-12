@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   img: {
     width: '100%',
     height: 150,
-    resizeMode:'contain'
+    resizeMode:'cover'
   },
   heartIcon: {
     position: 'absolute',
