@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "58442434849-kvfgef81mn7t5cf0bgdanf9n31g62euo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pollotragonapp",
+            "certificate_hash": "99bce3dc701a761a6419ba239677f2613e5f7f99"
+          }
+        },
+        {
           "client_id": "58442434849-qq1mlppjg6igtpg0idnphp8m4hgr88gc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
