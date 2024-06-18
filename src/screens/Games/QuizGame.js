@@ -1,18 +1,125 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Alert,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
 } from 'react-native';
-import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
+import {
+  BannerAd,
+  BannerAdSize,
+  useRewardedAd,
+  useRewardedInterstitialAd,
+} from '@react-native-admob/admob';
 import * as Progress from 'react-native-progress';
 import Icons from '../../components/Icons';
+import q from '../../filesJSON/questions.json';
+import { auth, db } from '../../../config';
+import {
+  collection,
+  query,
+  where,
+  doc,
+  updateDoc,
+  getDocs,
+} from 'firebase/firestore';
 
 const QuizGame = ({ navigation }) => {
   const [start, setStart] = useState(false);
+  const [time, setTime] = useState(60);
+  const [progress, setProgress] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [shuffledQuestions, setShuffledQuestions] = useState([]);
+  const signedInUser = auth.currentUser;
+  const [coins, setCoins] = useState(0);
+
+  const {
+    adLoaded: rewardedLoaded,
+    adDismissed: rewardedDismissed,
+    load: loadRewarded,
+    show: showRewarded,
+  } = useRewardedAd('ca-app-pub-3477493054350988/8242528814');
+
+  const {
+    adLoaded: rewardedInterstitialLoaded,
+    adDismissed: rewardedInterstitialDismissed,
+    load: loadRewardedInterstitial,
+    show: showRewardedInterstitial,
+  } = useRewardedInterstitialAd('ca-app-pub-3477493054350988/3027142417');
+
+  const updateCoin = async () => {
+    if (signedInUser) {
+      const userQuery = query(
+        collection(db, 'users'),
+        where('mail', '==', signedInUser.email),
+      );
+
+      try {
+        const querySnapshot = await getDocs(userQuery);
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0];
+          const userRef = doc(db, 'users', userDoc.id);
+          await updateDoc(userRef, {
+            coins: coins + 1,
+          });
+          setCoins(coins + 1);
+        } else {
+          console.error('No user found with the provided email.');
+        }
+      } catch (error) {
+        console.error('Error updating coins:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (rewardedDismissed) {
+      loadRewarded();
+    }
+    if (rewardedInterstitialDismissed) {
+      loadRewardedInterstitial();
+    }
+  }, [rewardedDismissed, rewardedInterstitialDismissed, loadRewarded, loadRewardedInterstitial]);
+
+  const originalQuestions = q;
+
+  useEffect(() => {
+    const loadRandomQuestions = () => {
+      const shuffled = [...originalQuestions];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      setShuffledQuestions(shuffled);
+    };
+
+    if (start) {
+      loadRandomQuestions();
+    }
+  }, [start, originalQuestions]);
+
+  useEffect(() => {
+    let intervalId;
+
+    if (start) {
+      intervalId = setInterval(() => {
+        setTime(prevTime => {
+          if (prevTime <= 0) {
+            clearInterval(intervalId);
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [start]);
 
   const onPressBack = () => {
     navigation.navigate('Win');
@@ -20,10 +127,50 @@ const QuizGame = ({ navigation }) => {
 
   const startGame = () => {
     setStart(true);
+    setTime(60);
   };
 
-  const AnswerOption = ({ answer, id }) => (
-    <TouchableOpacity style={styles.cardAnswer}>
+  const doubleCoins = useCallback(async () => {
+    if (rewardedInterstitialLoaded) {
+      showRewardedInterstitial();
+      await updateCoin();
+    } else if (rewardedLoaded) {
+      showRewarded();
+      await updateCoin();
+    } else {
+      Alert.alert(
+        'No hay anuncios disponibles en este momento. Inténtalo más tarde.',
+      );
+    }
+  }, [rewardedInterstitialLoaded, showRewardedInterstitial, rewardedLoaded, showRewarded]);
+
+  const handleAnswer = selectedAnswer => {
+    const currentQuestion = shuffledQuestions[currentQuestionIndex];
+    if (selectedAnswer === currentQuestion.correctAnswer) {
+      setCorrectAnswers(correctAnswers + 1);
+      setProgress((correctAnswers + 1) / shuffledQuestions.length);
+      if (currentQuestionIndex < shuffledQuestions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        onPressBack();
+      }
+    } else {
+      Alert.alert('Fallaste', 'Respuesta incorrecta! Vuelve a intentarlo.');
+    }
+  };
+
+  const formatTime = time => {
+    if (time === 0 && start) {
+      setStart(false);
+      Alert.alert('Finalizo el tiempo');
+    }
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+  };
+
+  const AnswerOption = ({ answer, id, onPress }) => (
+    <TouchableOpacity style={styles.cardAnswer} onPress={onPress}>
       <Text style={styles.answerText}>
         <Text style={styles.answerId}>{id}.</Text>
         {answer}
@@ -32,64 +179,72 @@ const QuizGame = ({ navigation }) => {
   );
 
   const renderQuestions = () => {
-    return questions.map((item, index) => (
-      <View key={index} style={styles.questionContainer}>
+    if (shuffledQuestions.length === 0) {
+      return null;
+    }
+
+    const currentQuestion = shuffledQuestions[currentQuestionIndex];
+    return (
+      <View style={styles.questionContainer}>
         <Text style={styles.questionText}>
-          <Text style={styles.questionId}>{item.id}.</Text>
-          {item.question}
+          <Text style={styles.questionId}>Q.</Text>
+          {currentQuestion.question}
         </Text>
-        {item.options.map((option, i) => (
-          <AnswerOption key={i} id={option.key} answer={option.label} />
+        {currentQuestion.options.map((option, i) => (
+          <AnswerOption
+            key={i}
+            id={option.key}
+            answer={option.label}
+            onPress={() => handleAnswer(option.key)}
+          />
         ))}
       </View>
-    ));
+    );
   };
 
-  const questions = [
-    {
-      id: 1,
-      question: '¿Cuántos años son 4 décadas?',
-      options: [
-        { label: 'Son 10 años', key: 'A' },
-        { label: 'Son 5 años', key: 'B' },
-        { label: 'Son 20 años', key: 'C' },
-        { label: 'Son 19 años', key: 'D' },
-      ],
-      correctAnswer: 'C',
-    },
-  ];
-
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
       {start ? (
         <View style={styles.gameContainer}>
           <TouchableOpacity style={styles.backButton} onPress={onPressBack}>
-            <Icons name="arrow-left" sizes={30} />
+            <Icons
+              name="arrow-left"
+              sizes={Dimensions.get('window').width * 0.08}
+            />
           </TouchableOpacity>
           <View style={styles.timerContainer}>
-            <Text style={styles.timeText}>Tiempo restante 1:00Min</Text>
-            <Text style={styles.quizText}>1/20</Text>
+            <Text style={styles.timeText}>
+              Tiempo restante {formatTime(time)}
+            </Text>
+            <Text style={styles.quizText}>
+              {currentQuestionIndex + 1}/{shuffledQuestions.length}
+            </Text>
           </View>
+
           <View style={styles.progressBarContainer}>
             <Progress.Bar
-              progress={0.3}
-              height={15}
+              progress={progress}
+              height={Dimensions.get('window').width * 0.02}
               borderRadius={10}
               width={null}
               color="#DE3A3A"
             />
+          </View>
+          <View style={styles.quizContainer}>
+            <BannerAd
+              unitId="ca-app-pub-3477493054350988/1457774401"
+              size={BannerAdSize.ADAPTIVE_BANNER}
+            />
+            {renderQuestions()}
+            <TouchableOpacity style={styles.nextButton} onPress={doubleCoins}>
+              <Icons name="cash" sizes={Dimensions.get('window').width * 0.1} />
+            </TouchableOpacity>
             <BannerAd
               unitId="ca-app-pub-3477493054350988/1457774401"
               size={BannerAdSize.ADAPTIVE_BANNER}
             />
           </View>
-          <View style={styles.quizContainer}>{renderQuestions()}</View>
-          <TouchableOpacity
-            style={styles.nextButton}
-            onPress={onPressBack}>
-            <Icons name="arrow-right" sizes={30} />
-          </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.startContainer}>
@@ -105,21 +260,27 @@ const QuizGame = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    
+    flexGrow: 1,
     backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   gameContainer: {
     flex: 1,
-    padding: 15,
+    width: '100%',
+    padding: Dimensions.get('window').width * 0.05,
   },
   backButton: {
-    width: '15%',
-    marginBottom: 15,
+    position: 'absolute',
+    top: Dimensions.get('window').width * 0.05,
+    left: Dimensions.get('window').width * 0.05,
+    zIndex: 1,
   },
   timerContainer: {
-    marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: Dimensions.get('window').width * 0.01,
+    marginTop: Dimensions.get('window').width * 0.1,
   },
   timeText: {
     color: 'black',
@@ -130,16 +291,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   progressBarContainer: {
-    marginTop: 15,
+    marginVertical: Dimensions.get('window').width * 0.04,
   },
   quizContainer: {
-    marginVertical: 10,
+    alignItems: 'center',
   },
   questionContainer: {
-    marginBottom: 20,
+    marginBottom: Dimensions.get('window').width * 0.1,
+    width: '100%',
   },
   questionText: {
-    fontSize: 18,
+    fontSize: Dimensions.get('window').width * 0.06,
     fontWeight: '500',
     color: 'black',
   },
@@ -148,10 +310,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   cardAnswer: {
-    marginVertical: 8,
+    marginVertical: Dimensions.get('window').width * 0.02,
     backgroundColor: 'white',
     borderRadius: 5,
-    padding: 5,
+    padding: Dimensions.get('window').width * 0.03,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -160,12 +322,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height: 60,
+    width: '100%',
+    height: Dimensions.get('window').width * 0.15,
     justifyContent: 'center',
   },
   answerText: {
     color: 'black',
-    fontSize: 18,
+    fontSize: Dimensions.get('window').width * 0.045,
     fontWeight: '500',
   },
   answerId: {
@@ -174,36 +337,35 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     backgroundColor: '#DE3A3A',
-    padding: 20,
-    borderRadius: 50,
-    width: 69,
-    height: 69,
+    padding: Dimensions.get('window').width * 0.03,
+    borderRadius: Dimensions.get('window').width * 0.08,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'flex-end',
-    marginRight: 20,
+    alignSelf: 'center',
+    marginRight: Dimensions.get('window').width * 0.05,
+    marginBottom: Dimensions.get('window').width * 0.05,
   },
   startContainer: {
     flex: 1,
-    justifyContent: 'center', // Centrar verticalmente
-    alignItems: 'center', // Centrar horizontalmente
-    padding: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: Dimensions.get('window').width * 0.1,
   },
   welcomeText: {
     color: 'black',
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center', // Alineación central del texto
+    fontSize: Dimensions.get('window').width * 0.08,
+    marginBottom: Dimensions.get('window').width * 0.1,
+    textAlign: 'center',
   },
   startButton: {
     backgroundColor: '#DE3A3A',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
+    paddingVertical: Dimensions.get('window').width * 0.04,
+    paddingHorizontal: Dimensions.get('window').width * 0.08,
+    borderRadius: Dimensions.get('window').width * 0.04,
   },
   startButtonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: Dimensions.get('window').width * 0.05,
     fontWeight: 'bold',
   },
 });

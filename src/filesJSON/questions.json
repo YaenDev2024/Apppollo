@@ -1,0 +1,663 @@
+[
+    {
+      "id": 1,
+      "question": "¿Cuántos años son 4 décadas?",
+      "options": [
+        { "label": "Son 10 años", "key": "A" },
+        { "label": "Son 5 años", "key": "B" },
+        { "label": "Son 20 años", "key": "C" },
+        { "label": "Son 19 años", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 2,
+      "question": "¿Qué gas es esencial para la respiración humana?",
+      "options": [
+        { "label": "Hidrógeno", "key": "A" },
+        { "label": "Oxígeno", "key": "B" },
+        { "label": "Nitrógeno", "key": "C" },
+        { "label": "Dióxido de carbono", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 3,
+      "question": "¿Cuál es el planeta más cercano al Sol?",
+      "options": [
+        { "label": "Venus", "key": "A" },
+        { "label": "Marte", "key": "B" },
+        { "label": "Mercurio", "key": "C" },
+        { "label": "Júpiter", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 4,
+      "question": "¿Cuál es el país más grande del mundo?",
+      "options": [
+        { "label": "Canadá", "key": "A" },
+        { "label": "Estados Unidos", "key": "B" },
+        { "label": "China", "key": "C" },
+        { "label": "Rusia", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 5,
+      "question": "¿Cuál es el océano más grande del mundo?",
+      "options": [
+        { "label": "Océano Atlántico", "key": "A" },
+        { "label": "Océano Índico", "key": "B" },
+        { "label": "Océano Ártico", "key": "C" },
+        { "label": "Océano Pacífico", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 6,
+      "question": "¿Cuál es el animal terrestre más rápido?",
+      "options": [
+        { "label": "León", "key": "A" },
+        { "label": "Gacela", "key": "B" },
+        { "label": "Tigre", "key": "C" },
+        { "label": "Guepardo", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 7,
+      "question": "¿Qué elemento químico tiene como símbolo O?",
+      "options": [
+        { "label": "Oro", "key": "A" },
+        { "label": "Oxígeno", "key": "B" },
+        { "label": "Osmio", "key": "C" },
+        { "label": "Óxido", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 8,
+      "question": "¿Quién pintó la Mona Lisa?",
+      "options": [
+        { "label": "Vincent van Gogh", "key": "A" },
+        { "label": "Pablo Picasso", "key": "B" },
+        { "label": "Leonardo da Vinci", "key": "C" },
+        { "label": "Miguel Ángel", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 9,
+      "question": "¿Cuál es el río más largo del mundo?",
+      "options": [
+        { "label": "Río Amazonas", "key": "A" },
+        { "label": "Río Nilo", "key": "B" },
+        { "label": "Río Yangtsé", "key": "C" },
+        { "label": "Río Misisipi", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 10,
+      "question": "¿Cuál es la capital de Australia?",
+      "options": [
+        { "label": "Sídney", "key": "A" },
+        { "label": "Melbourne", "key": "B" },
+        { "label": "Canberra", "key": "C" },
+        { "label": "Perth", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 11,
+      "question": "¿Cuál es el órgano más grande del cuerpo humano?",
+      "options": [
+        { "label": "El corazón", "key": "A" },
+        { "label": "El hígado", "key": "B" },
+        { "label": "La piel", "key": "C" },
+        { "label": "El cerebro", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 12,
+      "question": "¿Quién escribió 'Don Quijote de la Mancha'?",
+      "options": [
+        { "label": "Miguel de Cervantes", "key": "A" },
+        { "label": "Gabriel García Márquez", "key": "B" },
+        { "label": "Federico García Lorca", "key": "C" },
+        { "label": "Jorge Luis Borges", "key": "D" }
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 13,
+      "question": "¿Qué país tiene la mayor población del mundo?",
+      "options": [
+        { "label": "India", "key": "A" },
+        { "label": "Estados Unidos", "key": "B" },
+        { "label": "China", "key": "C" },
+        { "label": "Rusia", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 14,
+      "question": "¿Cuál es el metal más abundante en la corteza terrestre?",
+      "options": [
+        { "label": "Hierro", "key": "A" },
+        { "label": "Oro", "key": "B" },
+        { "label": "Plata", "key": "C" },
+        { "label": "Aluminio", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 15,
+      "question": "¿Qué planeta es conocido como el planeta rojo?",
+      "options": [
+        { "label": "Mercurio", "key": "A" },
+        { "label": "Venus", "key": "B" },
+        { "label": "Marte", "key": "C" },
+        { "label": "Júpiter", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 16,
+      "question": "¿Qué país es famoso por la Torre Eiffel?",
+      "options": [
+        { "label": "Italia", "key": "A" },
+        { "label": "Francia", "key": "B" },
+        { "label": "España", "key": "C" },
+        { "label": "Alemania", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 17,
+      "question": "¿Cuál es la capital de Japón?",
+      "options": [
+        { "label": "Osaka", "key": "A" },
+        { "label": "Kyoto", "key": "B" },
+        { "label": "Tokio", "key": "C" },
+        { "label": "Nagasaki", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 18,
+      "question": "¿Quién es conocido como el padre de la computación?",
+      "options": [
+        { "label": "Bill Gates", "key": "A" },
+        { "label": "Steve Jobs", "key": "B" },
+        { "label": "Alan Turing", "key": "C" },
+        { "label": "Charles Babbage", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 19,
+      "question": "¿Qué país tiene la forma de una bota?",
+      "options": [
+        { "label": "España", "key": "A" },
+        { "label": "Grecia", "key": "B" },
+        { "label": "Italia", "key": "C" },
+        { "label": "Turquía", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 20,
+      "question": "¿Qué elemento químico tiene como símbolo Au?",
+      "options": [
+        { "label": "Plata", "key": "A" },
+        { "label": "Cobre", "key": "B" },
+        { "label": "Oro", "key": "C" },
+        { "label": "Aluminio", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 21,
+      "question": "¿Cuál es la montaña más alta del mundo?",
+      "options": [
+        { "label": "Monte Everest", "key": "A" },
+        { "label": "K2", "key": "B" },
+        { "label": "Kangchenjunga", "key": "C" },
+        { "label": "Makalu", "key": "D" }
+      ],
+      "correctAnswer": "A"
+    },
+    {
+      "id": 22,
+      "question": "¿Qué instrumento musical tiene cuerdas y se toca con arco?",
+      "options": [
+        { "label": "Guitarra", "key": "A" },
+        { "label": "Piano", "key": "B" },
+        { "label": "Violín", "key": "C" },
+        { "label": "Trompeta", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 23,
+      "question": "¿Qué país es famoso por el sushi?",
+      "options": [
+        { "label": "China", "key": "A" },
+        { "label": "Corea del Sur", "key": "B" },
+        { "label": "Japón", "key": "C" },
+        { "label": "Tailandia", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 24,
+      "question": "¿Cuál es el idioma más hablado en el mundo?",
+      "options": [
+        { "label": "Inglés", "key": "A" },
+        { "label": "Español", "key": "B" },
+        { "label": "Chino mandarín", "key": "C" },
+        { "label": "Hindú", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 25,
+      "question": "¿Qué artista es conocido por cortar su propia oreja?",
+      "options": [
+        { "label": "Pablo Picasso", "key": "A" },
+        { "label": "Salvador Dalí", "key": "B" },
+        { "label": "Claude Monet", "key": "C" },
+        { "label": "Vincent van Gogh", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 26,
+      "question": "¿Qué animal es conocido como el rey de la selva?",
+      "options": [
+        { "label": "Elefante", "key": "A" },
+        { "label": "Tigre", "key": "B" },
+        { "label": "León", "key": "C" },
+        { "label": "Pantera", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 27,
+      "question": "¿Cuál es el metal más ligero?",
+      "options": [
+        { "label": "Hierro", "key": "A" },
+        { "label": "Plata", "key": "B" },
+        { "label": "Oro", "key": "C" },
+        { "label": "Litio", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 28,
+      "question": "¿Qué gas es conocido como el gas de la risa?",
+      "options": [
+        { "label": "Oxígeno", "key": "A" },
+        { "label": "Nitrógeno", "key": "B" },
+        { "label": "Dióxido de carbono", "key": "C" },
+        { "label": "Óxido nitroso", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 29,
+      "question": "¿Cuál es el país más pequeño del mundo?",
+      "options": [
+        { "label": "Mónaco", "key": "A" },
+        { "label": "Nauru", "key": "B" },
+        { "label": "San Marino", "key": "C" },
+        { "label": "Vaticano", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 30,
+      "question": "¿Qué bebida se obtiene de las uvas?",
+      "options": [
+        { "label": "Cerveza", "key": "A" },
+        { "label": "Sidra", "key": "B" },
+        { "label": "Whisky", "key": "C" },
+        { "label": "Vino", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 31,
+      "question": "¿Cuál es el país de mayor tamaño en América del Sur?",
+      "options": [
+        { "label": "Argentina", "key": "A" },
+        { "label": "Brasil", "key": "B" },
+        { "label": "Chile", "key": "C" },
+        { "label": "Perú", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 32,
+      "question": "¿Cuál es el símbolo químico del agua?",
+      "options": [
+        { "label": "O2", "key": "A" },
+        { "label": "H2O", "key": "B" },
+        { "label": "CO2", "key": "C" },
+        { "label": "NaCl", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 33,
+      "question": "¿Cuál es la moneda oficial de Japón?",
+      "options": [
+        { "label": "Won", "key": "A" },
+        { "label": "Dólar", "key": "B" },
+        { "label": "Yen", "key": "C" },
+        { "label": "Euro", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 34,
+      "question": "¿Quién fue el primer presidente de los Estados Unidos?",
+      "options": [
+        { "label": "Thomas Jefferson", "key": "A" },
+        { "label": "George Washington", "key": "B" },
+        { "label": "Abraham Lincoln", "key": "C" },
+        { "label": "John Adams", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 35,
+      "question": "¿Cuál es el país de mayor tamaño en África?",
+      "options": [
+        { "label": "Egipto", "key": "A" },
+        { "label": "Nigeria", "key": "B" },
+        { "label": "Argelia", "key": "C" },
+        { "label": "Sudáfrica", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 36,
+      "question": "¿Qué planeta es conocido como el gigante gaseoso?",
+      "options": [
+        { "label": "Saturno", "key": "A" },
+        { "label": "Urano", "key": "B" },
+        { "label": "Neptuno", "key": "C" },
+        { "label": "Júpiter", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 37,
+      "question": "¿Qué país es conocido por el baile del tango?",
+      "options": [
+        { "label": "México", "key": "A" },
+        { "label": "España", "key": "B" },
+        { "label": "Brasil", "key": "C" },
+        { "label": "Argentina", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 38,
+      "question": "¿Quién es el autor de 'Cien años de soledad'?",
+      "options": [
+        { "label": "Mario Vargas Llosa", "key": "A" },
+        { "label": "Gabriel García Márquez", "key": "B" },
+        { "label": "Isabel Allende", "key": "C" },
+        { "label": "Julio Cortázar", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 39,
+      "question": "¿Cuál es la capital de Canadá?",
+      "options": [
+        { "label": "Toronto", "key": "A" },
+        { "label": "Vancouver", "key": "B" },
+        { "label": "Ottawa", "key": "C" },
+        { "label": "Montreal", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 40,
+      "question": "¿Qué instrumento musical tiene teclas y se toca con las manos?",
+      "options": [
+        { "label": "Violín", "key": "A" },
+        { "label": "Saxofón", "key": "B" },
+        { "label": "Piano", "key": "C" },
+        { "label": "Flauta", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 41,
+      "question": "¿Cuál es el continente más grande?",
+      "options": [
+        { "label": "África", "key": "A" },
+        { "label": "América", "key": "B" },
+        { "label": "Asia", "key": "C" },
+        { "label": "Europa", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 42,
+      "question": "¿Qué deporte se practica en un campo de 100 yardas?",
+      "options": [
+        { "label": "Fútbol", "key": "A" },
+        { "label": "Críquet", "key": "B" },
+        { "label": "Rugby", "key": "C" },
+        { "label": "Fútbol americano", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 43,
+      "question": "¿Qué inventor es conocido por la bombilla eléctrica?",
+      "options": [
+        { "label": "Alexander Graham Bell", "key": "A" },
+        { "label": "Thomas Edison", "key": "B" },
+        { "label": "Nikola Tesla", "key": "C" },
+        { "label": "George Westinghouse", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 44,
+      "question": "¿Qué es el Everest?",
+      "options": [
+        { "label": "Un río", "key": "A" },
+        { "label": "Una montaña", "key": "B" },
+        { "label": "Una ciudad", "key": "C" },
+        { "label": "Un océano", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 45,
+      "question": "¿Qué país es conocido por la samba?",
+      "options": [
+        { "label": "México", "key": "A" },
+        { "label": "España", "key": "B" },
+        { "label": "Brasil", "key": "C" },
+        { "label": "Argentina", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 46,
+      "question": "¿Cuál es el nombre del protagonista en la serie de libros 'Harry Potter'?",
+      "options": [
+        { "label": "Ron Weasley", "key": "A" },
+        { "label": "Hermione Granger", "key": "B" },
+        { "label": "Albus Dumbledore", "key": "C" },
+        { "label": "Harry Potter", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 47,
+      "question": "¿Qué país es conocido por las pirámides de Giza?",
+      "options": [
+        { "label": "Grecia", "key": "A" },
+        { "label": "México", "key": "B" },
+        { "label": "Perú", "key": "C" },
+        { "label": "Egipto", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 48,
+      "question": "¿Cuál es el río más largo de América del Sur?",
+      "options": [
+        { "label": "Río Orinoco", "key": "A" },
+        { "label": "Río Paraná", "key": "B" },
+        { "label": "Río de la Plata", "key": "C" },
+        { "label": "Río Amazonas", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 49,
+      "question": "¿Qué día es conocido como el día de la independencia de los Estados Unidos?",
+      "options": [
+        { "label": "1 de enero", "key": "A" },
+        { "label": "4 de julio", "key": "B" },
+        { "label": "25 de diciembre", "key": "C" },
+        { "label": "31 de octubre", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 50,
+      "question": "¿Qué animal es conocido por su gran memoria?",
+      "options": [
+        { "label": "Delfín", "key": "A" },
+        { "label": "Perro", "key": "B" },
+        { "label": "Elefante", "key": "C" },
+        { "label": "Gato", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 51,
+      "question": "¿Cuál es el número de continentes en el mundo?",
+      "options": [
+        { "label": "5", "key": "A" },
+        { "label": "6", "key": "B" },
+        { "label": "7", "key": "C" },
+        { "label": "8", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 52,
+      "question": "¿Quién pintó 'La Última Cena'?",
+      "options": [
+        { "label": "Michelangelo", "key": "A" },
+        { "label": "Leonardo da Vinci", "key": "B" },
+        { "label": "Rafael", "key": "C" },
+        { "label": "Caravaggio", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 53,
+      "question": "¿Cuál es el océano más pequeño del mundo?",
+      "options": [
+        { "label": "Océano Atlántico", "key": "A" },
+        { "label": "Océano Índico", "key": "B" },
+        { "label": "Océano Ártico", "key": "C" },
+        { "label": "Océano Pacífico", "key": "D" }
+      ],
+      "correctAnswer": "C"
+    },
+    {
+      "id": 54,
+      "question": "¿Cuál es el país más poblado de África?",
+      "options": [
+        { "label": "Sudáfrica", "key": "A" },
+        { "label": "Nigeria", "key": "B" },
+        { "label": "Egipto", "key": "C" },
+        { "label": "Etiopía", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 55,
+      "question": "¿Qué metal es líquido a temperatura ambiente?",
+      "options": [
+        { "label": "Oro", "key": "A" },
+        { "label": "Mercurio", "key": "B" },
+        { "label": "Plata", "key": "C" },
+        { "label": "Cobre", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 56,
+      "question": "¿Cuál es el planeta más grande del sistema solar?",
+      "options": [
+        { "label": "Saturno", "key": "A" },
+        { "label": "Júpiter", "key": "B" },
+        { "label": "Urano", "key": "C" },
+        { "label": "Neptuno", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 57,
+      "question": "¿Qué país es famoso por el reloj de cuco?",
+      "options": [
+        { "label": "Francia", "key": "A" },
+        { "label": "Suiza", "key": "B" },
+        { "label": "Alemania", "key": "C" },
+        { "label": "Austria", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 58,
+      "question": "¿Quién escribió 'Don Quijote de la Mancha'?",
+      "options": [
+        { "label": "Federico García Lorca", "key": "A" },
+        { "label": "Miguel de Cervantes", "key": "B" },
+        { "label": "Gabriel García Márquez", "key": "C" },
+        { "label": "Mario Vargas Llosa", "key": "D" }
+      ],
+      "correctAnswer": "B"
+    },
+    {
+      "id": 59,
+      "question": "¿Qué ciudad es conocida como la Gran Manzana?",
+      "options": [
+        { "label": "Los Ángeles", "key": "A" },
+        { "label": "Chicago", "key": "B" },
+        { "label": "Miami", "key": "C" },
+        { "label": "Nueva York", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    },
+    {
+      "id": 60,
+      "question": "¿Cuál es el país de mayor tamaño del mundo?",
+      "options": [
+        { "label": "Estados Unidos", "key": "A" },
+        { "label": "Canadá", "key": "B" },
+        { "label": "China", "key": "C" },
+        { "label": "Rusia", "key": "D" }
+      ],
+      "correctAnswer": "D"
+    }
+  ]
+  
