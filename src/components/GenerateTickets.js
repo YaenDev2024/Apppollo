@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Image, ScrollView, Button, Alert} from 'react-na
 import pollo from '../../Assets/fnbg.png';
 import Createpdf from '../screens/tests/createpdf';
 import ViewShot from 'react-native-view-shot';
-import {db} from '../../config';
+import {auth, db} from '../../config';
 import storage from '@react-native-firebase/storage';
 import RNPrint from 'react-native-print';
 import PrintImage from '../screens/tests/Print';
@@ -11,7 +11,8 @@ import PrintImage from '../screens/tests/Print';
 
 const GenerateTickets = ({productsss}) => {
   const [eventName, setEventName] = useState('El Pollo Tragon');
-  const [name, setName] = useState('Tomas Acosta');
+  const signedUser = auth.currentUser;
+  const [name, setName] = useState('');
   const [date, setDate] = useState(new Date());
   const [imageURI, setImageURI] = useState(null);
   const currentYear = new Date().getFullYear();
@@ -25,6 +26,11 @@ const GenerateTickets = ({productsss}) => {
     });
   };
 
+
+  useEffect(() => {
+    setName(signedUser.displayName)
+  }, [])
+  
   const uploadImageToFirebase = async imageUri => {
     const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
     const storageRef = storage().ref(`images/${filename}`);
