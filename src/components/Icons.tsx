@@ -85,9 +85,12 @@ const Icons = ({name, sizes}: IconsProps) => {
     case 'arrow-left':
       return <Icon name="arrow-left" size={sizes} color={'#DE3A3A'} />;
       break;
-      case 'arrow-rigth':
-        return <Icon name="arrow-right" size={sizes} color={'white'} />;
-        break;
+    case 'arrow-rigth':
+      return <Icon name="arrow-right" size={sizes} color={'white'} />;
+      break;
+    case 'cash':
+      return <MaterialC name="cash-refund" size={sizes} color={'white'} />;
+      break;
     default:
       break;
   }
