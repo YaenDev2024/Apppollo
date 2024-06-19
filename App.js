@@ -33,6 +33,7 @@ export default function App() {
       options={{
         showOnColdStart: true,
         showOnAppForeground: true,
+        loadOnDismissed:true
       }}
     >
       <MenuProvider>

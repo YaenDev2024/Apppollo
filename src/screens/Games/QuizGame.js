@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   Alert,
   ScrollView,
@@ -8,10 +8,12 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  Image,
 } from 'react-native';
 import {
   BannerAd,
   BannerAdSize,
+  useInterstitialAd,
   useRewardedAd,
   useRewardedInterstitialAd,
 } from '@react-native-admob/admob';
@@ -37,6 +39,15 @@ const QuizGame = ({ navigation }) => {
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const signedInUser = auth.currentUser;
   const [coins, setCoins] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+
+  const {
+    adLoaded: interstitialLoaded,
+    adDismissed: interstitialDismissed,
+    load: loadInterstitial,
+    show: showInterstitial,
+  } = useInterstitialAd('ca-app-pub-3477493054350988/8755348914');
 
   const {
     adLoaded: rewardedLoaded,
@@ -51,6 +62,8 @@ const QuizGame = ({ navigation }) => {
     load: loadRewardedInterstitial,
     show: showRewardedInterstitial,
   } = useRewardedInterstitialAd('ca-app-pub-3477493054350988/3027142417');
+
+  const timerRef = useRef(null);
 
   const updateCoin = async () => {
     if (signedInUser) {
@@ -84,7 +97,10 @@ const QuizGame = ({ navigation }) => {
     if (rewardedInterstitialDismissed) {
       loadRewardedInterstitial();
     }
-  }, [rewardedDismissed, rewardedInterstitialDismissed, loadRewarded, loadRewardedInterstitial]);
+    if (interstitialDismissed) {
+      loadInterstitial();
+    }
+  }, [rewardedDismissed, rewardedInterstitialDismissed,interstitialDismissed, loadRewarded, loadRewardedInterstitial, loadInterstitial]);
 
   const originalQuestions = q;
 
@@ -104,21 +120,28 @@ const QuizGame = ({ navigation }) => {
   }, [start, originalQuestions]);
 
   useEffect(() => {
-    let intervalId;
-
     if (start) {
-      intervalId = setInterval(() => {
+      timerRef.current = setInterval(() => {
         setTime(prevTime => {
           if (prevTime <= 0) {
-            clearInterval(intervalId);
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+            Alert.alert('Finalizo el tiempo');
+            setStart(false);
+            setProgress(0);
             return 0;
           }
           return prevTime - 1;
         });
       }, 1000);
+    } else {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
 
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(timerRef.current);
+    };
   }, [start]);
 
   const onPressBack = () => {
@@ -127,27 +150,37 @@ const QuizGame = ({ navigation }) => {
 
   const startGame = () => {
     setStart(true);
-    setTime(60);
+    setTime(30);
+    setCoins(0);
   };
 
   const doubleCoins = useCallback(async () => {
+    if (loading) return;
+
+    setLoading(true);
     if (rewardedInterstitialLoaded) {
       showRewardedInterstitial();
-      await updateCoin();
     } else if (rewardedLoaded) {
       showRewarded();
+    } else if (interstitialLoaded) {
+      showInterstitial();
       await updateCoin();
     } else {
+
       Alert.alert(
         'No hay anuncios disponibles en este momento. Inténtalo más tarde.',
       );
+
     }
-  }, [rewardedInterstitialLoaded, showRewardedInterstitial, rewardedLoaded, showRewarded]);
+    // await updateCoin();
+    setLoading(false);
+  }, [rewardedInterstitialLoaded, showRewardedInterstitial, rewardedLoaded, showRewarded, loading]);
 
   const handleAnswer = selectedAnswer => {
     const currentQuestion = shuffledQuestions[currentQuestionIndex];
     if (selectedAnswer === currentQuestion.correctAnswer) {
       setCorrectAnswers(correctAnswers + 1);
+      setCoins(prevCoins => prevCoins + 1);
       setProgress((correctAnswers + 1) / shuffledQuestions.length);
       if (currentQuestionIndex < shuffledQuestions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -160,10 +193,6 @@ const QuizGame = ({ navigation }) => {
   };
 
   const formatTime = time => {
-    if (time === 0 && start) {
-      setStart(false);
-      Alert.alert('Finalizo el tiempo');
-    }
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
@@ -217,6 +246,14 @@ const QuizGame = ({ navigation }) => {
             <Text style={styles.timeText}>
               Tiempo restante {formatTime(time)}
             </Text>
+            <Text style={styles.quizTextCoins} >
+              Coins ganados:{coins}
+              <Image
+                source={require('../../../Assets/coin-pt.png')}
+                style={{ height: 25, width: 25 }}
+              />
+            </Text>
+
             <Text style={styles.quizText}>
               {currentQuestionIndex + 1}/{shuffledQuestions.length}
             </Text>
@@ -288,6 +325,11 @@ const styles = StyleSheet.create({
   },
   quizText: {
     color: '#DE3A3A',
+    fontWeight: 'bold',
+  },
+  quizTextCoins: {
+    top: -8,
+    color: 'orange',
     fontWeight: 'bold',
   },
   progressBarContainer: {
