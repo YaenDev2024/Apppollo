@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bonelles App</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, sans-serif;
+      }
+
+      :root {
+        --primary: #ffd23f;
+        --primary-light: #ffe584;
+        --accent: #ff6b6b;
+        --dark: #5c3d2e;
+        --background: #fff9ea;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        padding: 20px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+      }
+
+      .phone-frame {
+        width: 280px;
+        height: 600px;
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      /* Welcome Screen */
+      .welcome-screen {
+        background: linear-gradient(135deg, var(--dark), #4a311f);
+        height: 100%;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+      }
+
+      .logo-placeholder {
+        width: 120px;
+        height: 120px;
+        background: var(--primary);
+        border-radius: 30px;
+        margin-bottom: 40px;
+      }
+
+      .welcome-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .welcome-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-bottom: 40px;
+      }
+
+      .get-started-btn {
+        background: var(--accent);
+        color: white;
+        padding: 15px 40px;
+        border-radius: 25px;
+        border: none;
+        font-weight: 600;
+      }
+
+      /* Main Screen */
+      .main-screen {
+        background: var(--background);
+        height: 100%;
+        padding: 20px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .search-bar {
+        background: white;
+        padding: 12px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .search-input {
+        border: none;
+        background: none;
+        width: 100%;
+        padding: 0 10px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .show-all {
+        color: var(--accent);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .product-card {
+        background: white;
+        border-radius: 16px;
+        padding: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .product-image {
+        width: 100%;
+        height: 100px;
+        background: var(--primary-light);
+        border-radius: 12px;
+        margin-bottom: 10px;
+      }
+
+      .product-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 5px;
+      }
+
+      .product-rating {
+        color: var(--primary);
+        font-size: 12px;
+        margin-bottom: 5px;
+      }
+
+      .product-price {
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      /* Detail Screen */
+      .detail-screen {
+        background: var(--background);
+        height: 100%;
+        position: relative;
+      }
+
+      .detail-header {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .back-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .detail-image {
+        width: 100%;
+        height: 250px;
+        background: var(--primary-light);
+      }
+
+      .detail-content {
+        padding: 20px;
+      }
+
+      .detail-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 10px;
+      }
+
+      .detail-subtitle {
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .detail-rating {
+        color: var(--primary);
+        margin-bottom: 20px;
+      }
+
+      .detail-price {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 20px;
+      }
+
+      .add-to-cart {
+        background: var(--accent);
+        color: white;
+        width: 100%;
+        padding: 15px;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+      }
+      .profile-screen {
+        background: var(--background);
+        height: 100%;
+        position: relative;
+      }
+
+      .profile-header {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .profile-hero {
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .profile-image {
+        width: 100px;
+        height: 100px;
+        background: var(--primary-light);
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        border: 4px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .profile-name {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 5px;
+      }
+
+      .profile-email {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .profile-stats {
+        display: flex;
+        justify-content: space-around;
+        padding: 20px;
+        background: white;
+        margin: 0 20px 20px;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-number {
+        display: block;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .profile-sections {
+        padding: 0 20px;
+      }
+
+      .profile-section-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .section-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--background);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+      }
+
+      .section-text {
+        flex-grow: 1;
+        color: var(--dark);
+        font-weight: 500;
+      }
+
+      .section-arrow {
+        color: #666;
+      }
+
+      .logout-button {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        background: var(--accent);
+        color: white;
+        padding: 15px;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+      }
+      .settings-screen {
+        background: var(--background);
+        height: 100%;
+        position: relative;
+        overflow-y: auto;
+    }
+
+    .settings-header {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--background);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .settings-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--dark);
+    }
+
+    .settings-section {
+        padding: 0 20px;
+        margin-bottom: 24px;
+    }
+
+    .settings-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 12px;
+    }
+
+    .settings-items {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .settings-item {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .settings-item:last-child {
+        border-bottom: none;
+    }
+
+    .settings-item-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--background);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+    }
+
+    .settings-item-content {
+        flex-grow: 1;
+    }
+
+    .settings-item-title {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--dark);
+        margin-bottom: 2px;
+    }
+
+    .settings-item-subtitle {
+        font-size: 13px;
+        color: #666;
+    }
+
+    .settings-item-arrow {
+        color: #666;
+        margin-left: 12px;
+    }
+    </style>
+  </head>
+  <body>
+    <!-- Welcome Screen -->
+    <div class="phone-frame">
+      <div class="welcome-screen">
+        <div class="logo-placeholder"></div>
+        <h1 class="welcome-title">Bienvenido a<br />Bonelles</h1>
+        <p class="welcome-subtitle">Los mejores pollos<br />a la brasa</p>
+        <button class="get-started-btn">Comenzar</button>
+      </div>
+    </div>
+
+    <!-- Main Screen -->
+    <div class="phone-frame">
+      <div class="main-screen">
+        <div class="header">
+          <h2>Descubre</h2>
+          <div
+            style="
+              width: 40px;
+              height: 40px;
+              background: white;
+              border-radius: 50%;
+            "></div>
+        </div>
+
+        <div class="search-bar">
+          <input
+            type="text"
+            placeholder="Buscar productos..."
+            class="search-input" />
+        </div>
+
+        <div>
+          <div class="section-title">
+            Productos Populares
+            <span class="show-all">Ver Todo</span>
+          </div>
+          <div class="products-grid">
+            <div class="product-card">
+              <div class="product-image"></div>
+              <h3 class="product-title">Pollo Entero</h3>
+              <div class="product-rating">★ 4.8</div>
+              <div class="product-price">$15.99</div>
+            </div>
+            <div class="product-card">
+              <div class="product-image"></div>
+              <h3 class="product-title">Medio Pollo</h3>
+              <div class="product-rating">★ 4.7</div>
+              <div class="product-price">$9.99</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-title">
+            Promociones
+            <span class="show-all">Ver Todo</span>
+          </div>
+          <div class="product-card">
+            <div class="product-image"></div>
+            <h3 class="product-title">Combo Familiar</h3>
+            <div class="product-rating">★ 4.9</div>
+            <div class="product-price">$29.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-frame">
+      <div class="profile-screen">
+        <div class="profile-header">
+          <div class="back-button">←</div>
+          <div class="back-button">⚙️</div>
+        </div>
+
+        <div class="profile-hero">
+          <div class="profile-image"></div>
+          <h2 class="profile-name">Juan Pérez</h2>
+          <p class="profile-email">juan.perez@email.com</p>
+        </div>
+
+        <div class="profile-stats">
+          <div class="stat-item">
+            <span class="stat-number">12</span>
+            <span class="stat-label">Pedidos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">4</span>
+            <span class="stat-label">Favoritos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">320</span>
+            <span class="stat-label">Puntos</span>
+          </div>
+        </div>
+
+        <div class="profile-sections">
+          <div class="profile-section-item">
+            <div class="section-icon">📦</div>
+            <div class="section-text">Mis Pedidos</div>
+            <div class="section-arrow">→</div>
+          </div>
+          <div class="profile-section-item">
+            <div class="section-icon">♥️</div>
+            <div class="section-text">Favoritos</div>
+            <div class="section-arrow">→</div>
+          </div>
+          <div class="profile-section-item">
+            <div class="section-icon">🎁</div>
+            <div class="section-text">Mis Puntos</div>
+            <div class="section-arrow">→</div>
+          </div>
+          <div class="profile-section-item">
+            <div class="section-icon">📍</div>
+            <div class="section-text">Direcciones</div>
+            <div class="section-arrow">→</div>
+          </div>
+          <div class="profile-section-item">
+            <div class="section-icon">🔔</div>
+            <div class="section-text">Notificaciones</div>
+            <div class="section-arrow">→</div>
+          </div>
+        </div>
+
+        <button class="logout-button">Cerrar Sesión</button>
+      </div>
+    </div>
+    <!-- Detail Screen -->
+    <div class="phone-frame">
+      <div class="detail-screen">
+        <div class="detail-header">
+          <div class="back-button">←</div>
+          <div class="back-button">♥</div>
+        </div>
+        <div class="detail-image"></div>
+        <div class="detail-content">
+          <h2 class="detail-title">Pollo Entero</h2>
+          <p class="detail-subtitle">A la brasa</p>
+          <div class="detail-rating">★ 4.8</div>
+          <p style="color: #666; margin-bottom: 20px">
+            Nuestro delicioso pollo a la brasa, marinado con nuestras especias
+            secretas y cocinado a la perfección.
+          </p>
+          <div class="detail-price">$15.99</div>
+          <button class="add-to-cart">Añadir al Carrito</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone-frame">
+        <div class="settings-screen">
+            <div class="settings-header">
+                <div class="back-button">←</div>
+                <h2 class="settings-title">Configuración</h2>
+                <div style="width: 40px;"></div>
+            </div>
+    
+            <!-- Cuenta -->
+            <div class="settings-section">
+                <h3 class="settings-section-title">Cuenta</h3>
+                <div class="settings-items">
+                    <div class="settings-item">
+                        <div class="settings-item-icon">👤</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Información Personal</div>
+                            <div class="settings-item-subtitle">Nombre, email, teléfono</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-icon">🔒</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Seguridad</div>
+                            <div class="settings-item-subtitle">Contraseña, verificación</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Pagos -->
+            <div class="settings-section">
+                <h3 class="settings-section-title">Pagos</h3>
+                <div class="settings-items">
+                    <div class="settings-item">
+                        <div class="settings-item-icon">💳</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Métodos de Pago</div>
+                            <div class="settings-item-subtitle">Tarjetas, efectivo</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-icon">📃</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Facturación</div>
+                            <div class="settings-item-subtitle">Datos fiscales, RUC</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Direcciones -->
+            <div class="settings-section">
+                <h3 class="settings-section-title">Direcciones</h3>
+                <div class="settings-items">
+                    <div class="settings-item">
+                        <div class="settings-item-icon">🏠</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Direcciones de Entrega</div>
+                            <div class="settings-item-subtitle">Casa, trabajo, otros</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-icon">📍</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Ubicación Actual</div>
+                            <div class="settings-item-subtitle">GPS, permisos</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Preferencias -->
+            <div class="settings-section">
+                <h3 class="settings-section-title">Preferencias</h3>
+                <div class="settings-items">
+                    <div class="settings-item">
+                        <div class="settings-item-icon">🔔</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Notificaciones</div>
+                            <div class="settings-item-subtitle">Pedidos, ofertas, noticias</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-icon">🌙</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Tema</div>
+                            <div class="settings-item-subtitle">Claro, oscuro</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-icon">🌐</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Idioma</div>
+                            <div class="settings-item-subtitle">Español</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Ayuda -->
+            <div class="settings-section">
+                <h3 class="settings-section-title">Ayuda</h3>
+                <div class="settings-items">
+                    <div class="settings-item">
+                        <div class="settings-item-icon">❓</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Centro de Ayuda</div>
+                            <div class="settings-item-subtitle">Preguntas frecuentes</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-icon">📞</div>
+                        <div class="settings-item-content">
+                            <div class="settings-item-title">Contacto</div>
+                            <div class="settings-item-subtitle">Soporte, sugerencias</div>
+                        </div>
+                        <div class="settings-item-arrow">→</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

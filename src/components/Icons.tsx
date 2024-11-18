@@ -10,9 +10,10 @@ import MaterialC from 'react-native-vector-icons/MaterialCommunityIcons';
 type IconsProps = PropsWithChildren<{
   name: String;
   sizes: number;
+  ColorsDA: string;
 }>;
 
-const Icons = ({name, sizes}: IconsProps) => {
+const Icons = ({name, sizes, ColorsDA}: IconsProps) => {
   switch (name) {
     case 'bars':
       return <Icon name="bars" size={sizes} color={'red'} />;
@@ -88,8 +89,14 @@ const Icons = ({name, sizes}: IconsProps) => {
     case 'arrow-rigth':
       return <Icon name="arrow-right" size={sizes} color={'white'} />;
       break;
+    case 'arrow-right':
+      return <Icon name="arrow-right" size={sizes} color={ColorsDA} />;
+      break;
     case 'cash':
       return <MaterialC name="cash-refund" size={sizes} color={'white'} />;
+      break;
+    case 'heart':
+      return <MaterialC name="heart" size={sizes} color={'red'} />;
       break;
     default:
       break;

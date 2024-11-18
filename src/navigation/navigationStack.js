@@ -16,6 +16,9 @@ import AccountScreen from '../screens/AccountScreen';
 import AboutUsScreen from '../screens/AboutUsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import QuizGame from '../screens/Games/QuizGame';
+import ProductScreenDesc from '../screens/Products/ProductScreenDesc';
+import UserPerfil from '../screens/Users/UserPerfil';
+import UserConfig from '../screens/Users/UserConfig';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +42,9 @@ export const NavigationStack = () => {
       <Stack.Screen name="Account" component={AccountScreen} />
       <Stack.Screen name="AboutUs" component={AboutUsScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="ProductDescBuy" component={ProductScreenDesc} />
+      <Stack.Screen name="UserPerfil" component={UserPerfil} />
+      <Stack.Screen name="ConfigUser" component={UserConfig} />
     </Stack.Navigator>
   );
 };

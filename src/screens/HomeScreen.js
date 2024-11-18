@@ -16,6 +16,7 @@ import coin from '../../Assets/coin-pt.png';
 import {BannerAd, useRewardedAd, BannerAdSize} from '@react-native-admob/admob';
 import {auth, db} from '../../config';
 import {collection, query, where, onSnapshot} from 'firebase/firestore';
+import UsuarioNormal from './ByRoles/UsuarioNormal';
 
 export const HomeScreen = ({navigation}) => {
   const {adLoaded, adDismissed, show} = useRewardedAd(
@@ -115,7 +116,6 @@ export const HomeScreen = ({navigation}) => {
             To={'Win'}
             desc={'Programa de recompensas'}
           />
-          
         </>
       );
     } else {
@@ -125,34 +125,38 @@ export const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.root}>
-      <ImageBackground
-        source={require('../../Assets/fondo.jpg')}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-        imageStyle={{opacity: 0.08}}>
-        <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
-        <NavBar name={'Menu'} />
-        {time ? (
-          <ActivityIndicator size="large" color="black" />
-        ) : (
-          <ScrollView contentContainerStyle={styles.scrollViewContent}>
-            <View style={styles.container}>
-              {itApprovedBanner ? (
-                <BannerAd
-                  unitId="ca-app-pub-3477493054350988/1457774401"
-                  size={BannerAdSize.ADAPTIVE_BANNER}
-                />
-              ) : null}
-              <View style={styles.menuContainer}>{renderMenuOptions()}</View>
-              <View style={styles.buttonContainer}></View>
-            </View>
-            <BannerAd
-              unitId="ca-app-pub-3477493054350988/1457774401"
-              size={BannerAdSize.ADAPTIVE_BANNER}
-            />
-          </ScrollView>
-        )}
-      </ImageBackground>
+      {role === 'admin' ? (
+        <UsuarioNormal />
+      ) : (
+        <ImageBackground
+          source={require('../../Assets/fondo.jpg')}
+          style={styles.backgroundImage}
+          resizeMode="cover"
+          imageStyle={{opacity: 0.08}}>
+          <StatusBar backgroundColor={'transparent'} barStyle="light-content" />
+          <NavBar name={'Menu'} />
+          {time ? (
+            <ActivityIndicator size="large" color="black" />
+          ) : (
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+              <View style={styles.container}>
+                {itApprovedBanner ? (
+                  <BannerAd
+                    unitId="ca-app-pub-3477493054350988/1457774401"
+                    size={BannerAdSize.ADAPTIVE_BANNER}
+                  />
+                ) : null}
+                <View style={styles.menuContainer}>{renderMenuOptions()}</View>
+                <View style={styles.buttonContainer}></View>
+              </View>
+              <BannerAd
+                unitId="ca-app-pub-3477493054350988/1457774401"
+                size={BannerAdSize.ADAPTIVE_BANNER}
+              />
+            </ScrollView>
+          )}
+        </ImageBackground>
+      )}
     </View>
   );
 };
@@ -160,7 +164,7 @@ export const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
   },
   scrollViewContent: {
     flexGrow: 1,

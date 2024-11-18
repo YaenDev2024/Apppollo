@@ -36,11 +36,11 @@ export const WelcomeScreen = ({navigation}) => {
               Registrarse
             </Text>
           </TouchableOpacity> */}
-          <Text>o</Text>
+   
           <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('Sign In')}>
-            <Text style={{color: 'white', textAlign: 'center'}}>
+            <Text style={{color: 'white', fontWeight:'bold'}}>
               Iniciar Sesion
             </Text>
           </TouchableOpacity>
@@ -75,8 +75,11 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'red',
     padding: 10,
-    borderRadius: 10,
-    width: 150
+    borderRadius: 50,
+    width: 200,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   backgroundImage: {
     flex: 1,
