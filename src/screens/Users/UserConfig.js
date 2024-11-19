@@ -11,12 +11,12 @@ import Icons from '../../components/Icons';
 import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
 
 const COLORS = {
-  dark: '#5C3D2E',
+  dark: 'black',
   darkSecondary: '#4A311F',
   primary: '#FFD23F',
   primaryLight: '#FFE584',
   accent: '#FF6B6B',
-  background: '#FFF9EA',
+  background: 'white',
 };
 
 // Componente individual para cada card
@@ -239,6 +239,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
+    borderLeftWidth: 1,
+    borderLeftColor: '#f0f0f0',
+    borderRightWidth: 1,
+    borderRightColor: '#f0f0f0',
   },
   containerContentCard: {
     flexDirection: 'row',

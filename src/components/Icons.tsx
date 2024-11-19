@@ -15,6 +15,9 @@ type IconsProps = PropsWithChildren<{
 
 const Icons = ({name, sizes, ColorsDA}: IconsProps) => {
   switch (name) {
+    case 'search':
+      return <Icon name="search" size={sizes} color={'#dadada'} />;
+      break;
     case 'bars':
       return <Icon name="bars" size={sizes} color={'red'} />;
       break;

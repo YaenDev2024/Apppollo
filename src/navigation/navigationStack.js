@@ -1,13 +1,13 @@
 // navigationStack.js
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { HomeScreen } from '../screens/HomeScreen';
-import { MainPageInventory } from '../screens/inventory/MainPageInventory';
-import { BuyScreen } from '../screens/BuyScreen';
-import { OrderScreen } from '../screens/OrderScreen';
-import { WinCoins } from '../screens/WinCoins';
+import {createStackNavigator} from '@react-navigation/stack';
+import {HomeScreen} from '../screens/HomeScreen';
+import {MainPageInventory} from '../screens/inventory/MainPageInventory';
+import {BuyScreen} from '../screens/BuyScreen';
+import {OrderScreen} from '../screens/OrderScreen';
+import {WinCoins} from '../screens/WinCoins';
 import RuletaGame from '../screens/Games/RuletaGame';
-import { TestPdf } from '../screens/tests/tstpdf';
+import {TestPdf} from '../screens/tests/tstpdf';
 import ShareExample from '../screens/tests/ticket';
 import Createpdf from '../screens/tests/createpdf';
 import CombosList from '../screens/buy/CombosList';
@@ -19,7 +19,8 @@ import QuizGame from '../screens/Games/QuizGame';
 import ProductScreenDesc from '../screens/Products/ProductScreenDesc';
 import UserPerfil from '../screens/Users/UserPerfil';
 import UserConfig from '../screens/Users/UserConfig';
-
+import SearchProducs from '../screens/Products/SearchProducs';
+import {CardStyleInterpolators} from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 export const NavigationStack = () => {
@@ -27,6 +28,7 @@ export const NavigationStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS, // o prueba "forFadeFromBottomAndroid"
       }}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Inventory" component={MainPageInventory} />
@@ -45,6 +47,7 @@ export const NavigationStack = () => {
       <Stack.Screen name="ProductDescBuy" component={ProductScreenDesc} />
       <Stack.Screen name="UserPerfil" component={UserPerfil} />
       <Stack.Screen name="ConfigUser" component={UserConfig} />
+      <Stack.Screen name="Search" component={SearchProducs} />
     </Stack.Navigator>
   );
 };

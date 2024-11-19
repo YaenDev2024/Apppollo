@@ -1,6 +1,7 @@
 import {collection, onSnapshot, query, where} from 'firebase/firestore';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   Image,
   ScrollView,
   StatusBar,
@@ -16,14 +17,16 @@ import {auth, db} from '../../../config';
 import {useNavigation} from '@react-navigation/native';
 import ModalPerfilUser from '../../components/ModalPerfilUser';
 import {BannerAd, BannerAdSize, useRewardedAd} from '@react-native-admob/admob';
+import Icons from '../../components/Icons';
+import SearchInput from '../../components/SearchInput';
 
 const COLORS = {
-  dark: '#5C3D2E',
+  dark: 'black',
   darkSecondary: '#4A311F',
   primary: '#FFD23F',
   primaryLight: '#FFE584',
   accent: '#FF6B6B',
-  background: '#FFF9EA',
+  background: 'white',
 };
 
 const UsuarioNormal = () => {
@@ -157,8 +160,8 @@ const UsuarioNormal = () => {
       </View>
       {isVisible && <ModalPerfilUser onClose={onClose} visible={isVisible} />}
 
-      <TextInput placeholder="Buscar productos..." style={styles.searchinput} />
-
+      {/* */}
+      <SearchInput />
       <ScrollView>
         <View style={styles.productsPopularesContainer}>
           <Text style={styles.productsTitles}>Productos Populares</Text>
@@ -181,19 +184,19 @@ const UsuarioNormal = () => {
           {loading ? <Text>Cargando...</Text> : renderPromos()}
         </View>
         <View style={styles.productsPopularesContainer}>
-          <Text style={styles.productsTitles}>Gana productos gratis</Text>   
+          <Text style={styles.productsTitles}>Gana productos gratis</Text>
           <TouchableOpacity>
             <Text style={styles.seeall}>Ver Todo</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.containerCardsProm}>
           {loading ? <Text>Cargando...</Text> : renderPromos()}
-        </View>      
+        </View>
       </ScrollView>
       <BannerAd
-          unitId="ca-app-pub-3477493054350988/1457774401"
-          size={BannerAdSize.ADAPTIVE_BANNER}
-        />
+        unitId="ca-app-pub-3477493054350988/1457774401"
+        size={BannerAdSize.ADAPTIVE_BANNER}
+      />
     </View>
   );
 };

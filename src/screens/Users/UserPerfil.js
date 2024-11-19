@@ -12,12 +12,12 @@ import {useNavigation} from '@react-navigation/native';
 import {auth} from '../../../config';
 import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
 const COLORS = {
-  dark: '#5C3D2E',
+  dark: 'black',
   darkSecondary: '#4A311F',
   primary: '#FFD23F',
   primaryLight: '#FFE584',
   accent: '#FF6B6B',
-  background: '#FFF9EA',
+  background: 'white',
 };
 const UserPerfil = ({route}) => {
   const navigation = useNavigation();
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   squareImg: {
     width: 50,
     height: 50,
-    backgroundColor: '#fff9ea',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 15,

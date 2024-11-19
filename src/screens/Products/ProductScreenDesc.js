@@ -11,12 +11,12 @@ import Icons from '../../components/Icons';
 import {useNavigation} from '@react-navigation/native';
 import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
 const COLORS = {
-  dark: '#5C3D2E',
+  dark: 'black',
   darkSecondary: '#4A311F',
   primary: '#FFD23F',
   primaryLight: '#FFE584',
   accent: '#FF6B6B',
-  background: '#FFF9EA',
+  background: 'white',
 };
 const ProductScreenDesc = ({route}) => {
   const {nameCombo, price, desc, url, star} = route.params.product;
