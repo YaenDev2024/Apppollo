@@ -6,6 +6,7 @@ import Icon5 from 'react-native-vector-icons/FontAwesome5';
 import M from 'react-native-vector-icons/FontAwesome6';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import MaterialC from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 type IconsProps = PropsWithChildren<{
   name: String;
@@ -100,6 +101,9 @@ const Icons = ({name, sizes, ColorsDA}: IconsProps) => {
       break;
     case 'heart':
       return <MaterialC name="heart" size={sizes} color={'red'} />;
+      break;
+    case 'back-in-time':
+      return <Entypo name="back-in-time" size={sizes} color={'gray'} />;
       break;
     default:
       break;
