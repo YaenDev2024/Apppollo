@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -9,8 +9,15 @@ import {
 } from 'react-native';
 import Icons from '../../components/Icons';
 import {useNavigation} from '@react-navigation/native';
-import {auth} from '../../../config';
-import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
+import {auth, db} from '../../../config';
+import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
 const COLORS = {
   dark: 'black',
   darkSecondary: '#4A311F',
@@ -22,6 +29,45 @@ const COLORS = {
 const UserPerfil = ({route}) => {
   const navigation = useNavigation();
   const signedInUser = auth.currentUser;
+
+  const [listPedidos, setListPedidos] = useState([]);
+  const [listFav, setListFav] = useState([]);
+  const [listPoints, setListPoints] = useState('');
+
+  useEffect(() => {
+    const getUserId = async () => {
+      if (signedInUser) {
+        const querySnapshot = await getDocs(
+          query(
+            collection(db, 'users'),
+            where('mail', '==', signedInUser.email),
+          ),
+        );
+        querySnapshot.forEach(doc => {
+          const unsubscribe = onSnapshot(
+            query(collection(db, 'pedidos'), where('iduser', '==', doc.id)),
+            snapshot => {
+              setListPedidos(
+                snapshot.docs.map(docst => ({id: docst.id, ...docst.data()})),
+              );
+            },
+          );
+          const unsubscribeFav = onSnapshot(
+            query(collection(db, 'favoritos'), where('iduser', '==', doc.id)),
+            snapshot => {
+              setListFav(
+                snapshot.docs.map(doct => ({id: doct.id, ...doct.data()})),
+              );
+            },
+          );
+          setListPoints(doc.data().coins);
+          return unsubscribe;
+        });
+      }
+    };
+    getUserId();
+  }, [signedInUser]);
+
   return (
     <View style={styles.container}>
       <View style={styles.btnContainer}>
@@ -31,7 +77,9 @@ const UserPerfil = ({route}) => {
           onPress={() => navigation.goBack()}>
           <Icons name="arrow-left" sizes={25} color={COLORS.dark} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnrounded} onPress={() => navigation.navigate('ConfigUser')}>
+        <TouchableOpacity
+          style={styles.btnrounded}
+          onPress={() => navigation.navigate('ConfigUser')}>
           <Icons name="cog" sizes={25} color={COLORS.dark} />
         </TouchableOpacity>
       </View>
@@ -47,15 +95,15 @@ const UserPerfil = ({route}) => {
         {/* card info */}
         <View style={styles.cardInfo}>
           <View style={styles.containerData}>
-            <Text style={styles.titleCardCount}>0</Text>
+            <Text style={styles.titleCardCount}>{listPedidos.length}</Text>
             <Text style={styles.titleCard}>Pedidos</Text>
           </View>
           <View style={styles.containerData}>
-            <Text style={styles.titleCardCount}>0</Text>
+            <Text style={styles.titleCardCount}>{listFav.length}</Text>
             <Text style={styles.titleCard}>Favoritos</Text>
           </View>
           <View style={styles.containerData}>
-            <Text style={styles.titleCardCount}>0</Text>
+            <Text style={styles.titleCardCount}>{listPoints}</Text>
             <Text style={styles.titleCard}>Puntos</Text>
           </View>
         </View>
@@ -64,36 +112,52 @@ const UserPerfil = ({route}) => {
           size={BannerAdSize.ADAPTIVE_BANNER}
         />
         {/* cards */}
-        <View style={styles.card}>
-          <View style={styles.squareImg}><Text style={{fontSize:25}}>📦</Text></View>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('UserPedidos')}>
+          <View style={styles.squareImg}>
+            <Text style={{fontSize: 25}}>📦</Text>
+          </View>
           <Text style={styles.titleCards}>Mis Pedidos</Text>
           <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </View>
-        <View style={styles.card}>
-          <View style={styles.squareImg}><Icons name="heart" sizes={35} color={COLORS.dark} /></View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('UserFav')}>
+          <View style={styles.squareImg}>
+            <Icons name="heart" sizes={35} color={COLORS.dark} />
+          </View>
           <Text style={styles.titleCards}>Favoritos</Text>
           <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </View>
-        <View style={styles.card}>
-          <View style={styles.squareImg}><Text style={{fontSize:25}}>🎁</Text></View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('UserPoints')}>
+          <View style={styles.squareImg}>
+            <Text style={{fontSize: 25}}>🎁</Text>
+          </View>
           <Text style={styles.titleCards}>Mis Puntos</Text>
           <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </View>
-        <View style={styles.card}>
-          <View style={styles.squareImg}><Text style={{fontSize:25}}>📍</Text></View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('UserDir')}>
+          <View style={styles.squareImg}>
+            <Text style={{fontSize: 25}}>📍</Text>
+          </View>
           <Text style={styles.titleCards}>Direcciones</Text>
           <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </View>
-        <View style={styles.card}>
+        </TouchableOpacity>
+        {/* <View style={styles.card}>
           <View style={styles.squareImg}><Text style={{fontSize:25}}>🔔</Text></View>
           <Text style={styles.titleCards}>Notificaciones</Text>
           <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </View>
+        </View> */}
       </ScrollView>
       <BannerAd
-          unitId="ca-app-pub-3477493054350988/1457774401"
-          size={BannerAdSize.ADAPTIVE_BANNER}
-        />
+        unitId="ca-app-pub-3477493054350988/1457774401"
+        size={BannerAdSize.ADAPTIVE_BANNER}
+      />
     </View>
   );
 };
@@ -150,7 +214,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    marginBottom:25
+    marginBottom: 25,
   },
   titleCard: {
     fontSize: 16,

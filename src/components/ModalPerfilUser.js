@@ -143,11 +143,11 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderRadius: 10,
-    backgroundColor: '#fbecc5',
+    backgroundColor: '#f2f2f2',
     marginBottom: 8,
   },
   deleteOption: {
-    backgroundColor: '#fbd9c5',
+    backgroundColor: '#f9eaea',
   },
   optionText: {
     color: COLORS.dark,

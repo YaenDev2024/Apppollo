@@ -21,6 +21,11 @@ import UserPerfil from '../screens/Users/UserPerfil';
 import UserConfig from '../screens/Users/UserConfig';
 import SearchProducs from '../screens/Products/SearchProducs';
 import {CardStyleInterpolators} from '@react-navigation/stack';
+import UserPedidos from '../screens/Users/UserPedidos';
+import UserFav from '../screens/Users/UserFav';
+import UserPoints from '../screens/Users/UserPoints';
+import UserDir from '../screens/Users/UserDir';
+import ConfigInfoPersonal from '../screens/Config/ConfigInfoPersonal';
 const Stack = createStackNavigator();
 
 export const NavigationStack = () => {
@@ -48,6 +53,11 @@ export const NavigationStack = () => {
       <Stack.Screen name="UserPerfil" component={UserPerfil} />
       <Stack.Screen name="ConfigUser" component={UserConfig} />
       <Stack.Screen name="Search" component={SearchProducs} />
+      <Stack.Screen name="UserPedidos" component={UserPedidos} />
+      <Stack.Screen name="UserFav" component={UserFav} />
+      <Stack.Screen name="UserPoints" component={UserPoints} />
+      <Stack.Screen name="UserDir" component={UserDir} />
+      <Stack.Screen name="ConfigInfoPersonal" component={ConfigInfoPersonal} />
     </Stack.Navigator>
   );
 };

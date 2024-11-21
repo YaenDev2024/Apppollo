@@ -7,6 +7,7 @@ import M from 'react-native-vector-icons/FontAwesome6';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import MaterialC from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 type IconsProps = PropsWithChildren<{
   name: String;
@@ -22,7 +23,6 @@ const Icons = ({name, sizes, ColorsDA}: IconsProps) => {
     case 'bars':
       return <Icon name="bars" size={sizes} color={'red'} />;
       break;
-
     case 'logout':
       return <Icon name="sign-out" size={sizes} color={'red'} />;
       break;
@@ -35,7 +35,6 @@ const Icons = ({name, sizes, ColorsDA}: IconsProps) => {
     case 'trash':
       return <Icon name="trash" size={sizes} color={'red'} />;
       break;
-
     case 'shopping-cart':
       return <Icon name="shopping-cart" size={sizes} color={'red'} />;
       break;
@@ -99,15 +98,20 @@ const Icons = ({name, sizes, ColorsDA}: IconsProps) => {
     case 'cash':
       return <MaterialC name="cash-refund" size={sizes} color={'white'} />;
       break;
-    case 'heart':
+    case 'hearts':
       return <MaterialC name="heart" size={sizes} color={'red'} />;
       break;
     case 'back-in-time':
       return <Entypo name="back-in-time" size={sizes} color={'gray'} />;
       break;
+    case 'heart':
+      return <AntDesign name="heart" size={sizes} color={'red'} />;
+      break;
+    case 'hearto':
+      return <AntDesign name="hearto" size={sizes} color={'red'} />;
+      break;
     default:
       break;
   }
 };
-
 export default Icons;

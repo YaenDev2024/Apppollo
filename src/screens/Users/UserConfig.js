@@ -83,7 +83,7 @@ const UserConfig = () => {
       icon: '👤',
       title: 'Información Personal',
       subtitle: 'Nombre, email, teléfono',
-      onPress: () => navigation.navigate('PersonalInfo'),
+      onPress: () => navigation.navigate('ConfigInfoPersonal'),
     },
     {
       id: '2',
