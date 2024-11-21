@@ -26,6 +26,7 @@ import UserFav from '../screens/Users/UserFav';
 import UserPoints from '../screens/Users/UserPoints';
 import UserDir from '../screens/Users/UserDir';
 import ConfigInfoPersonal from '../screens/Config/ConfigInfoPersonal';
+import PayScreen from '../screens/Orders/PayScreen';
 const Stack = createStackNavigator();
 
 export const NavigationStack = () => {
@@ -58,6 +59,7 @@ export const NavigationStack = () => {
       <Stack.Screen name="UserPoints" component={UserPoints} />
       <Stack.Screen name="UserDir" component={UserDir} />
       <Stack.Screen name="ConfigInfoPersonal" component={ConfigInfoPersonal} />
+      <Stack.Screen name="Pay" component={PayScreen} />
     </Stack.Navigator>
   );
 };

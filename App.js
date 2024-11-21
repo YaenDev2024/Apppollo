@@ -29,7 +29,7 @@ export default function App() {
   };
 
   return (
-    <StripeProvider publishableKey="tu-clave-publica">
+    <StripeProvider publishableKey="pk_live_51QNapqBeEjHp6TpqvlOI3xwJZLYR3E63p3AvOoZS93X49qeddTLBOGNgJcYryXafgwWV7k1Id3N3HHoBBDaaeskT00V2wtKR1z">
     <AppOpenAdProvider
       unitId={'pk_live_Zh9ba81b0ftAyBc8uQqxi110'} 
       options={{

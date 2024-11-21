@@ -141,7 +141,7 @@ const ProductScreenDesc = ({route}) => {
         </View>
 
         <View style={styles.btnBuyContainer}>
-          <TouchableOpacity style={styles.btnBuy}>
+          <TouchableOpacity style={styles.btnBuy} onPress={() => navigation.navigate('Pay')}>
             <Text style={styles.btnBuyText}>Comprar</Text>
           </TouchableOpacity>
         </View>

@@ -1,19 +1,33 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+const {onRequest} = require('firebase-functions/v2/https');
 
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
+exports.createPaymentIntent = onRequest(
+  {secrets: ['SECRET_NAME']},
+  async (req, res) => {
+    const stripe = require('stripe')(process.env.SECRET_NAME);
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+    try {
+      // Obtener la cantidad a pagar desde el cuerpo de la solicitud (por ejemplo, un pago de $20)
+      const {amount} = req.body;
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+      // Asegúrate de que 'amount' sea un número válido en la respuesta
+      if (!amount || isNaN(amount)) {
+        return res.status(400).json({error: 'Invalid amount'});
+      }
+
+      // Crear un PaymentIntent en Stripe
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount, // El monto en centavos (por ejemplo, $20 es 2000)
+        currency: 'mxn',
+        automatic_payment_methods: {enabled: true, allow_redirects: 'never'}, // Puedes cambiar la moneda si lo necesitas
+      });
+
+      // Devolver el client_secret de Stripe en la respuesta
+      res.status(200).json({
+        clientSecret: paymentIntent.client_secret,
+      });
+    } catch (error) {
+      console.error('Error creating PaymentIntent', error);
+      res.status(500).json({error: 'Internal Server Error'});
+    }
+  },
+);
