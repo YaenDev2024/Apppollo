@@ -18,6 +18,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootNavigation } from './src/navigation';
 import { MenuProvider } from './src/hooks/MenuContext';
 import { BannerAd, BannerAdSize, TestIds, AppOpenAdProvider } from '@react-native-admob/admob';
+import { StripeProvider } from '@stripe/stripe-react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,8 +29,9 @@ export default function App() {
   };
 
   return (
+    <StripeProvider publishableKey="tu-clave-publica">
     <AppOpenAdProvider
-      unitId={'ca-app-pub-3477493054350988/4308605933'} 
+      unitId={'pk_live_Zh9ba81b0ftAyBc8uQqxi110'} 
       options={{
         showOnColdStart: true,
         showOnAppForeground: true,
@@ -42,6 +44,7 @@ export default function App() {
         </NavigationContainer>
       </MenuProvider>
     </AppOpenAdProvider>
+    </StripeProvider>
   );
 }
 

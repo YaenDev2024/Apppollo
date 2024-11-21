@@ -1,0 +1,217 @@
+[debug] [2024-11-21T12:34:18.318Z] ----------------------------------------------------------------------
+[debug] [2024-11-21T12:34:18.320Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\tomacost\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-11-21T12:34:18.321Z] CLI Version:   13.26.0
+[debug] [2024-11-21T12:34:18.321Z] Platform:      win32
+[debug] [2024-11-21T12:34:18.321Z] Node Version:  v20.12.2
+[debug] [2024-11-21T12:34:18.321Z] Time:          Thu Nov 21 2024 05:34:18 GMT-0700 (Mountain Standard Time)
+[debug] [2024-11-21T12:34:18.321Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-21T12:34:18.328Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-21T12:34:18.328Z] > authorizing via signed-in user (acostadtomas.24@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\tomacost\Apppollo-1
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-11-21T12:34:30.415Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:34:30.415Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:34:30.418Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2024-11-21T12:34:51.476Z] *** [apiv2] error from fetch(https://firebase.googleapis.com/v1beta1/projects?pageSize=100, {"headers":{},"method":"GET","agent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"requests":{},"sockets":{"firebase.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"cache":{"max":20,"maxSize":0,"maxEntrySize":0,"fetchMethod":null,"keyMap":{},"keyList":["https:+http://sersanti:8AAhh7xE@10.14.193.57:3128",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"valList":[{"_events":{},"_eventsCount":2,"options":{},"requests":{},"sockets":{"firebase.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"proxy":"http://sersanti:8AAhh7xE@10.14.193.57:3128/","proxyHeaders":{},"connectOpts":{"ALPNProtocols":["http/1.1"],"host":"10.14.193.57","port":3128}},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"next":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"prev":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"head":0,"tail":0,"free":{"heap":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"length":0},"initialFill":1,"size":1,"disposeAfter":null,"disposed":null,"noDisposeOnSet":false,"noUpdateTTL":false,"noDeleteOnFetchRejection":false,"allowStaleOnFetchRejection":false,"allowStaleOnFetchAbort":false,"ignoreFetchAbort":false,"allowStale":false,"noDeleteOnStaleGet":false,"updateAgeOnGet":false,"updateAgeOnHas":false,"ttlResolution":1,"ttlAutopurge":false,"ttl":0},"httpAgent":{"_events":{},"_eventsCount":2,"defaultPort":80,"protocol":"http:","options":{"noDelay":true,"path":null},"requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0},"httpsAgent":{"_events":{},"_eventsCount":2,"defaultPort":443,"protocol":"https:","options":{"noDelay":true,"path":null},"requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"maxCachedSessions":100,"_sessionCache":{"map":{},"list":[]}}},"signal":{}}): FetchError: request to https://firebase.googleapis.com/v1beta1/projects?pageSize=100 failed, reason: connect ETIMEDOUT 10.14.193.57:3128
+[debug] [2024-11-21T12:34:51.478Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects?pageSize=100
+[debug] [2024-11-21T12:34:51.985Z] FirebaseError: Failed to make request to https://firebase.googleapis.com/v1beta1/projects?pageSize=100
+    at RetryOperation._fn (C:\Users\tomacost\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:261:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to list Firebase projects. See firebase-debug.log for more info.
+[debug] [2024-11-21T12:35:07.889Z] ----------------------------------------------------------------------
+[debug] [2024-11-21T12:35:07.891Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\tomacost\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init --debug
+[debug] [2024-11-21T12:35:07.892Z] CLI Version:   13.26.0
+[debug] [2024-11-21T12:35:07.892Z] Platform:      win32
+[debug] [2024-11-21T12:35:07.892Z] Node Version:  v20.12.2
+[debug] [2024-11-21T12:35:07.892Z] Time:          Thu Nov 21 2024 05:35:07 GMT-0700 (Mountain Standard Time)
+[debug] [2024-11-21T12:35:07.892Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-21T12:35:07.899Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-21T12:35:07.900Z] > authorizing via signed-in user (acostadtomas.24@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\tomacost\Apppollo-1
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-11-21T12:35:13.570Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:35:13.570Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:35:13.574Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2024-11-21T12:35:34.620Z] *** [apiv2] error from fetch(https://firebase.googleapis.com/v1beta1/projects?pageSize=100, {"headers":{},"method":"GET","agent":{"_events":{},"_eventsCount":2,"options":{"noDelay":true,"path":null},"requests":{},"sockets":{"firebase.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"cache":{"max":20,"maxSize":0,"maxEntrySize":0,"fetchMethod":null,"keyMap":{},"keyList":["https:+http://sersanti:8AAhh7xE@10.14.193.57:3128",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"valList":[{"_events":{},"_eventsCount":2,"options":{},"requests":{},"sockets":{"firebase.googleapis.com:443:::::::::::::::::::::":[]},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"proxy":"http://sersanti:8AAhh7xE@10.14.193.57:3128/","proxyHeaders":{},"connectOpts":{"ALPNProtocols":["http/1.1"],"host":"10.14.193.57","port":3128}},null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"next":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"prev":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"head":0,"tail":0,"free":{"heap":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0},"length":0},"initialFill":1,"size":1,"disposeAfter":null,"disposed":null,"noDisposeOnSet":false,"noUpdateTTL":false,"noDeleteOnFetchRejection":false,"allowStaleOnFetchRejection":false,"allowStaleOnFetchAbort":false,"ignoreFetchAbort":false,"allowStale":false,"noDeleteOnStaleGet":false,"updateAgeOnGet":false,"updateAgeOnHas":false,"ttlResolution":1,"ttlAutopurge":false,"ttl":0},"httpAgent":{"_events":{},"_eventsCount":2,"defaultPort":80,"protocol":"http:","options":{"noDelay":true,"path":null},"requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0},"httpsAgent":{"_events":{},"_eventsCount":2,"defaultPort":443,"protocol":"https:","options":{"noDelay":true,"path":null},"requests":{},"sockets":{},"freeSockets":{},"keepAliveMsecs":1000,"keepAlive":false,"maxSockets":null,"maxFreeSockets":256,"scheduling":"lifo","maxTotalSockets":null,"totalSocketCount":0,"maxCachedSessions":100,"_sessionCache":{"map":{},"list":[]}}},"signal":{}}): FetchError: request to https://firebase.googleapis.com/v1beta1/projects?pageSize=100 failed, reason: connect ETIMEDOUT 10.14.193.57:3128
+[debug] [2024-11-21T12:35:34.622Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects?pageSize=100
+[debug] [2024-11-21T12:35:35.113Z] FirebaseError: Failed to make request to https://firebase.googleapis.com/v1beta1/projects?pageSize=100
+    at RetryOperation._fn (C:\Users\tomacost\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:261:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to list Firebase projects. See firebase-debug.log for more info.
+[debug] [2024-11-21T12:36:11.954Z] ----------------------------------------------------------------------
+[debug] [2024-11-21T12:36:11.956Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\tomacost\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init --debug
+[debug] [2024-11-21T12:36:11.956Z] CLI Version:   13.26.0
+[debug] [2024-11-21T12:36:11.956Z] Platform:      win32
+[debug] [2024-11-21T12:36:11.957Z] Node Version:  v20.12.2
+[debug] [2024-11-21T12:36:11.957Z] Time:          Thu Nov 21 2024 05:36:11 GMT-0700 (Mountain Standard Time)
+[debug] [2024-11-21T12:36:11.957Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-21T12:36:11.964Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-21T12:36:11.965Z] > authorizing via signed-in user (acostadtomas.24@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\tomacost\Apppollo-1
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-11-21T12:36:17.670Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:36:17.670Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:36:17.672Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2024-11-21T12:36:18.469Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2024-11-21T12:36:18.469Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] i  Using project pollotragonapp (polloTragonApp) 
+[info] 
+=== Functions Setup
+[debug] [2024-11-21T12:36:27.616Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-21T12:36:27.616Z] > authorizing via signed-in user (acostadtomas.24@gmail.com)
+[debug] [2024-11-21T12:36:27.617Z] [iam] checking project pollotragonapp for permissions ["firebase.projects.get"]
+[debug] [2024-11-21T12:36:27.617Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:36:27.618Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:36:27.618Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions [none]
+[debug] [2024-11-21T12:36:27.618Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions x-goog-quota-user=projects/pollotragonapp
+[debug] [2024-11-21T12:36:27.619Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-11-21T12:36:28.314Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions 200
+[debug] [2024-11-21T12:36:28.314Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-11-21T12:36:28.315Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:36:28.315Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:36:28.316Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:36:28.316Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:36:28.316Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/cloudfunctions.googleapis.com [none]
+[debug] [2024-11-21T12:36:28.317Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/pollotragonapp
+[debug] [2024-11-21T12:36:28.318Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/runtimeconfig.googleapis.com [none]
+[debug] [2024-11-21T12:36:28.319Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/pollotragonapp
+[debug] [2024-11-21T12:36:29.175Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/cloudfunctions.googleapis.com 200
+[debug] [2024-11-21T12:36:29.175Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2024-11-21T12:36:29.203Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/runtimeconfig.googleapis.com 200
+[debug] [2024-11-21T12:36:29.204Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/runtimeconfig.googleapis.com [omitted]
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[info] +  Wrote functions/package.json 
+[info] +  Wrote functions/.eslintrc.js 
+[info] +  Wrote functions/index.js 
+[info] +  Wrote functions/.gitignore 
+[debug] [2024-11-21T12:42:48.200Z] ----------------------------------------------------------------------
+[debug] [2024-11-21T12:42:48.202Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\tomacost\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-11-21T12:42:48.203Z] CLI Version:   13.26.0
+[debug] [2024-11-21T12:42:48.203Z] Platform:      win32
+[debug] [2024-11-21T12:42:48.203Z] Node Version:  v20.12.2
+[debug] [2024-11-21T12:42:48.203Z] Time:          Thu Nov 21 2024 05:42:48 GMT-0700 (Mountain Standard Time)
+[debug] [2024-11-21T12:42:48.203Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-21T12:42:48.209Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-21T12:42:48.209Z] > authorizing via signed-in user (acostadtomas.24@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\tomacost\Apppollo-1
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-11-21T12:42:53.620Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:42:53.620Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:42:53.622Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2024-11-21T12:42:54.448Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2024-11-21T12:42:54.448Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] i  Using project pollotragonapp (polloTragonApp) 
+[info] 
+=== Functions Setup
+[debug] [2024-11-21T12:42:56.671Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-21T12:42:56.672Z] > authorizing via signed-in user (acostadtomas.24@gmail.com)
+[debug] [2024-11-21T12:42:56.672Z] [iam] checking project pollotragonapp for permissions ["firebase.projects.get"]
+[debug] [2024-11-21T12:42:56.672Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:42:56.672Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:42:56.672Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions [none]
+[debug] [2024-11-21T12:42:56.673Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions x-goog-quota-user=projects/pollotragonapp
+[debug] [2024-11-21T12:42:56.673Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-11-21T12:42:57.368Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions 200
+[debug] [2024-11-21T12:42:57.368Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pollotragonapp:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-11-21T12:42:57.369Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:42:57.369Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:42:57.369Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:42:57.369Z] Checked if tokens are valid: true, expires at: 1732195750576
+[debug] [2024-11-21T12:42:57.369Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/cloudfunctions.googleapis.com [none]
+[debug] [2024-11-21T12:42:57.369Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/pollotragonapp
+[debug] [2024-11-21T12:42:57.370Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/runtimeconfig.googleapis.com [none]
+[debug] [2024-11-21T12:42:57.370Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/pollotragonapp
+[debug] [2024-11-21T12:42:58.194Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/runtimeconfig.googleapis.com 200
+[debug] [2024-11-21T12:42:58.195Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2024-11-21T12:42:58.222Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/cloudfunctions.googleapis.com 200
+[debug] [2024-11-21T12:42:58.222Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/pollotragonapp/services/cloudfunctions.googleapis.com [omitted]
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[info] +  Wrote functions/package.json 
+[info] i  functions/index.js is unchanged 
+[info] i  functions/.gitignore is unchanged 
