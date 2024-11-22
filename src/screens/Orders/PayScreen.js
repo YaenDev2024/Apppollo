@@ -1,76 +1,71 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { CardField, useStripe } from '@stripe/stripe-react-native'; // Asegúrate de que tienes Stripe instalado y configurado
-import { getFirestore } from 'firebase/firestore';
+import { CardField, useStripe } from '@stripe/stripe-react-native';
 
 const PaymentScreen = () => {
-  const stripe = useStripe();
+  const { createPaymentMethod, handleNextAction } = useStripe();
   const [loading, setLoading] = useState(false);
-  const [cardDetails, setCardDetails] = useState(null); // Estado para los detalles de la tarjeta
-  const [clientSecret, setClientSecret] = useState(null);
+  const [cardDetails, setCardDetails] = useState(null);
 
-  // Función para crear el PaymentIntent en Firebase Functions
   const createPaymentIntent = async (amount) => {
-    const response = await fetch('https://createpaymentintent-5fgjclrloq-uc.a.run.app', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ amount }), // Monto en centavos (por ejemplo, $20.00 -> 2000)
-    });
-
-    const data = await response.json();
-    console.log('PaymentIntent client secret:', data);
-    return data.clientSecret;
+    try {
+      const response = await fetch('https://createpaymentintent-5fgjclrloq-uc.a.run.app', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount }),
+      });
+      const data = await response.json();
+      return data.clientSecret; // Asumiendo que tu backend devuelve el client secret
+    } catch (error) {
+      console.error('Error creating payment intent:', error);
+      throw error;
+    }
   };
 
-  // Función que maneja el proceso de pago
-  const handlePayment = async () => {
-    setLoading(true);
-  
+  const handlePayPress = async () => {
     try {
-      // Crear el PaymentIntent desde Firebase Functions (backend)
-      const clientSecret = await createPaymentIntent(1000); // 2000 = $20.00
-  
-      // Crear el PaymentMethod usando los detalles de la tarjeta
+      // Validar que la tarjeta tenga datos
+      if (!cardDetails?.complete) {
+        Alert.alert('Error', 'Por favor, completa los datos de la tarjeta');
+        return;
+      }
+
+      setLoading(true);
+
+      // 1. Crear el Payment Intent
+      const clientSecret = await createPaymentIntent(1000); // $10.00
+
+      // 2. Confirmar el pago
       const { error: paymentMethodError, paymentMethod } = await stripe.createPaymentMethod({
-        paymentMethodType: 'Card', // Usar 'type' en lugar de 'paymentMethodType'
+        paymentMethodType: 'Card',
         card: cardDetails,
       });
-      console.log('PaymentMethod:', paymentMethod.id);
-  
+
       if (paymentMethodError) {
-        console.error('PaymentMethod error:', paymentMethodError);
-        Alert.alert('Error', 'Error al crear el método de pago.');
-        return;
+        throw new Error(error.message);
       }
-  
-      // Confirmar el pago con el clientSecret y el PaymentMethod
-      console.log('PaymentclientSecretMethod:', clientSecret);
-      const { error, paymentIntent } = await stripe.confirmPayment(clientSecret, {
-        paymentMethodType: 'Card',
-        paymentMethodId: paymentMethod.id,
-        
-      });
+
+      // 3. Si se requiere autenticación adicional
+      const { error: confirmError } = await handleNextAction(clientSecret);
       
-      if (error) {
-        console.error('Error al confirmar el pago:', error);
-        Alert.alert('Error', error.localizedMessage || 'No se pudo confirmar el pago.');
-        return;
+      if (confirmError) {
+        throw new Error(confirmError.message);
       }
-      
-      console.log('Payment Intent:', paymentIntent);
-  
-      if (error) {
-        console.error('Payment failed:', error);
-        Alert.alert('Error', 'El pago no fue procesado.');
-      } else {
-        console.log('Payment successful:', paymentIntent);
-        Alert.alert('Éxito', 'Pago realizado con éxito.');
-      }
-    } catch (err) {
-      console.error('Error durante el proceso de pago:', err);
-      Alert.alert('Error', 'Hubo un error durante el proceso de pago.');
+
+      // 4. Pago exitoso
+      Alert.alert(
+        'Pago Exitoso',
+        'El pago se ha procesado correctamente'
+      );
+
+    } catch (error) {
+      console.error('Error en el pago:', error);
+      Alert.alert(
+        'Error en el Pago',
+        error.message || 'Hubo un error al procesar el pago'
+      );
     } finally {
       setLoading(false);
     }
@@ -79,26 +74,31 @@ const PaymentScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.paymentCard}>
-        <Text style={styles.title}>Pago de Servicio</Text>
-        <Text style={styles.amount}>Total: $.50</Text>
-
-        {/* Componente para capturar los detalles de la tarjeta */}
+        <Text style={styles.title}>Realizar Pago</Text>
+        <Text style={styles.amount}>Total: $10.00</Text>
+        
+        {/* Campo para la tarjeta */}
         <CardField
           postalCodeEnabled={false}
           placeholders={{
-            number: '4242 4242 4242 4242',
+            number: 'Número de tarjeta',
           }}
-          cardStyle={styles.cardStyle}
+          cardStyle={{
+            backgroundColor: '#FFFFFF',
+            textColor: '#000000',
+          }}
           style={styles.cardField}
-          onCardChange={(cardDetails) => setCardDetails(cardDetails)}
+          onCardChange={(cardDetails) => {
+            setCardDetails(cardDetails);
+          }}
         />
 
         <TouchableOpacity
           style={[styles.payButton, loading && styles.payButtonDisabled]}
-          onPress={handlePayment}
-          disabled={loading}>
+          onPress={handlePayPress}
+          disabled={loading || !cardDetails?.complete}>
           <Text style={styles.payButtonText}>
-            {loading ? 'Procesando...' : 'Pagar Ahora'}
+            {loading ? 'Procesando...' : 'Pagar $10.00'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   paymentCard: {
-    width: '90%',
+    width: '100%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
@@ -124,36 +124,31 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
-    alignItems: 'center',
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 10,
     color: '#333',
+    textAlign: 'center',
   },
   amount: {
     fontSize: 18,
     color: '#666',
     marginBottom: 20,
+    textAlign: 'center',
   },
   cardField: {
     width: '100%',
     height: 50,
-    marginBottom: 20,
-  },
-  cardStyle: {
-    backgroundColor: '#F3F3F3',
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-    borderRadius: 8,
+    marginVertical: 20,
   },
   payButton: {
     backgroundColor: '#007bff',
-    width: '100%',
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
+    marginTop: 20,
   },
   payButtonDisabled: {
     backgroundColor: '#a0a0a0',
