@@ -1,44 +1,102 @@
-import {collection, onSnapshot, query, where} from 'firebase/firestore';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Alert,
-  Image,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  Touchable,
-  TouchableOpacity,
   View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  StatusBar,
+  Dimensions,
+  Animated,
 } from 'react-native';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import { ShoppingBag } from 'lucide-react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {auth, db} from '../../../config';
-import {useNavigation} from '@react-navigation/native';
-import ModalPerfilUser from '../../components/ModalPerfilUser';
-import {BannerAd, BannerAdSize, useRewardedAd} from '@react-native-admob/admob';
+import { BannerAd, BannerAdSize, useRewardedAd } from '@react-native-admob/admob';
+import { auth, db } from '../../../config';
 import Icons from '../../components/Icons';
 import SearchInput from '../../components/SearchInput';
+import ModalPerfilUser from '../../components/ModalPerfilUser';
+
+const { width } = Dimensions.get('window');
 
 const COLORS = {
-  dark: 'black',
-  darkSecondary: '#4A311F',
-  primary: '#FFD23F',
-  primaryLight: '#FFE584',
-  accent: '#FF6B6B',
-  background: 'white',
+  primary: '#FF4B3E',
+  secondary: '#2A2A2A',
+  background: '#F8F9FA',
+  surface: '#FFFFFF',
+  text: '#1A1A1A',
+  textLight: '#757575',
+  accent: '#FFD23F',
 };
+
+const ProductCard = ({ product, onPress }) => {
+  return (
+    <TouchableOpacity 
+      style={styles.card}
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
+      <Image source={{ uri: product.url }} style={styles.cardImage} />
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.8)']}
+        style={styles.cardGradient}
+      >
+        <View style={styles.cardContent}>
+          <Text style={styles.cardTitle} numberOfLines={1}>
+            {product.nameCombo}
+          </Text>
+          <View style={styles.cardFooter}>
+            <View style={styles.ratingContainer}>
+              <Icons name="star" sizes={12} color="#FFD700" />
+              <Text style={styles.rating}>{product.star}</Text>
+            </View>
+            <Text style={styles.price}>${product.price}</Text>
+          </View>
+        </View>
+      </LinearGradient>
+    </TouchableOpacity>
+  );
+};
+
+const PromoCard = ({ product }) => {
+  return (
+    <TouchableOpacity style={styles.promoCard} activeOpacity={0.9}>
+      <Image source={{ uri: product.url }} style={styles.promoImage} />
+      <View style={styles.promoContent}>
+        <View style={styles.promoBadge}>
+          <Text style={styles.promoLabel}>Próximamente</Text>
+        </View>
+        <Text style={styles.promoTitle}>{product.nameCombo}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+const SectionHeader = ({ title, onSeeAll }) => (
+  <View style={styles.sectionHeader}>
+    <Text style={styles.sectionTitle}>{title}</Text>
+    <TouchableOpacity onPress={onSeeAll}>
+      <Text style={styles.seeAllButton}>Ver Todo</Text>
+    </TouchableOpacity>
+  </View>
+);
 
 const UsuarioNormal = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
+  const [badgeNum, setBadgeNum] = useState(0);
   const signedInUser = auth.currentUser;
-  //console.log(signedInUser);
   const navigation = useNavigation();
-  const {adLoaded, adDismissed, show} = useRewardedAd(
+  const scrollY = new Animated.Value(0);
+
+  const { adLoaded, adDismissed, show } = useRewardedAd(
     'ca-app-pub-3477493054350988/8242528814',
   );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,7 +104,7 @@ const UsuarioNormal = () => {
         const unsuscribe = onSnapshot(q, querySnapshot => {
           const updatedProducts = [];
           querySnapshot.forEach(doc => {
-            updatedProducts.push({id: doc.id, ...doc.data()});
+            updatedProducts.push({ id: doc.id, ...doc.data() });
           });
           setProducts(updatedProducts);
           setLoading(false);
@@ -59,140 +117,128 @@ const UsuarioNormal = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (signedInUser) {
-      const fetchData = async () => {
-        try {
-          const q = query(
-            collection(db, 'users'),
-            where('mail', '==', signedInUser.email),
-          );
-          const unsubscribe = onSnapshot(q, querySnapshot => {
-            querySnapshot.forEach(doc => {
-              if (doc.exists) {
-                //setRole(doc.data().role);
-                console.log(doc.data());
-              }
-            });
-          });
-          return () => {
-            unsubscribe();
-          };
-        } catch (error) {
-          console.error('Error al obtener los datos:', error);
-        }
-      };
+  const headerOpacity = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0.9],
+    extrapolate: 'clamp',
+  });
 
-      fetchData();
-    }
-  }, [signedInUser]);
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    { useNativeDriver: true }
+  );
 
-  const renderCombos = () => {
-    return products.map((product, index) => {
-      return product.nameCombo === 'Coming soon' ? null : (
-        <TouchableOpacity
+  const renderPopularProducts = () => {
+    return products
+      .filter(product => product.nameCombo !== 'Coming soon')
+      .map((product, index) => (
+        <ProductCard
           key={index}
-          style={styles.cardProduct}
+          product={product}
           onPress={() =>
             navigation.navigate('ProductDescBuy', {
               product: product,
             })
-          }>
-          <Image style={styles.imgProduct} source={{uri: product.url}} />
-          <Text style={styles.titleProduct}>{product.nameCombo}</Text>
-          <Text style={styles.calification}>⭐{product.star}</Text>
-          <Text style={styles.price}>${product.price}</Text>
-        </TouchableOpacity>
-      );
-    });
-  };
-  const renderCombosFree = () => {
-    return products.map((product, index) => {
-      return product.nameCombo === 'Coming soon' ? null : (
-        <TouchableOpacity
-          key={index}
-          style={styles.cardProduct}
-          onPress={() =>
-            navigation.navigate('ProductDescBuy', {
-              product: product,
-            })
-          }>
-          <Image style={styles.imgProduct} source={{uri: product.url}} />
-          <Text style={styles.titleProduct}>{product.nameCombo}</Text>
-          <Text style={styles.calification}>⭐{product.star}</Text>
-          <Text style={styles.price}>${product.price}</Text>
-        </TouchableOpacity>
-      );
-    });
+          }
+        />
+      ));
   };
 
-  const renderPromos = () => {
-    return products.map((product, index) => {
-      return product.nameCombo !== 'Coming soon' ? null : (
-        <TouchableOpacity key={index} style={styles.cardProductProm}>
-          <Image style={styles.imgProduct} source={{uri: product.url}} />
-          <Text style={styles.titleProduct}>{product.nameCombo}</Text>
-        </TouchableOpacity>
-      );
-    });
-  };
-
-  const onClose = () => {
-    setIsVisible(false);
+  const renderPromotions = () => {
+    return products
+      .filter(product => product.nameCombo === 'Coming soon')
+      .map((product, index) => (
+        <PromoCard key={index} product={product} />
+      ));
   };
 
   return (
     <View style={styles.container}>
       <StatusBar
         translucent
-        backgroundColor={'transparent'}
+        backgroundColor="transparent"
         barStyle="dark-content"
       />
 
-      <View style={styles.header}>
-        <Text style={styles.title}>Descubre</Text>
-        <TouchableOpacity onPress={() => setIsVisible(true)}>
-          <Image
-            style={styles.imgPerfil}
-            source={{uri: signedInUser.photoURL}}
-          />
-        </TouchableOpacity>
-      </View>
-      {isVisible && <ModalPerfilUser onClose={onClose} visible={isVisible} />}
+      <Animated.View style={[styles.header, { opacity: headerOpacity }]}>
+        <Text style={styles.headerTitle}>Descubre</Text>
+        <View style={styles.headerRight}>
+          <TouchableOpacity 
+            style={styles.cartButton}
+            onPress={() => navigation.navigate('CartScreen')}
+          >
+            <ShoppingBag size={24} color={COLORS.text} />
+            {badgeNum > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{badgeNum}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
 
-      {/* */}
+          <TouchableOpacity
+            style={styles.avatarContainer}
+            onPress={() => setIsVisible(true)}
+          >
+            <Image
+              style={styles.avatar}
+              source={{ uri: signedInUser.photoURL }}
+            />
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
+
+      {isVisible && <ModalPerfilUser onClose={() => setIsVisible(false)} visible={isVisible} />}
+
       <SearchInput />
-      <ScrollView>
-        <View style={styles.productsPopularesContainer}>
-          <Text style={styles.productsTitles}>Productos Populares</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeall}>Ver Todo</Text>
-          </TouchableOpacity>
-        </View>
 
-        <View style={styles.containerCards}>
-          {loading ? <Text>Cargando...</Text> : renderCombos()}
-        </View>
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
+        <View style={styles.content}>
+          <SectionHeader
+            title="Productos Populares"
+            onSeeAll={() => {}}
+          />
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.productsScroll}
+          >
+            {loading ? (
+              <Text style={styles.loadingText}>Cargando...</Text>
+            ) : (
+              renderPopularProducts()
+            )}
+          </ScrollView>
 
-        <View style={styles.productsPopularesContainer}>
-          <Text style={styles.productsTitles}>Promociones</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeall}>Ver Todo</Text>
-          </TouchableOpacity>
+          <SectionHeader
+            title="Promociones"
+            onSeeAll={() => {}}
+          />
+          <View style={styles.promotionsContainer}>
+            {loading ? (
+              <Text style={styles.loadingText}>Cargando...</Text>
+            ) : (
+              renderPromotions()
+            )}
+          </View>
+
+          <SectionHeader
+            title="Gana productos gratis"
+            onSeeAll={() => {}}
+          />
+          <View style={styles.freeProductsContainer}>
+            {loading ? (
+              <Text style={styles.loadingText}>Cargando...</Text>
+            ) : (
+              renderPromotions()
+            )}
+          </View>
         </View>
-        <View style={styles.containerCardsProm}>
-          {loading ? <Text>Cargando...</Text> : renderPromos()}
-        </View>
-        <View style={styles.productsPopularesContainer}>
-          <Text style={styles.productsTitles}>Gana productos gratis</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeall}>Ver Todo</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.containerCardsProm}>
-          {loading ? <Text>Cargando...</Text> : renderPromos()}
-        </View>
-      </ScrollView>
+      </Animated.ScrollView>
+
       <BannerAd
         unitId="ca-app-pub-3477493054350988/1457774401"
         size={BannerAdSize.ADAPTIVE_BANNER}
@@ -200,11 +246,9 @@ const UsuarioNormal = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
     backgroundColor: COLORS.background,
   },
   header: {
@@ -212,131 +256,183 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 20,
+    backgroundColor: COLORS.background,
   },
-  title: {
+  headerTitle: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: COLORS.dark,
+    fontWeight: '700',
+    color: COLORS.text,
   },
-  imgPerfil: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  cartButton: {
+    position: 'relative',
+    padding: 8,
+  },
+  badge: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
     backgroundColor: COLORS.primary,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    objectFit: 'cover',
   },
-  searchinput: {
-    backgroundColor: 'white',
-    padding: 20,
-    margin: 20,
+  badgeText: {
+    color: COLORS.surface,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  avatarContainer: {
+    padding: 2,
+    borderRadius: 24,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
     borderRadius: 20,
-    height: 60,
-    placeholderTextColor: COLORS.darkSecondary,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
-  productsPopularesContainer: {
+  content: {
+    padding: 20,
+  },
+  sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    marginBottom: 16,
   },
-  productsTitles: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.dark,
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: COLORS.text,
   },
-  seeall: {
-    fontSize: 16,
-    color: COLORS.accent,
-    fontWeight: 'bold',
-  },
-  containerCards: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
-    paddingHorizontal: 10,
-    marginTop: 10,
-  },
-  cardProduct: {
-    backgroundColor: 'white',
-    padding: 15,
-    margin: 8,
-    borderRadius: 20,
-    width: '45%', // Ajustado para que quepan 2 cards por fila con margen
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 2,
-    alignItems: 'flex-start',
-  },
-  imgProduct: {
-    width: '100%',
-    height: 120,
-    borderRadius: 15,
-    backgroundColor: COLORS.primary,
-    marginBottom: 10,
-    objectFit: 'cover',
-  },
-  titleProduct: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: COLORS.dark,
-    marginBottom: 5,
-  },
-  calification: {
+  seeAllButton: {
     fontSize: 14,
-    color: '#ffcd16',
-    fontWeight: 'bold',
-    marginBottom: 5,
+    fontWeight: '600',
+    color: COLORS.primary,
+  },
+  productsScroll: {
+    paddingBottom: 16,
+    gap: 16,
+  },
+  card: {
+    width: width * 0.6,
+    height: 200,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: COLORS.surface,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  cardImage: {
+    width: '100%',
+    height: '100%',
+  },
+  cardGradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '50%',
+    justifyContent: 'flex-end',
+    padding: 16,
+  },
+  cardContent: {
+    gap: 8,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: COLORS.surface,
+  },
+  cardFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  rating: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#FFD700',
   },
   price: {
-    fontSize: 18,
-    color: COLORS.accent,
-    fontWeight: 'bold',
-  },
-  seeMoreButton: {
     fontSize: 16,
-    color: COLORS.accent,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+    fontWeight: '700',
+    color: COLORS.surface,
   },
-  containerCardsProm: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
-    paddingHorizontal: 10,
-    marginTop: 10,
+  promotionsContainer: {
+    gap: 16,
+    marginBottom: 24,
   },
-  cardProductProm: {
-    backgroundColor: 'white',
-    padding: 15,
-    margin: 8,
-    borderRadius: 20,
-    width: '80%', // Ajustado para que quepan 2 cards por fila con margen
+  promoCard: {
+    height: 160,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: COLORS.surface,
+    elevation: 4,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 2,
-    alignItems: 'flex-start',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  promoImage: {
+    width: '100%',
+    height: '100%',
+  },
+  promoContent: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    right: 16,
+  },
+  promoBadge: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+    marginBottom: 8,
+  },
+  promoLabel: {
+    color: COLORS.surface,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  promoTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: COLORS.surface,
+  },
+  freeProductsContainer: {
+    gap: 16,
+    marginBottom: 24,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: COLORS.textLight,
+    textAlign: 'center',
+    padding: 20,
   },
 });
 

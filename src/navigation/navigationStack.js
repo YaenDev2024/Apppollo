@@ -27,6 +27,8 @@ import UserPoints from '../screens/Users/UserPoints';
 import UserDir from '../screens/Users/UserDir';
 import ConfigInfoPersonal from '../screens/Config/ConfigInfoPersonal';
 import PayScreen from '../screens/Orders/PayScreen';
+import BuyScreenDetail from '../screens/Orders/BuyScreenDetail';
+import CartScreen from '../screens/Products/CartScreen';
 const Stack = createStackNavigator();
 
 export const NavigationStack = () => {
@@ -60,6 +62,8 @@ export const NavigationStack = () => {
       <Stack.Screen name="UserDir" component={UserDir} />
       <Stack.Screen name="ConfigInfoPersonal" component={ConfigInfoPersonal} />
       <Stack.Screen name="Pay" component={PayScreen} />
+      <Stack.Screen name="BuyScreenDetail" component={BuyScreenDetail} />
+      <Stack.Screen name='CartScreen' component={CartScreen} />
     </Stack.Navigator>
   );
 };

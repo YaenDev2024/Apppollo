@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -6,11 +6,13 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Animated,
+  Dimensions,
 } from 'react-native';
 import Icons from '../../components/Icons';
-import {useNavigation} from '@react-navigation/native';
-import {auth, db} from '../../../config';
-import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
+import { useNavigation } from '@react-navigation/native';
+import { auth, db } from '../../../config';
+import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
 import {
   collection,
   getDocs,
@@ -18,21 +20,63 @@ import {
   query,
   where,
 } from 'firebase/firestore';
+
+const { width } = Dimensions.get('window');
+
 const COLORS = {
-  dark: 'black',
-  darkSecondary: '#4A311F',
-  primary: '#FFD23F',
-  primaryLight: '#FFE584',
-  accent: '#FF6B6B',
-  background: 'white',
+  primary: '#FF4B3E',
+  secondary: '#2A2A2A',
+  background: '#FFFFFF',
+  text: '#1A1A1A',
+  textLight: '#757575',
+  success: '#4CAF50',
+  gray: '#F5F5F5',
+  lightGray: '#E0E0E0',
 };
-const UserPerfil = ({route}) => {
+
+const MENU_ITEMS = [
+  {
+    icon: '📦',
+    title: 'Mis Pedidos',
+    route: 'UserPedidos',
+  },
+  {
+    icon: '❤️',
+    title: 'Favoritos',
+    route: 'UserFav',
+  },
+  {
+    icon: '🎁',
+    title: 'Mis Puntos',
+    route: 'UserPoints',
+  },
+  {
+    icon: '📍',
+    title: 'Direcciones',
+    route: 'UserDir',
+  },
+];
+
+const UserPerfil = () => {
   const navigation = useNavigation();
   const signedInUser = auth.currentUser;
-
+  const scrollY = new Animated.Value(0);
   const [listPedidos, setListPedidos] = useState([]);
   const [listFav, setListFav] = useState([]);
   const [listPoints, setListPoints] = useState('');
+
+  // Animations
+  const headerOpacity = scrollY.interpolate({
+    inputRange: [0, 200],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
+
+  const imageScale = scrollY.interpolate({
+    inputRange: [-100, 0, 100],
+    outputRange: [1.2, 1, 0.8],
+    extrapolate: 'clamp',
+  });
 
   useEffect(() => {
     const getUserId = async () => {
@@ -43,6 +87,7 @@ const UserPerfil = ({route}) => {
             where('mail', '==', signedInUser.email),
           ),
         );
+        
         querySnapshot.forEach(doc => {
           const unsubscribe = onSnapshot(
             query(collection(db, 'pedidos'), where('iduser', '==', doc.id)),
@@ -52,6 +97,7 @@ const UserPerfil = ({route}) => {
               );
             },
           );
+          
           const unsubscribeFav = onSnapshot(
             query(collection(db, 'favoritos'), where('iduser', '==', doc.id)),
             snapshot => {
@@ -60,6 +106,7 @@ const UserPerfil = ({route}) => {
               );
             },
           );
+          
           setListPoints(doc.data().coins);
           return unsubscribe;
         });
@@ -68,92 +115,83 @@ const UserPerfil = ({route}) => {
     getUserId();
   }, [signedInUser]);
 
+  const renderMenuItem = ({ icon, title, route }) => (
+    <TouchableOpacity
+      key={title}
+      style={styles.menuItem}
+      onPress={() => navigation.navigate(route)}>
+      <View style={styles.menuIconContainer}>
+        <Text style={styles.menuIcon}>{icon}</Text>
+      </View>
+      <View style={styles.menuContent}>
+        <Text style={styles.menuTitle}>{title}</Text>
+        <Icons name="arrow-right" sizes={20} color={COLORS.textLight} />
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
-      <View style={styles.btnContainer}>
-        {/* BOTONES */}
+      {/* Floating Header */}
+      <Animated.View style={[styles.header, { opacity: headerOpacity }]}>
         <TouchableOpacity
-          style={styles.btnrounded}
+          style={styles.headerButton}
           onPress={() => navigation.goBack()}>
-          <Icons name="arrow-left" sizes={25} color={COLORS.dark} />
+          <Icons name="arrow-left" sizes={22} color={COLORS.text} />
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.btnrounded}
+          style={styles.headerButton}
           onPress={() => navigation.navigate('ConfigUser')}>
-          <Icons name="cog" sizes={25} color={COLORS.dark} />
+          <Icons name="cog" sizes={22} color={COLORS.text} />
         </TouchableOpacity>
-      </View>
+      </Animated.View>
 
-      <ScrollView>
-        {/* data user */}
-        <View style={styles.datausercontainer}>
-          <Image style={styles.imgUser} source={{uri: signedInUser.photoURL}} />
-          <Text style={styles.titleName}>{signedInUser.displayName}</Text>
-          <Text style={styles.email}>{signedInUser.email}</Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}>
+        {/* Profile Section */}
+        <View style={styles.profileSection}>
+          <Animated.View style={[styles.imageContainer, { transform: [{ scale: imageScale }] }]}>
+            <Image
+              style={styles.profileImage}
+              source={{ uri: signedInUser.photoURL }}
+            />
+          </Animated.View>
+          <Text style={styles.profileName}>{signedInUser.displayName}</Text>
+          <Text style={styles.profileEmail}>{signedInUser.email}</Text>
         </View>
 
-        {/* card info */}
-        <View style={styles.cardInfo}>
-          <View style={styles.containerData}>
-            <Text style={styles.titleCardCount}>{listPedidos.length}</Text>
-            <Text style={styles.titleCard}>Pedidos</Text>
+        {/* Stats Cards */}
+        <View style={styles.statsContainer}>
+          <View style={styles.statCard}>
+            <Text style={styles.statValue}>{listPedidos.length}</Text>
+            <Text style={styles.statLabel}>Pedidos</Text>
           </View>
-          <View style={styles.containerData}>
-            <Text style={styles.titleCardCount}>{listFav.length}</Text>
-            <Text style={styles.titleCard}>Favoritos</Text>
+          <View style={[styles.statCard, styles.statCardMiddle]}>
+            <Text style={styles.statValue}>{listFav.length}</Text>
+            <Text style={styles.statLabel}>Favoritos</Text>
           </View>
-          <View style={styles.containerData}>
-            <Text style={styles.titleCardCount}>{listPoints}</Text>
-            <Text style={styles.titleCard}>Puntos</Text>
+          <View style={styles.statCard}>
+            <Text style={styles.statValue}>{listPoints}</Text>
+            <Text style={styles.statLabel}>Puntos</Text>
           </View>
         </View>
+
         <BannerAd
           unitId="ca-app-pub-3477493054350988/1457774401"
           size={BannerAdSize.ADAPTIVE_BANNER}
         />
-        {/* cards */}
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => navigation.navigate('UserPedidos')}>
-          <View style={styles.squareImg}>
-            <Text style={{fontSize: 25}}>📦</Text>
-          </View>
-          <Text style={styles.titleCards}>Mis Pedidos</Text>
-          <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => navigation.navigate('UserFav')}>
-          <View style={styles.squareImg}>
-            <Icons name="heart" sizes={35} color={COLORS.dark} />
-          </View>
-          <Text style={styles.titleCards}>Favoritos</Text>
-          <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => navigation.navigate('UserPoints')}>
-          <View style={styles.squareImg}>
-            <Text style={{fontSize: 25}}>🎁</Text>
-          </View>
-          <Text style={styles.titleCards}>Mis Puntos</Text>
-          <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => navigation.navigate('UserDir')}>
-          <View style={styles.squareImg}>
-            <Text style={{fontSize: 25}}>📍</Text>
-          </View>
-          <Text style={styles.titleCards}>Direcciones</Text>
-          <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </TouchableOpacity>
-        {/* <View style={styles.card}>
-          <View style={styles.squareImg}><Text style={{fontSize:25}}>🔔</Text></View>
-          <Text style={styles.titleCards}>Notificaciones</Text>
-          <Icons name="arrow-right" sizes={25} color={COLORS.dark} />
-        </View> */}
+
+        {/* Menu Items */}
+        <View style={styles.menuContainer}>
+          {MENU_ITEMS.map(renderMenuItem)}
+        </View>
       </ScrollView>
+
       <BannerAd
         unitId="ca-app-pub-3477493054350988/1457774401"
         size={BannerAdSize.ADAPTIVE_BANNER}
@@ -165,98 +203,131 @@ const UserPerfil = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
     backgroundColor: COLORS.background,
   },
-  btnContainer: {
+  header: {
+    position: 'absolute',
+    top: 40,
+    left: 0,
+    right: 0,
+    zIndex: 100,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
+    paddingHorizontal: 20,
   },
-  btnrounded: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 50,
-  },
-  imgUser: {
-    width: 200,
-    height: 200,
-    borderRadius: 200,
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    objectFit: 'cover',
-  },
-  datausercontainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 50,
-  },
-  titleName: {
-    fontSize: 35,
-    fontWeight: 'bold',
-    color: COLORS.dark,
-  },
-  email: {
-    fontSize: 18,
-    color: 'gray',
-  },
-  cardInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 50,
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 20,
-    marginHorizontal: 20,
-    elevation: 1,
+  headerButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: 12,
+    borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    marginBottom: 25,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
-  titleCard: {
+  profileSection: {
+    alignItems: 'center',
+    paddingTop: 60,
+    paddingBottom: 30,
+  },
+  imageContainer: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 5,
+  },
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 4,
+    borderColor: COLORS.background,
+  },
+  profileName: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: COLORS.text,
+    marginTop: 16,
+  },
+  profileEmail: {
     fontSize: 16,
-    color: 'black',
+    color: COLORS.textLight,
+    marginTop: 4,
   },
-  containerData: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  titleCardCount: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: COLORS.dark,
-  },
-  card: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 20,
-    marginHorizontal: 20,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+  statsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    marginHorizontal: 20,
+    marginBottom: 24,
+    backgroundColor: COLORS.background,
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  statCard: {
+    flex: 1,
     alignItems: 'center',
-    marginTop: 5,
-    marginBottom: 5,
   },
-  titleCards: {
-    fontSize: 20,
-    color: COLORS.dark,
-    fontWeight: 'bold',
+  statCardMiddle: {
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: COLORS.lightGray,
+    paddingHorizontal: 16,
   },
-  squareImg: {
-    width: 50,
-    height: 50,
-    backgroundColor: 'white',
+  statValue: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  statLabel: {
+    fontSize: 14,
+    color: COLORS.textLight,
+    marginTop: 4,
+  },
+  menuContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 24,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.background,
+    marginBottom: 12,
+    padding: 16,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  menuIconContainer: {
+    width: 40,
+    height: 40,
+    backgroundColor: COLORS.gray,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 15,
+    marginRight: 16,
+  },
+  menuIcon: {
+    fontSize: 20,
+  },
+  menuContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  menuTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.text,
   },
 });
+
 export default UserPerfil;
