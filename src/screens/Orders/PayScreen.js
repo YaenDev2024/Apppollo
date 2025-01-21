@@ -4,13 +4,16 @@ import { CardField, confirmPayment, useStripe } from '@stripe/stripe-react-nativ
 import Toast from 'react-native-toast-message';
 import { Lock } from 'lucide-react-native';
 
-const PaymentScreen = ({ amount = 1000, onSuccess, onError }) => {
+const PaymentScreen = ({ route }) => {
+  const amount= route.params.amount;
+
   const { createPaymentMethod, handleNextAction } = useStripe();
   const [loading, setLoading] = useState(false);
   const [cardDetails, setCardDetails] = useState(null);
+  console.log(amount)
 
   const formatAmount = (amount) => {
-    return `$${(amount / 100).toFixed(2)}`;
+    return `$${((amount / 100)*100).toFixed(2)}`;
   };
 
   const showToast = (type, title, message) => {

@@ -127,15 +127,12 @@ const CartScreen = () => {
     };
   }, []);
 
-  const removeProductCart = async (id) => {
+  const removeProductCart = async id => {
     try {
       await deleteDoc(doc(db, 'carrito', id))
-        .then(() => {
-        })
-        .catch(error => {
-        });
-    } catch (error) {
-    }
+        .then(() => {})
+        .catch(error => {});
+    } catch (error) {}
   };
 
   return (
@@ -171,7 +168,8 @@ const CartScreen = () => {
                       source={{uri: item.comboData.url}}
                       style={styles.imgProduc}
                     />
-                    <TouchableOpacity onPress={()=>removeProductCart(item.id)}>
+                    <TouchableOpacity
+                      onPress={() => removeProductCart(item.id)}>
                       <Icons name="trash" sizes={25} />
                     </TouchableOpacity>
                     <Text style={styles.titleProductCart}>
@@ -221,7 +219,7 @@ const CartScreen = () => {
 
           <TouchableOpacity
             style={styles.checkoutButton}
-            onPress={() => navigation.navigate('Checkout')}>
+            onPress={() => navigation.navigate('Pay', {amount: totalPrice})}>
             <Text style={styles.checkoutButtonText}>Proceder al pago</Text>
           </TouchableOpacity>
 
