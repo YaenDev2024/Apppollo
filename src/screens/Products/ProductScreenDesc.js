@@ -20,6 +20,7 @@ import {
   where,
   addDoc,
   deleteDoc,
+  doc,
 } from 'firebase/firestore';
 import { auth, db } from '../../../config';
 
@@ -39,6 +40,13 @@ const ProductScreenDesc = ({ route }) => {
   const navigation = useNavigation();
   const [isInFav, setIsInFav] = useState(false);
   const [userId, setUserId] = useState(null);
+
+  const [isInCart, setIsInCart] = useState(false);
+  const [cart, setCart] = useState([]);
+
+
+
+
   const scrollY = new Animated.Value(0);
 
   // Efectos de animación para la imagen
@@ -75,7 +83,14 @@ const ProductScreenDesc = ({ route }) => {
             where('idcombo', '==', id)
           );
 
+          const cartQuery = query(
+            collection(db, 'carrito'),
+            where('iduser', '==', currentUserId),
+            where('idcombo', '==', id)
+          );
+          const cartSnapshot = await getDocs(cartQuery);
           const favSnapshot = await getDocs(favQuery);
+          setIsInCart(!cartSnapshot.empty);
           setIsInFav(!favSnapshot.empty);
         }
       } catch (error) {
@@ -83,10 +98,48 @@ const ProductScreenDesc = ({ route }) => {
         Alert.alert('Error', 'No se pudo verificar favoritos');
       }
     };
-
     checkFavoriteStatus();
   }, []);
 
+  const addCart = async () => {
+
+    try{
+
+      if(!userId) return;
+
+      if(isInCart)
+      {
+        const cartQuery = query(
+          collection(db, 'carrito'),
+          where('iduser', '==', userId),
+          where('idcombo', '==', id)
+        );
+
+        const cartSnapshot = await getDocs(cartQuery);
+
+        cartSnapshot.forEach(async (doc) => {
+          await deleteDoc(doc.ref);
+        });
+
+        setIsInCart(false);
+      }else{
+
+        await addDoc(collection(db, 'carrito'), {
+          iduser: userId,
+          idcombo: id
+        });
+        setIsInCart(true);
+
+      }
+
+    }catch(error){
+      console.error('Error adding to cart:', error);
+      Alert.alert('Error', 'No se pudo agregar al carrito');
+    }
+
+
+  };
+  
   const toggleFavorite = async () => {
     try {
       if (!userId) return;
@@ -180,10 +233,16 @@ const ProductScreenDesc = ({ route }) => {
           {/* Botones de acción */}
           <View style={styles.actionButtons}>
             <TouchableOpacity
-              style={styles.btnAddCart}
-              onPress={() => navigation.navigate('CartScreen')}>
-              <Icons name="shopping-cart" sizes={20} color={COLORS.primary} />
-              <Text style={styles.btnCartText}>Agregar al carrito</Text>
+              style={!isInCart ? styles.btnAddCart : [styles.btnAddCart, { backgroundColor: 'rgba(255, 75, 62, 0.2)' }]}
+              onPress={() => addCart()}>
+                {isInCart ? (
+                  <>
+                  <Icons name="check" sizes={20} color={COLORS.primary} />
+                  <Text style={styles.btnCartText}>Producto en el carrito</Text>
+                  </>
+                ) : (
+                  <><Icons name="shopping-cart" sizes={20} color={COLORS.primary} /><Text style={styles.btnCartText}>Agregar al carrito</Text></>
+                )}
             </TouchableOpacity>
             
             <TouchableOpacity

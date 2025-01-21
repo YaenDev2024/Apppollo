@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,11 +9,23 @@ import {
   Dimensions,
 } from 'react-native';
 import Icons from '../../components/Icons';
-import { useNavigation } from '@react-navigation/native';
-import { ShoppingCart } from 'lucide-react-native';
-import { BannerAd, BannerAdSize } from '@react-native-admob/admob';
+import {useNavigation} from '@react-navigation/native';
+import {ShoppingCart} from 'lucide-react-native';
+import {BannerAd, BannerAdSize} from '@react-native-admob/admob';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
+import {auth, db} from '../../../config';
+import {Image} from 'react-native';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const COLORS = {
   primary: '#FF4B3E',
@@ -29,8 +41,9 @@ const COLORS = {
 const CartScreen = () => {
   const navigation = useNavigation();
   const [cart, setCart] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const scrollY = new Animated.Value(0);
-  
+  const [userId, setUserId] = useState(null);
   // Header animation
   const headerOpacity = scrollY.interpolate({
     inputRange: [0, 100],
@@ -40,7 +53,7 @@ const CartScreen = () => {
 
   // Empty cart animation
   const emptyCartScale = new Animated.Value(1);
-  
+
   useEffect(() => {
     Animated.sequence([
       Animated.timing(emptyCartScale, {
@@ -56,10 +69,79 @@ const CartScreen = () => {
     ]).start();
   }, []);
 
+  useEffect(() => {
+    let unsubscribe;
+
+    const setupRealtimeCart = async () => {
+      try {
+        const userQuery = query(
+          collection(db, 'users'),
+          where('mail', '==', auth.currentUser.email),
+        );
+
+        const userSnapshot = await getDocs(userQuery);
+
+        if (!userSnapshot.empty) {
+          const userDoc = userSnapshot.docs[0];
+          const currentUserId = userDoc.id;
+          setUserId(currentUserId);
+
+          const cartQuery = query(
+            collection(db, 'carrito'),
+            where('iduser', '==', currentUserId),
+          );
+
+          unsubscribe = onSnapshot(cartQuery, async querySnapshot => {
+            const cartItemsPromises = querySnapshot.docs.map(async docs => {
+              const comboRef = docs.data().idcombo;
+              const comboSnap = await getDoc(doc(db, 'combo', comboRef));
+              return {
+                id: docs.id,
+                ...docs.data(),
+                comboData: comboSnap.data(),
+              };
+            });
+
+            const cartItems = await Promise.all(cartItemsPromises);
+
+            setCart(cartItems);
+            const total = cartItems.reduce(
+              (sum, item) =>
+                sum + parseFloat(item.comboData.price) * (item.quantity || 1),
+              0,
+            );
+            setTotalPrice(total);
+          });
+        }
+      } catch (error) {
+        console.log('Error setting up real-time cart:', error);
+      }
+    };
+
+    setupRealtimeCart();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
+
+  const removeProductCart = async (id) => {
+    try {
+      await deleteDoc(doc(db, 'carrito', id))
+        .then(() => {
+        })
+        .catch(error => {
+        });
+    } catch (error) {
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Animated Header */}
-      <Animated.View style={[styles.header, { opacity: headerOpacity }]}>
+      <Animated.View style={[styles.header, {opacity: headerOpacity}]}>
         <TouchableOpacity
           style={styles.headerButton}
           onPress={() => navigation.goBack()}>
@@ -72,28 +154,45 @@ const CartScreen = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: false }
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: false},
         )}
-        scrollEventThrottle={16}
-      >
+        scrollEventThrottle={16}>
         <View style={styles.content}>
           {cart.length > 0 ? (
             <View style={styles.cartContent}>
               {/* Cart items would go here */}
               <Text style={styles.sectionTitle}>Productos en tu carrito</Text>
               {/* Add your cart items list here */}
+              <ScrollView>
+                {cart.map((item, index) => (
+                  <View key={index} style={styles.cartItem}>
+                    <Image
+                      source={{uri: item.comboData.url}}
+                      style={styles.imgProduc}
+                    />
+                    <TouchableOpacity onPress={()=>removeProductCart(item.id)}>
+                      <Icons name="trash" sizes={25} />
+                    </TouchableOpacity>
+                    <Text style={styles.titleProductCart}>
+                      {item.comboData.nameCombo}
+                    </Text>
+                    <Text style={styles.pricesProduct}>
+                      ${item.comboData.price}
+                    </Text>
+                  </View>
+                ))}
+              </ScrollView>
             </View>
           ) : (
-            <Animated.View 
+            <Animated.View
               style={[
                 styles.emptyCartContainer,
-                { transform: [{ scale: emptyCartScale }] }
-              ]}
-            >
-              <ShoppingCart 
-                width={120} 
-                height={120} 
+                {transform: [{scale: emptyCartScale}]},
+              ]}>
+              <ShoppingCart
+                width={120}
+                height={120}
                 color={COLORS.lightGray}
                 style={styles.emptyCartIcon}
               />
@@ -117,7 +216,7 @@ const CartScreen = () => {
         <View style={styles.bottomContainer}>
           <View style={styles.totalContainer}>
             <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalAmount}>$0.00</Text>
+            <Text style={styles.totalAmount}>${totalPrice}</Text>
           </View>
 
           <TouchableOpacity
@@ -242,6 +341,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: COLORS.background,
+  },
+  cartItem: {
+    flexDirection: 'row',
+    marginBottom: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+    borderBottomColor: COLORS.gray,
+    borderBottomWidth: 1,
+  },
+  imgProduc: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  titleProductCart: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: COLORS.text,
+    marginLeft: -10,
+  },
+  priceProduct: {
+    fontSize: 16,
+    color: COLORS.textLight,
   },
 });
 
